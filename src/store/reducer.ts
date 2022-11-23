@@ -20,7 +20,6 @@ const reducer: ReducerModel = (state, action) => {
 
 const appReducer: ReducerModel = (state, action) => {
   let stateUpdated = false;
-
   switch(action.name) {
   case ACTION_NAMES.app_setTheme:
     if(action.payload !== state.theme) {

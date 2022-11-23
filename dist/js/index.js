@@ -33258,6 +33258,7 @@ var m = reactDom.exports;
 
 const Version = "1.1";
 const LocalStorageName = "ODState";
+const RandLength = 1000000;
 var THEME_TYPE;
 (function (THEME_TYPE) {
     THEME_TYPE["light"] = "light";
@@ -33274,6 +33275,26 @@ var ACTION_NAMES;
     ACTION_NAMES["app_setTheme"] = "app_setTheme";
     ACTION_NAMES["app_setLangCode"] = "app_setLangCode";
 })(ACTION_NAMES || (ACTION_NAMES = {}));
+var TAB_TYPE;
+(function (TAB_TYPE) {
+    TAB_TYPE["edit"] = "edit";
+    TAB_TYPE["copy"] = "copy";
+})(TAB_TYPE || (TAB_TYPE = {}));
+var CONTENT_TYPE;
+(function (CONTENT_TYPE) {
+    CONTENT_TYPE["fixed"] = "fixed";
+    CONTENT_TYPE["variable"] = "variable";
+    CONTENT_TYPE["select"] = "select";
+    CONTENT_TYPE["copyFrom"] = "copyFrom";
+})(CONTENT_TYPE || (CONTENT_TYPE = {}));
+var MI_LISTITEM_TYPE;
+(function (MI_LISTITEM_TYPE) {
+    MI_LISTITEM_TYPE["templateParam"] = "templateParam";
+    MI_LISTITEM_TYPE["blockParam"] = "blockParam";
+    MI_LISTITEM_TYPE["templateCSS"] = "templateCSS";
+    MI_LISTITEM_TYPE["blockCSS"] = "blockCSS";
+})(MI_LISTITEM_TYPE || (MI_LISTITEM_TYPE = {}));
+const A4 = ["210mm", "297.1mm"];
 
 const Page = ({ state, dispach }) => {
     const handleClick = () => {
@@ -33320,12 +33341,36 @@ const appReducer = (state, action) => {
         stateUpdated };
 };
 
+const getId = (prefix) => {
+    return `${prefix}${Math.round(Math.random() * RandLength)}`;
+};
 const getInitialAppState = () => {
     return {
         version: Version,
         theme: THEME_TYPE.dark,
         lastChange: new Date().getTime(),
-        langCode: LANG_CODES.ua
+        langCode: LANG_CODES.ua,
+        selectedTab: TAB_TYPE.edit,
+        selectedBlock: null,
+        selectedCopy: null,
+        sidebarSectionHeight: 100,
+        templates: [getInitialTamplate()]
+    };
+};
+const getInitialTamplate = () => {
+    return {
+        uuid: getId("t"),
+        dateCreated: new Date().getTime(),
+        dateEdited: 0,
+        name: "",
+        pageSizeMM: A4,
+        pageOrientation: "vertical",
+        pageMargin: ["0mm", "0mm", "0mm", "0mm"],
+        copyColumns: [],
+        copyRefferenceIds: [],
+        copyRows: [],
+        blocks: [],
+        menuItems: []
     };
 };
 
