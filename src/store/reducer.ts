@@ -33,6 +33,20 @@ const appReducer: ReducerModel = (state, action) => {
       stateUpdated = true;
     }
     break;
+  case ACTION_NAMES.app_setTab:
+    if(action.payload !== state.selectedTab) {
+      state.selectedTab = action.payload;
+      stateUpdated = true;
+    }
+    break;
+  case ACTION_NAMES.app_setsidebarSectionHeight:
+    if(action.payload !== state.sidebarSectionHeight) {
+      state.sidebarSectionHeight = action.payload;
+      stateUpdated = true;
+    }
+    break;
+  default:
+    console.error("unknown reducer action", action);
   }
   return {state,
     stateUpdated};

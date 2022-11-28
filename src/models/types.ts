@@ -2,20 +2,45 @@ import { ACTION_NAMES, THEME_TYPE, LANG_CODES, TAB_TYPE, CONTENT_TYPE, MI_LISTIT
 import { languageWordNameType } from "./languageWords";
 
 interface StoreModel {
+  state: AppStateModel
   dispach: (arg: ActionModel)=> void
-  getState: () => AppStateModel
-  subscribe: (arg: (newState: AppStateModel) => void) => void
+  showToast: (arg: string) => void
+  showAlert: (
+    header: string,
+    text: string,
+    onCancel?: () => void
+  ) => void
+  showConfirm: (
+    header: string,
+    text: string,
+    onConfirm: () => void,
+    onCancel?: () => void
+  ) => void
+  showPrompt: (
+    header: string,
+    text: string,
+    onProceed: (result: string) => void,
+    onCancel?: () => void
+  ) => void
 }
 type SubscriberModel = (arg: AppStateModel) => void
 
-
-//each acrtion have unique payload type for better reducer editing
+//each action have unique payload type for better reducer editing
 type ActionModel = {
+  name: ""
+  payload: never
+} |{
   name: ACTION_NAMES.app_setTheme
   payload: THEME_TYPE
 } | {
   name: ACTION_NAMES.app_setLangCode
   payload: LANG_CODES
+} | {
+  name: ACTION_NAMES.app_setTab
+  payload: TAB_TYPE
+}  | {
+  name: ACTION_NAMES.app_setsidebarSectionHeight
+  payload: number
 };
 
 interface AppStateModel {

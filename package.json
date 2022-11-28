@@ -28,6 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-jsx": "^1.0.0",
+    "react-split": "^2.0.14",
     "redux": "^4.2.0",
     "rollup": "^3.3.0",
     "servor": "^4.0.2",

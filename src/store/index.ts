@@ -1,5 +1,5 @@
 import { LocalStorageName } from "src/models/constants";
-import { AppStateModel, SubscriberModel, ActionModel, StoreModel } from "src/models/types";
+import { AppStateModel, SubscriberModel, ActionModel } from "src/models/types";
 import { reducer } from "./reducer";
 import { getInitialAppState } from "../models/intials";
 
@@ -41,10 +41,14 @@ const subscribe: (callback: SubscriberModel) => void = (callback) => {
   subscribers.push(callback);
 };
 
-const store: StoreModel = {
+const stateManager:{
+  getState: () => AppStateModel
+  dispach: (arg: ActionModel) => void
+  subscribe: (callbeck: SubscriberModel) => void
+} = {
   getState:getState,
   dispach:dispach,
   subscribe: subscribe
 };
 
-export default store;
+export default stateManager;
