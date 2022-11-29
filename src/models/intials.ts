@@ -1,5 +1,6 @@
-import { LANG_CODES, TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
-import { AppStateModel, BlockModel, MenuItemListItemModel, MenuItemModel, TemplateModel } from "./types";
+import { LANG_CODES } from "src/store/translation";
+import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
+import { AppStateModel, BlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
 const getId: (atr: string)=>string = (prefix) => {
   return `${prefix}${Math.round(Math.random() * RandLength)}`;
@@ -10,8 +11,8 @@ const getInitialAppState: ()=>AppStateModel = () => {
     version: Version,
     theme: THEME_TYPE.dark,
     lastChange: new Date().getTime(),
-    langCode: LANG_CODES.ua,
-    selectedTab: TAB_TYPE.edit,
+    langCode: LANG_CODES[0],
+    selectedTab: TAB_TYPE.Edit,
     selectedBlock: null,
     selectedCopy: null,
     sidebarSectionHeight: 100,
@@ -32,8 +33,44 @@ const getInitialTamplate: ()=>TemplateModel = () => {
     copyRefferenceIds: [],
     copyRows: [],
     blocks: [],
-    menuItems: []
+    menuItems: getInitialTemplateMis()
   };
+};
+
+const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
+  const dateAdded = new Date().getTime();
+  return [
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0004",
+      miListItemValue: "",
+      dateAdded: dateAdded
+    },
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0003",
+      miListItemValue: "0",
+      dateAdded: dateAdded
+    },
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0001",
+      miListItemValue: A4,
+      dateAdded: dateAdded
+    },
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0002",
+      miListItemValue: "vertical",
+      dateAdded: dateAdded
+    },
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0101",
+      miListItemValue: null,
+      dateAdded: dateAdded
+    }
+  ];
 };
 
 const getInitialBlock: ()=>BlockModel = () => {
@@ -51,18 +88,5 @@ const getInitialBlock: ()=>BlockModel = () => {
     treeViewCollapseState: false 
   };
 };
-const getInitialMenuItem: (arg: MenuItemListItemModel)=>MenuItemModel = (MItype: MenuItemListItemModel) => {
-  const MIId = getId("mi");
-  return {
-    uuid: MIId,
-    miListItem: MItype,
-    miListItemValue: null,
-    valueType: CONTENT_TYPE.fixed,
-    variableLabel: "",
-    variableOptions: [],
-    refferenceId: MIId,
-    timeCreated: new Date().getTime()
-  };
-};
 
-export {getInitialAppState, getInitialTamplate, getInitialBlock, getInitialMenuItem};
+export {getInitialAppState, getInitialTamplate, getInitialBlock};

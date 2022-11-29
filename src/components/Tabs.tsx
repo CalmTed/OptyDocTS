@@ -40,7 +40,7 @@ const Tabs: FC<{store: StoreModel }> = ({store}) => {
     {
       Object.keys(TAB_TYPE).map(tab => {
         return <TabStyle key={tab} onClick={() => handleClick(tab as TAB_TYPE)} className={store.state.selectedTab === tab ? "selected" : ""}>
-          {tab}
+          {store.t(`sideBar${tab as TAB_TYPE}`)}
         </TabStyle>;
       })
     }

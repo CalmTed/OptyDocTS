@@ -1,11 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { StoreModel } from "src/models/types";
 import Tabs from "./Tabs";
 import Split from "./ui/Split";
-import Button from "./ui/Button";
-import Select, { selectOption } from "./ui/Select";
-import Textarea from "./ui/Textarea";
+import { TAB_TYPE } from "src/models/constants";
+import MenuItemTemplate from "./MenuItemTemplate";
 
 interface SidebarModel {
   store: StoreModel
@@ -22,52 +21,22 @@ const SidebarStyle = styled.div`
 
 const Sidebar: FC<SidebarModel> = ({store}) => {
 
-  const [option, setOption] = useState(1);
 
   return <SidebarStyle> 
     <Tabs store={store}></Tabs>
-    <Split store={store}>
-      <div>
-        <p>123</p>
-        <Button onClick={() => null}>123</Button>
-        <Select 
-          value={option}
-          onChange={(newOption: selectOption) => { setOption(newOption.value as number); }}
-          options={[
-            {
-              value: 1,
-              label:"1"
-            },
-            {
-              value: 2,
-              label:"2"
-            },
-            {
-              value: 3,
-              label:"3"
-            },
-            {
-              value: 4,
-              label:"4"
-            },
-            {
-              value: 5,
-              label:"5"
-            },
-            {
-              value: 6,
-              label:"6"
-            },
-            {
-              value: 7,
-              label:"7"
-            }
-          ]}
-        ></Select>
-        <Textarea value="123" onChange={() => { null; }}></Textarea>
-      </div>
-      <div>Tree view</div>
-    </Split>
+    { store.state.selectedTab === TAB_TYPE.Edit &&
+      <Split store={store}>
+        <div style={{
+          "overflow":"auto",
+          "height":"100%"
+        }}>
+          {store.state.templates[0].menuItems.map(mi => {
+            return <MenuItemTemplate key={mi.uuid} store={store} mi={mi}/>;
+          })}
+        </div>
+        <div>Tree view</div>
+      </Split>
+    }
   </SidebarStyle>;
 };
 

@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import Toast from "./ui/Toast";
 import Prompt from "./ui/Prompt";
 import useUI from "src/store/useUI";
+import createT from "src/store/translation";
 
 interface PageModel {
   state: AppStateModel
@@ -53,21 +54,22 @@ const PageStyle = styled.div`
 const Page: FC<PageModel> = ({state, dispach}) => {
 
   const {toast, prompt, showToast, showAlert, showConfirm, showPrompt} = useUI();
-
+  const t = createT(state.langCode);
   const store: StoreModel = {
-    state: state,
-    dispach: dispach,
-    showToast: showToast,
-    showAlert: showAlert,
-    showConfirm: showConfirm,
-    showPrompt: showPrompt
+    state,
+    dispach,
+    showToast,
+    showAlert,
+    showConfirm,
+    showPrompt,
+    t
   };
 
   return <PageStyle className={state.theme === THEME_TYPE.light ? THEME_TYPE.light : THEME_TYPE.dark}>
     <Topbar store={store}></Topbar>
     <Sidebar store={store}></Sidebar>
     <Toast toast={toast}></Toast>
-    <Prompt prompt={prompt}></Prompt>
+    <Prompt t={t} prompt={prompt}></Prompt>
   </PageStyle>;
 };
 

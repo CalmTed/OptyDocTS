@@ -12,21 +12,21 @@ export enum THEME_TYPE{
   dark = "dark",
   auto = "auto"
 }
-export enum LANG_CODES{
-  ua = "ua",
-  en = "en"
-}
 
 export enum ACTION_NAMES{
   app_setTheme = "app_setTheme",
   app_setLangCode = "app_setLangCode",
   app_setTab = "app_setTab",
-  app_setsidebarSectionHeight = "app_setsidebarSectionHeight"
+  app_setsidebarSectionHeight = "app_setsidebarSectionHeight",
+  app_setTemplate = "app_setTemplate",
+
+  template_setParam = "template_setParam",
+  template_setCSS = "template_setCSS"
 }
 
 export enum TAB_TYPE{
-  edit = "edit",
-  copy = "copy"
+  Edit = "Edit",
+  Copy = "Copy"
 }
 
 export enum CONTENT_TYPE {
@@ -43,10 +43,20 @@ export enum MI_LISTITEM_TYPE {
   blockCSS = "blockCSS"
 }
 
+export enum INPUT_TYPES{
+  text = "text",
+  textarea = "textarea",
+  size = "size",
+  options = "options",
+  color = "color",
+  margin = "margin",
+  border = "border"
+}
+
 export enum FOCUS_ORDER{
   select = "3"
 }
 
-export const A4 = ["210mm", "297.1mm"];
-export const A3 = ["297mm", "419.9mm"];
-export const A5 = ["148mm", "209.9mm"];
+export const A4 = "210mm 297.1mm";
+export const A3 = "297mm 419.9mm";
+export const A5 = "148mm 209.9mm";

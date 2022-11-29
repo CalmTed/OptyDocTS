@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { ACTION_NAMES, THEME_TYPE } from "src/models/constants";
-import { StoreModel } from "src/models/types";
 import { IconTypeKey } from "src/models/icons";
+import Icon from "./ui/Icon";
 
 interface TopbarButtonModel {
-  store: StoreModel
   iconType: IconTypeKey
+  onClick: () => void
+  disabled?: boolean
 }
 
 const TopbarButtonStyle = styled.div`
@@ -16,29 +16,22 @@ const TopbarButtonStyle = styled.div`
   justify-content: center;
   align-items: center;
   transition: opacity var(--transition);
+  &.disabled, &.disabled:hover{
+    cursor: default;
+    opacity: 0.5
+  }
   :hover{
     cursor: pointer;
     opacity: 0.7;
   }
+  & .icon{
+    font-size: 1.6em;
+  }
 `;
 
-const TopbarButton: FC<TopbarButtonModel> = ({store, iconType}) => {
-  const handleClick = () => {
-    const nextTheme = store.state.theme === THEME_TYPE.light ? THEME_TYPE.dark : store.state.theme === THEME_TYPE.dark ? THEME_TYPE.auto : THEME_TYPE.light;
-    store.showPrompt("Enter password", "You can just enter 123", (result: string) => {
-      if(result !== "123") {
-        store.showToast("Wrong password");
-        return null;
-      }
-      store.showToast(nextTheme);
-      store.dispach({
-        name: ACTION_NAMES.app_setTheme,
-        payload: nextTheme
-      });
-    }); 
-  };
-  return <TopbarButtonStyle onClick={handleClick}>
-    {iconType}
+const TopbarButton: FC<TopbarButtonModel> = ({iconType, onClick, disabled = false}) => {
+  return <TopbarButtonStyle onClick={() => { !disabled ? onClick() : null; }} className={`${disabled ? "disabled" : ""}`}>
+    <Icon iconType={iconType}/>
   </TopbarButtonStyle>;
 };
 

@@ -1,10 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { ZERO } from "src/models/constants";
+import { IconTypeKey } from "src/models/icons";
+import { WordType } from "src/store/translation";
 import styled from "styled-components";
 import Button from "./Button";
+import Icon from "./Icon";
 import Input from "./Input";
 
 interface PromptInterface{
+  t: (arg: WordType) => string
   prompt: {
     header: string
     text: string
@@ -14,6 +18,7 @@ interface PromptInterface{
     onCancel: () => void
     onConfirm: () => void
     onProceed: (result: string) => void
+    icon?: IconTypeKey
   }
 }
 
@@ -44,6 +49,12 @@ const PromptStyle = styled.div`
     & #promptHeader{
       margin: 0;
       width: 100%;
+      display: flex;
+      align-items: center;
+      & .icon{
+        font-size: 1.6em;
+        margin-right: 0.5em;
+      }
     }
     & #promptText{
       margin-top: 0.5em;
@@ -78,7 +89,7 @@ const PromptStyle = styled.div`
   }
 `;
 
-const Prompt: FC<PromptInterface> = ({prompt}) => {
+const Prompt: FC<PromptInterface> = ({t, prompt}) => {
   
   const [promptText, setPromptText] = useState("");
 
@@ -96,19 +107,19 @@ const Prompt: FC<PromptInterface> = ({prompt}) => {
   };
   return <PromptStyle className={prompt.isShown ? "shown" : "hidden"}>
     <div className="promptBlock">
-      <h3 id="promptHeader">{prompt.header}</h3>
+      <h3 id="promptHeader">{prompt.icon && <Icon iconType={prompt.icon}/>}{prompt.header}</h3>
       <p id="promptText">{prompt.text}</p>
-      { prompt.type === "alert" && <Button onClick={prompt.onConfirm}>OK</Button> }
+      { prompt.type === "alert" && <Button onClick={prompt.onConfirm}>{t("uiOk")}</Button> }
       { prompt.type === "confirm" && 
       <>
-        <Button onClick={prompt.onCancel} type="nocolor"  style={{marginRight: "0.5em"}}>Cancel</Button>
-        <Button onClick={prompt.onConfirm} >Confirm</Button>
+        <Button onClick={prompt.onCancel} type="nocolor"  style={{marginRight: "0.5em"}}>{t("uiCancel")}</Button>
+        <Button onClick={prompt.onConfirm} >{t("uiConfirm")}</Button>
       </> }
       { prompt.type === "prompt" && 
       <>
-        <Input value={promptText} classes="promptInput" onChange={handleChange} onKeyUp={handleKeyUp} disabled={true} />
-        <Button onClick={prompt.onCancel} type="nocolor" style={{marginRight: "0.5em"}}>Cancel</Button>
-        <Button onClick={() => { prompt.onProceed((document.querySelector(".promptInput") as HTMLInputElement).value); }}  disabled={promptText.length === ZERO}  >Proseed</Button>
+        <Input value={promptText} classes="promptInput" onChange={handleChange} onKeyUp={handleKeyUp} />
+        <Button onClick={prompt.onCancel} type="nocolor" style={{marginRight: "0.5em"}}>{t("uiCancel")}</Button>
+        <Button onClick={() => { prompt.onProceed((document.querySelector(".promptInput") as HTMLInputElement).value); }}  disabled={promptText.length === ZERO}  >{t("uiProseed")}</Button>
       </> 
       }
     </div>

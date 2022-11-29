@@ -1,16 +1,12 @@
 import React, {FC} from "react";
 import { FOCUS_ORDER } from "src/models/constants";
+import { SelectOption } from "src/models/types";
 import styled from "styled-components";
-
-export interface selectOption{
-  label: string,
-  value: string | number
-}
 
 interface SelectModel{
   value: (string | number) | (string | number)[]
-  onChange: (value: selectOption) => void
-  options: selectOption[]
+  onChange: (value: SelectOption) => void
+  options: SelectOption[]
   classes?: string
   style?: React.CSSProperties
 }
@@ -117,7 +113,7 @@ const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => 
     }
   );
   const seletedValueString = selectedValue.map(item => item.label).join(", ");
-  const handleOptionSelecting = (item: selectOption) => {
+  const handleOptionSelecting = (item: SelectOption) => {
     onChange(item);
   };
 

@@ -1,5 +1,7 @@
 import React, { FC } from "react";
+import { IconTypeKey } from "src/models/icons";
 import styled from "styled-components";
+import Icon from "./Icon";
 
 const ToastStyle = styled.div`
   position: fixed;
@@ -13,6 +15,7 @@ const ToastStyle = styled.div`
   min-height: 1em;
   display: flex;
   justify-content: center;
+  align-items: center;
   transition: all var(--transition);
   opacity: 0;
   transform: translateY(10px);
@@ -22,6 +25,10 @@ const ToastStyle = styled.div`
     opacity: 1;
     transform: translateY(0px);
   }
+  & .icon{
+    font-size: 1.6em;
+    margin-right: 0.2em;
+  }
 `;
 
 interface ToastInterface{
@@ -29,11 +36,15 @@ interface ToastInterface{
     text: string
     isShown: boolean
     lastUpdateTime: number
+    icon?: IconTypeKey
   }
 }
 
 const Toast: FC<ToastInterface> = ({toast}) => {
-  return <ToastStyle className={toast.isShown ? "shown" : "hidden"}>{toast.text}</ToastStyle>;
+  return <ToastStyle className={toast.isShown ? "shown" : "hidden"}>
+    {toast.icon && <Icon iconType={toast.icon}/>}
+    {toast.text}
+  </ToastStyle>;
 };
 
 export default Toast;

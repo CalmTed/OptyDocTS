@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ToastTime } from "src/models/constants";
+import { IconTypeKey } from "src/models/icons";
 import { StoreModel } from "src/models/types";
 
 const useUI = () => {
@@ -8,20 +9,23 @@ const useUI = () => {
   const [toast, setToast] = useState({
     text: "",
     isShown: false,
-    lastUpdateTime: -1
+    lastUpdateTime: -1,
+    icon: undefined as IconTypeKey | undefined
   });
   const hideToast = () => {
     setToast({
       text: toast.text,
       isShown: false,
-      lastUpdateTime: toast.lastUpdateTime
+      lastUpdateTime: toast.lastUpdateTime,
+      icon: toast.icon
     });
   };
-  const showToast: StoreModel["showToast"] = (textToShow) => {
+  const showToast: StoreModel["showToast"] = (textToShow, icon) => {
     setToast({
       text: textToShow,
       isShown: true,
-      lastUpdateTime: new Date().getTime()
+      lastUpdateTime: new Date().getTime(),
+      icon: icon
     });
   };
   useEffect(() => {
@@ -45,7 +49,8 @@ const useUI = () => {
     lastUpdateTime: -1,
     onCancel: () => { hidePrompt(); },
     onConfirm: () => { hidePrompt(); },
-    onProceed: (arg: string) => { hidePrompt(); arg; }
+    onProceed: (arg: string) => { hidePrompt(); arg; },
+    icon: undefined as IconTypeKey | undefined
   });
   const hidePrompt = () => {
     setPrompt({
@@ -56,10 +61,11 @@ const useUI = () => {
       lastUpdateTime: new Date().getTime(),
       onCancel: prompt.onCancel,
       onConfirm: prompt.onConfirm,
-      onProceed: prompt.onProceed
+      onProceed: prompt.onProceed,
+      icon: prompt.icon
     });
   };
-  const showAlert: StoreModel["showAlert"] = (header, text, onCancel) => {
+  const showAlert: StoreModel["showAlert"] = (header, text, onCancel, icon) => {
     setPrompt({
       header: header,
       text: text,
@@ -71,11 +77,11 @@ const useUI = () => {
         onCancel ? onCancel() : null;
       },
       onConfirm: prompt.onConfirm,
-      onProceed: prompt.onProceed
+      onProceed: prompt.onProceed,
+      icon: icon
     });
   };
-  const showConfirm: StoreModel["showConfirm"] = (header, text, onConfirm, onCancel) => {
-    console.log(header, text, onConfirm);
+  const showConfirm: StoreModel["showConfirm"] = (header, text, onConfirm, onCancel, icon) => {
     setPrompt({
       header: header,
       text: text,
@@ -90,10 +96,11 @@ const useUI = () => {
         hidePrompt();
         onConfirm();
       },
-      onProceed: prompt.onProceed
+      onProceed: prompt.onProceed,
+      icon: icon
     });
   };
-  const showPrompt: StoreModel["showPrompt"] = (header, text, onProceed, onCancel) => {
+  const showPrompt: StoreModel["showPrompt"] = (header, text, onProceed, onCancel, icon) => {
     setPrompt({
       header: header,
       text: text,
@@ -108,7 +115,8 @@ const useUI = () => {
       onProceed: (result) => {
         hidePrompt();
         onProceed(result);
-      }
+      },
+      icon: icon
     });
   };
   //END PROMPT HOOK
