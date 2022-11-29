@@ -47,6 +47,21 @@ const PageStyle = styled.div`
   width: 100vw;
   height: 100vh;
   transition: background var(--transition);
+
+  & *::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  & *::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+    background-color: transparent;
+  }
+  & *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: var(--app-bg); 
+    border: 2px solid var(--section-bg);
+    cursor: pointer;
+  }
 `;
 
 

@@ -26,6 +26,7 @@ const TabStyle = styled.div`
   &.selected{
     border-bottom-width: 3px;
     margin-bottom: 0px;
+    color: var(--main-color);
   }
 `;
 

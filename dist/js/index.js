@@ -34501,8 +34501,13 @@ var ACTION_NAMES;
     ACTION_NAMES["app_setTab"] = "app_setTab";
     ACTION_NAMES["app_setsidebarSectionHeight"] = "app_setsidebarSectionHeight";
     ACTION_NAMES["app_setTemplate"] = "app_setTemplate";
+    ACTION_NAMES["app_selectBlock"] = "app_selectBlock";
     ACTION_NAMES["template_setParam"] = "template_setParam";
     ACTION_NAMES["template_setCSS"] = "template_setCSS";
+    ACTION_NAMES["template_addBlock"] = "template_addBlock";
+    ACTION_NAMES["template_removeBlock"] = "template_removeBlock";
+    ACTION_NAMES["block_setParam"] = "block_setParam";
+    ACTION_NAMES["block_setCSS"] = "block_setCSS";
 })(ACTION_NAMES || (ACTION_NAMES = {}));
 var TAB_TYPE;
 (function (TAB_TYPE) {
@@ -34633,24 +34638,24 @@ const wordsUA = {
     name: "OptyDoc",
     //topBar
     //sideBar
-    sideBarEdit: "редагувати",
-    sideBarCopy: "копіювати",
+    sideBarEdit: "Макет",
+    sideBarCopy: "Копії",
     //ui
-    uiConfirmNewTemplateHeader: "Pidtverdit diyu",
-    uiConfirmNewTemplateText: "Vpevneny sho hochete perezapysaty cey maket",
-    uiNewTemplateCreated: "Noviy maket stvoreno",
-    uiOk: "Ok",
-    uiCancel: "Vidminity",
-    uiConfirm: "Pidtverdity",
-    uiProseed: "Prodovzhity",
+    uiConfirmNewTemplateHeader: "Підтрердіть дію",
+    uiConfirmNewTemplateText: "Впевнені що хочете перезаписати цей макет?",
+    uiNewTemplateCreated: "Новий мекет створено",
+    uiOk: "Ок",
+    uiCancel: "Відминити",
+    uiConfirm: "Підтвердити",
+    uiProseed: "Продовжити",
     //mi
-    miPageSize: "Rozmir arkusha",
-    miPageOrientation: "Orientaciya storinky",
-    horizontal: "Horizontalno",
-    vertical: "Verticalno",
-    miPadding: "Otstupy",
-    miLastChangeTime: "Ostannya zmina",
-    miName: "Nazva",
+    miPageSize: "Розмір аркуша",
+    miPageOrientation: "Орієнтація сторінки",
+    horizontal: "Горизонтально",
+    vertical: "Вертикально",
+    miPadding: "Відступи",
+    miLastChangeTime: "Час останьої зміни",
+    miName: "Назва",
     undefined: ""
 };
 
@@ -34691,7 +34696,7 @@ const getInitialTamplate = () => {
         name: "",
         pageSizeMM: A4,
         pageOrientation: "vertical",
-        pageMargin: ["0mm", "0mm", "0mm", "0mm"],
+        pageMargin: "0mm 0mm 0mm 0mm",
         copyColumns: [],
         copyRefferenceIds: [],
         copyRows: [],
@@ -34700,37 +34705,67 @@ const getInitialTamplate = () => {
     };
 };
 const getInitialTemplateMis = () => {
-    const dateAdded = new Date().getTime();
+    const timeAdded = new Date().getTime();
     return [
         {
             uuid: getId("tmi"),
             miListItemId: "mi0004",
             miListItemValue: "",
-            dateAdded: dateAdded
+            timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
             miListItemId: "mi0003",
             miListItemValue: "0",
-            dateAdded: dateAdded
+            timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
             miListItemId: "mi0001",
             miListItemValue: A4,
-            dateAdded: dateAdded
+            timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
             miListItemId: "mi0002",
             miListItemValue: "vertical",
-            dateAdded: dateAdded
+            timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0101",
+            miListItemId: "mi0005",
             miListItemValue: null,
-            dateAdded: dateAdded
+            timeAdded: timeAdded
+        }
+    ];
+};
+const getInitialBlock = (parentId = null) => {
+    const blockId = getId("b");
+    return {
+        uuid: blockId,
+        label: "",
+        parentId: parentId,
+        contentType: CONTENT_TYPE.fixed,
+        contentValue: "",
+        variableLabel: "",
+        variableOptions: [],
+        referenceId: blockId,
+        menuItems: getInitialBlockMis(),
+        treeViewCollapseState: false
+    };
+};
+const getInitialBlockMis = () => {
+    const dateAdded = new Date().getTime();
+    return [
+        {
+            uuid: getId("tmi"),
+            miListItemId: "mi0001",
+            miListItemValue: "",
+            valueType: CONTENT_TYPE.fixed,
+            variableLabel: "",
+            variableOptions: [],
+            refferenceId: null,
+            timeAdded: dateAdded
         }
     ];
 };
@@ -34755,6 +34790,16 @@ const TopbarStyle = qe.div `
   }
 `;
 const Topbar = ({ store }) => {
+    const handleNewBlock = () => {
+        store.dispach({
+            name: ACTION_NAMES.template_addBlock
+        });
+    };
+    const handleRemoveBlock = () => {
+        store.dispach({
+            name: ACTION_NAMES.template_removeBlock
+        });
+    };
     const handleTheme = () => {
         const nextTheme = store.state.theme === THEME_TYPE.light ? THEME_TYPE.dark : store.state.theme === THEME_TYPE.dark ? THEME_TYPE.auto : THEME_TYPE.light;
         store.dispach({
@@ -34778,14 +34823,21 @@ const Topbar = ({ store }) => {
             });
         });
     };
+    const handleSelectNone = () => {
+        store.dispach({
+            name: ACTION_NAMES.app_selectBlock,
+            payload: null
+        });
+    };
     return React.createElement(TopbarStyle, null,
         React.createElement("div", { className: "templateTools" },
-            React.createElement(TopbarButton, { iconType: "newBlock", onClick: () => { } }),
-            React.createElement(TopbarButton, { iconType: "removeBlock", onClick: () => { }, disabled: !store.state.selectedBlock })),
+            React.createElement(TopbarButton, { iconType: "newBlock", onClick: handleNewBlock }),
+            React.createElement(TopbarButton, { iconType: "removeBlock", onClick: handleRemoveBlock, disabled: !store.state.selectedBlock }),
+            React.createElement(TopbarButton, { iconType: "minus", onClick: handleSelectNone, disabled: !store.state.selectedBlock })),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { iconType: "import", onClick: () => { }, disabled: true }),
             React.createElement(TopbarButton, { iconType: "export", onClick: () => { }, disabled: true }),
-            React.createElement(TopbarButton, { iconType: "newTemplate", onClick: handleNewTemplate, disabled: !store.state.templates[0].dateEdited }),
+            React.createElement(TopbarButton, { iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
             React.createElement(TopbarButton, { iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: handleTheme }),
             React.createElement(TopbarButton, { iconType: "setting", onClick: handleLanguage })));
 };
@@ -34812,6 +34864,7 @@ const TabStyle = qe.div `
   &.selected{
     border-bottom-width: 3px;
     margin-bottom: 0px;
+    color: var(--main-color);
   }
 `;
 const Tabs = ({ store }) => {
@@ -34996,12 +35049,12 @@ const TemplateMIs = {
         inputType: INPUT_TYPES.text,
         inputOptions: []
     },
-    mi0101: {
-        uuid: "mi0101",
+    mi0005: {
+        uuid: "mi0005",
         label: "miPadding",
-        miType: MI_LISTITEM_TYPE.templateCSS,
-        CSSParam: "padding",
-        CSSDefaultValue: "0mm",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "pageMargin",
+        defaultValue: "0mm",
         isReadonly: false,
         isAddable: false,
         inputType: INPUT_TYPES.text,
@@ -35140,7 +35193,20 @@ const Select = ({ value, onChange, options, classes, style }) => {
         })));
 };
 
-const MenuItemStyle = qe.div `
+const MISelect = ({ value, t, options, onChange }) => {
+    const translatedOptions = options.map(option => {
+        return {
+            ...option,
+            label: t(option.label)
+        };
+    });
+    return React.createElement(Select, { value: value, options: translatedOptions, onChange: (option) => onChange(option.value) });
+};
+const MIText = ({ value, onChange }) => {
+    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); } });
+};
+
+const MenuItemStyle$1 = qe.div `
   display: flex;
   flex-wrap: wrap;
   padding: 0.6em 1em;
@@ -35150,7 +35216,10 @@ const MenuItemStyle = qe.div `
 `;
 const MenuItemTemplate = ({ mi, store }) => {
     const listItemData = TemplateMIs[mi.miListItemId];
-    return React.createElement(MenuItemStyle, null,
+    if (!listItemData) {
+        return React.createElement(React.Fragment, null);
+    }
+    return React.createElement(MenuItemStyle$1, null,
         React.createElement("div", { className: "label" }, store.t(listItemData.label)),
         React.createElement("br", null),
         listItemData.miType === MI_LISTITEM_TYPE.templateParam &&
@@ -35194,17 +35263,79 @@ const MITemplateCSS = ({ store, listItemData, mi }) => {
             listItemData.inputType === INPUT_TYPES.text &&
             React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange }));
 };
-const MISelect = ({ value, t, options, onChange }) => {
-    const translatedOptions = options.map(option => {
-        return {
-            ...option,
-            label: t(option.label)
-        };
-    });
-    return React.createElement(Select, { value: value, options: translatedOptions, onChange: (option) => onChange(option.value) });
+
+const BlockMIs = {
+    mi0001: {
+        uuid: "mi0001",
+        label: "miName",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "label",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    }
 };
-const MIText = ({ value, onChange }) => {
-    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); } });
+
+const MenuItemStyle = qe.div `
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.6em 1em;
+  & .label{
+    padding-bottom: 0.5em;
+  }
+`;
+const MenuItemBlock = ({ mi, store }) => {
+    const listItemData = BlockMIs[mi.miListItemId];
+    if (!listItemData) {
+        return React.createElement(React.Fragment, null);
+    }
+    return React.createElement(MenuItemStyle, null,
+        React.createElement("div", { className: "label" }, store.t(listItemData.label)),
+        React.createElement("br", null),
+        listItemData.miType === MI_LISTITEM_TYPE.blockParam &&
+            React.createElement(MIBlockParam, { listItemData: listItemData, store: store }),
+        listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
+            React.createElement(MIBlockCSS, { listItemData: listItemData, mi: mi, store: store }));
+};
+const MIBlockParam = ({ store, listItemData }) => {
+    const handleChange = (value) => {
+        if (listItemData.miType === MI_LISTITEM_TYPE.blockParam && !listItemData.isReadonly) {
+            store.dispach({
+                name: ACTION_NAMES.block_setParam,
+                payload: {
+                    paramName: listItemData.paramName,
+                    value: value
+                }
+            });
+        }
+    };
+    const selectedBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
+    return React.createElement(React.Fragment, null, selectedBlock &&
+        listItemData.miType === MI_LISTITEM_TYPE.blockParam &&
+        ((listItemData.inputType === INPUT_TYPES.options &&
+            React.createElement(MISelect, { value: String(selectedBlock[listItemData.paramName]), t: store.t, options: listItemData.inputOptions, onChange: handleChange })) ||
+            (listItemData.inputType === INPUT_TYPES.text &&
+                React.createElement(MIText, { value: String(selectedBlock[listItemData.paramName]), onChange: handleChange }))));
+};
+const MIBlockCSS = ({ store, listItemData, mi }) => {
+    const handleChange = (value) => {
+        store.dispach({
+            name: ACTION_NAMES.template_setCSS,
+            payload: {
+                miUUID: mi.uuid,
+                value: String(value)
+            }
+        });
+    };
+    return React.createElement(React.Fragment, null,
+        listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
+            listItemData.inputType === INPUT_TYPES.options &&
+            React.createElement(MISelect, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), t: store.t, options: listItemData.inputOptions, onChange: handleChange }),
+        listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
+            listItemData.inputType === INPUT_TYPES.text &&
+            React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange }));
 };
 
 const SidebarStyle = qe.div `
@@ -35214,7 +35345,75 @@ const SidebarStyle = qe.div `
   left: 0px;
   height: 100vh;
 `;
+const TreeBrunchStyle = qe.div `
+  display: flex;
+  &.selected{
+    background: var(--section-color);
+    color: var(--main-color);
+  }
+  :hover{
+    background: var(--app-bg);
+    & .triangle:after{
+      border-bottom-color: var(--text-color);
+    }
+    &.selected .triangle:after{
+      border-bottom-color: var(--main-color);
+    }
+  }
+  & .triangle{
+    width: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s;
+    transform: rotate(180deg);
+    cursor: pointer;
+    :after{
+      content: "";
+      --sideborder: 0.4em solid transparent;
+      border-left: var(--sideborder);
+      border-right: var(--sideborder);
+      border-bottom: 0.6em solid var(--app-bg);
+      height: 0;
+      display: flex;
+      width: 0;
+      margin-top: -0.15em;
+    }
+    &.collapsed{
+      transform: rotate(90deg);
+    }
+  }
+  & .label{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 0.4em;
+  }
+`;
 const Sidebar = ({ store }) => {
+    const handeBlockSelect = (uuid) => {
+        store.dispach({
+            name: ACTION_NAMES.app_selectBlock,
+            payload: uuid
+        });
+    };
+    const handeBlockBrunchCollapce = (block) => {
+        store.dispach({
+            name: ACTION_NAMES.block_setParam,
+            payload: {
+                blockUUID: block.uuid,
+                paramName: "treeViewCollapseState",
+                value: !block.treeViewCollapseState
+            }
+        });
+    };
+    const renderChildren = (parrentId, level) => {
+        return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
+            return React.createElement("div", { key: block.uuid },
+                React.createElement(TreeBrunch, { label: block.label.length ? block.label : block.uuid, level: level, colapsedState: block.treeViewCollapseState, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBlockSelect(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
+                !block.treeViewCollapseState && renderChildren(block.uuid, level + (TWO / TWO)));
+        });
+    };
     return React.createElement(SidebarStyle, null,
         React.createElement(Tabs, { store: store }),
         store.state.selectedTab === TAB_TYPE.Edit &&
@@ -35222,10 +35421,26 @@ const Sidebar = ({ store }) => {
                 React.createElement("div", { style: {
                         "overflow": "auto",
                         "height": "100%"
-                    } }, store.state.templates[0].menuItems.map(mi => {
-                    return React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi });
-                })),
-                React.createElement("div", null, "Tree view")));
+                    } },
+                    store.state.selectedBlock === null &&
+                        store.state.templates?.[0].menuItems.map(mi => {
+                            return React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi });
+                        }),
+                    store.state.selectedBlock !== null &&
+                        store.state.templates[0] &&
+                        store.state.templates[0].blocks &&
+                        store.state.templates?.[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.map(mi => {
+                            return React.createElement(MenuItemBlock, { key: mi.uuid, store: store, mi: mi });
+                        })),
+                React.createElement("div", { style: {
+                        "overflow": "auto",
+                        "height": "100%"
+                    } }, renderChildren(null, ZERO))));
+};
+const TreeBrunch = ({ label, level, colapsedState, selected, onClick, onCollapsedChange }) => {
+    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` } },
+        React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""}`, onClick: onCollapsedChange }),
+        React.createElement("span", { className: "label", onClick: onClick }, label));
 };
 
 const ToastStyle = qe.div `
@@ -35558,6 +35773,21 @@ const PageStyle = qe.div `
   width: 100vw;
   height: 100vh;
   transition: background var(--transition);
+
+  & *::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  & *::-webkit-scrollbar {
+    width: 0.7em;
+    height: 0.7em;
+    background-color: transparent;
+  }
+  & *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: var(--app-bg); 
+    border: 2px solid var(--section-bg);
+    cursor: pointer;
+  }
 `;
 const Page = ({ state, dispach }) => {
     const { toast, prompt, showToast, showAlert, showConfirm, showPrompt } = useUI();
@@ -35596,8 +35826,18 @@ const reducer = (state, action) => {
                 stateUpdated = redusedAction2.stateUpdated;
             }
             break;
+        case "block":
+            const redusedAction3 = blockReducer(state, action);
+            if (redusedAction3.stateUpdated) {
+                state = redusedAction3.state;
+                stateUpdated = redusedAction3.stateUpdated;
+            }
+            break;
         default:
             console.error("unknown reducer type", actionType, action);
+    }
+    if (stateUpdated) {
+        state.lastChange = new Date().getTime();
     }
     return { state,
         stateUpdated };
@@ -35630,8 +35870,18 @@ const appReducer = (state, action) => {
             }
             break;
         case ACTION_NAMES.app_setTemplate:
+            if (!state.templates?.[0]) {
+                state.templates.push(action.payload);
+                stateUpdated = true;
+            }
             if (action.payload.uuid !== state.templates[0].uuid) {
                 state.templates[0] = action.payload;
+                stateUpdated = true;
+            }
+            break;
+        case ACTION_NAMES.app_selectBlock:
+            if (action.payload !== state.selectedBlock) {
+                state.selectedBlock = action.payload;
                 stateUpdated = true;
             }
             break;
@@ -35662,10 +35912,92 @@ const templateReducer = (state, action) => {
                 }
             }
             break;
+        case ACTION_NAMES.template_addBlock:
+            template.blocks.push(getInitialBlock(state.selectedBlock));
+            stateUpdated = true;
+            break;
+        case ACTION_NAMES.template_removeBlock:
+            if (state.selectedBlock) {
+                const startingBlock = template.blocks.find(block => block.uuid === state.selectedBlock);
+                if (startingBlock) {
+                    const getChildrenParents = (parentId) => {
+                        let idList = [parentId];
+                        //add all children
+                        template.blocks.filter(b => b.parentId === parentId).map(child => {
+                            idList = [...idList, ...getChildrenParents(child.uuid)];
+                        });
+                        //if child has children
+                        //concat getChildrenParents()
+                        return idList;
+                    };
+                    const allDependentIds = getChildrenParents(startingBlock.uuid);
+                    template.blocks = template.blocks.filter(block => {
+                        if (allDependentIds.includes(block.uuid)) {
+                            stateUpdated = true;
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    });
+                }
+                if (state.selectedBlock !== null) {
+                    state.selectedBlock = startingBlock ? startingBlock.parentId : null;
+                    stateUpdated = true;
+                }
+            }
+            break;
         default:
             console.error("unknown template reducer action", action);
     }
-    template.dateEdited = new Date().getTime();
+    if (stateUpdated) {
+        template.dateEdited = new Date().getTime();
+    }
+    return {
+        state,
+        stateUpdated
+    };
+};
+const blockReducer = (state, action) => {
+    let stateUpdated = false;
+    switch (action.name) {
+        case ACTION_NAMES.block_setParam:
+            const blockSetParam = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
+            if (!blockSetParam) {
+                return {
+                    state,
+                    stateUpdated
+                };
+            }
+            if (Object.keys(blockSetParam).includes(action.payload.paramName)) {
+                if (action.payload.value !== blockSetParam[action.payload.paramName]) {
+                    blockSetParam[action.payload.paramName] = action.payload.value;
+                    stateUpdated = true;
+                }
+            }
+            break;
+        case ACTION_NAMES.block_setCSS:
+            const blockSetCSS = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
+            if (!blockSetCSS) {
+                return {
+                    state,
+                    stateUpdated
+                };
+            }
+            const targetMI = blockSetCSS.menuItems.find(mi => mi.uuid === action.payload.miUUID);
+            if (targetMI) {
+                if (action.payload.value !== targetMI.miListItemValue) {
+                    targetMI.miListItemValue = action.payload.value;
+                    stateUpdated = true;
+                }
+            }
+            break;
+        default:
+            console.error("unknown block reducer action", action);
+    }
+    if (stateUpdated) {
+        state.templates[0].dateEdited = new Date().getTime();
+    }
     return {
         state,
         stateUpdated

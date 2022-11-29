@@ -6,26 +6,26 @@ const wordsUA: Record<WordType, string> = {
   //topBar
 
   //sideBar
-  sideBarEdit: "редагувати",
-  sideBarCopy: "копіювати",
+  sideBarEdit: "Макет",
+  sideBarCopy: "Копії",
 
   //ui
-  uiConfirmNewTemplateHeader: "Pidtverdit diyu",
-  uiConfirmNewTemplateText: "Vpevneny sho hochete perezapysaty cey maket",
-  uiNewTemplateCreated: "Noviy maket stvoreno",
-  uiOk: "Ok",
-  uiCancel: "Vidminity",
-  uiConfirm: "Pidtverdity",
-  uiProseed: "Prodovzhity",
+  uiConfirmNewTemplateHeader: "Підтрердіть дію",
+  uiConfirmNewTemplateText: "Впевнені що хочете перезаписати цей макет?",
+  uiNewTemplateCreated: "Новий мекет створено",
+  uiOk: "Ок",
+  uiCancel: "Відминити",
+  uiConfirm: "Підтвердити",
+  uiProseed: "Продовжити",
 
   //mi
-  miPageSize: "Rozmir arkusha",
-  miPageOrientation: "Orientaciya storinky",
-  horizontal: "Horizontalno",
-  vertical: "Verticalno",
-  miPadding: "Otstupy",
-  miLastChangeTime: "Ostannya zmina",
-  miName: "Nazva",
+  miPageSize: "Розмір аркуша",
+  miPageOrientation: "Орієнтація сторінки",
+  horizontal: "Горизонтально",
+  vertical: "Вертикально",
+  miPadding: "Відступи",
+  miLastChangeTime: "Час останьої зміни",
+  miName: "Назва",
   undefined: ""
 };
 

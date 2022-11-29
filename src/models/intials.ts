@@ -1,12 +1,12 @@
 import { LANG_CODES } from "src/store/translation";
 import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
-import { AppStateModel, BlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
+import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
 const getId: (atr: string)=>string = (prefix) => {
   return `${prefix}${Math.round(Math.random() * RandLength)}`;
 };
 
-const getInitialAppState: ()=>AppStateModel = () => {
+export const getInitialAppState: ()=>AppStateModel = () => {
   return {
     version: Version,
     theme: THEME_TYPE.dark,
@@ -20,7 +20,7 @@ const getInitialAppState: ()=>AppStateModel = () => {
   };
 };
 
-const getInitialTamplate: ()=>TemplateModel = () => {
+export const getInitialTamplate: ()=>TemplateModel = () => {
   return {
     uuid: getId("t"),
     dateCreated: new Date().getTime(),
@@ -28,7 +28,7 @@ const getInitialTamplate: ()=>TemplateModel = () => {
     name: "",
     pageSizeMM: A4,
     pageOrientation: "vertical",
-    pageMargin: ["0mm", "0mm", "0mm", "0mm"],
+    pageMargin: "0mm 0mm 0mm 0mm",
     copyColumns: [],
     copyRefferenceIds: [],
     copyRows: [],
@@ -38,55 +38,69 @@ const getInitialTamplate: ()=>TemplateModel = () => {
 };
 
 const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
-  const dateAdded = new Date().getTime();
+  const timeAdded = new Date().getTime();
   return [
     {
       uuid: getId("tmi"),
       miListItemId: "mi0004",
       miListItemValue: "",
-      dateAdded: dateAdded
+      timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
       miListItemId: "mi0003",
       miListItemValue: "0",
-      dateAdded: dateAdded
+      timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
       miListItemId: "mi0001",
       miListItemValue: A4,
-      dateAdded: dateAdded
+      timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
       miListItemId: "mi0002",
       miListItemValue: "vertical",
-      dateAdded: dateAdded
+      timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0101",
+      miListItemId: "mi0005",
       miListItemValue: null,
-      dateAdded: dateAdded
+      timeAdded: timeAdded
     }
   ];
 };
 
-const getInitialBlock: ()=>BlockModel = () => {
+export const getInitialBlock: (parentId: string | null)=>BlockModel = (parentId = null) => {
   const blockId = getId("b");
   return {
     uuid: blockId,
     label: "",
-    parentId: null,
+    parentId: parentId,
     contentType: CONTENT_TYPE.fixed,
     contentValue: "",
     variableLabel: "",
     variableOptions: [],
     referenceId: blockId,
-    menuItems: [],
+    menuItems: getInitialBlockMis(),
     treeViewCollapseState: false 
   };
 };
 
-export {getInitialAppState, getInitialTamplate, getInitialBlock};
+const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
+  const dateAdded = new Date().getTime();
+  return [
+    {
+      uuid: getId("tmi"),
+      miListItemId: "mi0001",
+      miListItemValue: "",
+      valueType: CONTENT_TYPE.fixed,
+      variableLabel: "",
+      variableOptions: [],
+      refferenceId: null,
+      timeAdded: dateAdded
+    }
+  ];
+};

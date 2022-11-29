@@ -19,9 +19,15 @@ export enum ACTION_NAMES{
   app_setTab = "app_setTab",
   app_setsidebarSectionHeight = "app_setsidebarSectionHeight",
   app_setTemplate = "app_setTemplate",
+  app_selectBlock = "app_selectBlock",
 
   template_setParam = "template_setParam",
-  template_setCSS = "template_setCSS"
+  template_setCSS = "template_setCSS",
+  template_addBlock = "template_addBlock",
+  template_removeBlock = "template_removeBlock",
+  
+  block_setParam = "block_setParam",
+  block_setCSS = "block_setCSS"
 }
 
 export enum TAB_TYPE{

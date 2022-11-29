@@ -67,12 +67,12 @@ export const TemplateMIs = {
     inputType: INPUT_TYPES.text,
     inputOptions: []
   },
-  mi0101: {
-    uuid: "mi0101",
+  mi0005: {
+    uuid: "mi0005",
     label: "miPadding",
-    miType: MI_LISTITEM_TYPE.templateCSS,
-    CSSParam: "padding",
-    CSSDefaultValue: "0mm",
+    miType: MI_LISTITEM_TYPE.templateParam,
+    paramName: "pageMargin",
+    defaultValue: "0mm",
     isReadonly: false,
     isAddable: false,
     inputType: INPUT_TYPES.text,

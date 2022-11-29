@@ -31,6 +31,16 @@ const TopbarStyle = styled.div`
 `;
 
 const Topbar: FC<TopbarModel> = ({store}) => {
+  const handleNewBlock = () => {
+    store.dispach({
+      name: ACTION_NAMES.template_addBlock
+    });
+  };
+  const handleRemoveBlock = () => {
+    store.dispach({
+      name: ACTION_NAMES.template_removeBlock
+    });
+  };
   const handleTheme = () => {
     const nextTheme = store.state.theme === THEME_TYPE.light ? THEME_TYPE.dark : store.state.theme === THEME_TYPE.dark ? THEME_TYPE.auto : THEME_TYPE.light;
     store.dispach({
@@ -54,16 +64,23 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       });
     });
   };
+  const handleSelectNone = () => {
+    store.dispach({
+      name: ACTION_NAMES.app_selectBlock,
+      payload: null
+    });
+  };
 
   return <TopbarStyle>
     <div className="templateTools">
-      <TopbarButton iconType="newBlock" onClick={() => { null; }}></TopbarButton>
-      <TopbarButton iconType="removeBlock" onClick={() => { null; }} disabled={!store.state.selectedBlock}></TopbarButton>
+      <TopbarButton iconType="newBlock" onClick={handleNewBlock}></TopbarButton>
+      <TopbarButton iconType="removeBlock" onClick={handleRemoveBlock} disabled={!store.state.selectedBlock}></TopbarButton>
+      <TopbarButton iconType="minus" onClick={handleSelectNone} disabled={!store.state.selectedBlock}></TopbarButton>
     </div>
     <div className="appTools">
       <TopbarButton iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>
       <TopbarButton iconType="export" onClick={() => { null; }} disabled={true}></TopbarButton>
-      <TopbarButton iconType="newTemplate" onClick={handleNewTemplate} disabled={!store.state.templates[0].dateEdited}></TopbarButton>
+      <TopbarButton iconType="newTemplate" onClick={handleNewTemplate} disabled={ store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false}></TopbarButton>
       <TopbarButton
         iconType={store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme"}
         onClick={handleTheme}

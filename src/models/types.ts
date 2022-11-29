@@ -1,4 +1,5 @@
 import { LanguageType, WordType } from "src/store/translation";
+import { BlockMINames } from "./blockMIs";
 import { ACTION_NAMES, THEME_TYPE, TAB_TYPE, CONTENT_TYPE, MI_LISTITEM_TYPE, INPUT_TYPES } from "./constants";
 import { IconTypeKey } from "./icons";
 import { TemplateMINames } from "./templateMIs";
@@ -38,7 +39,7 @@ export type SubscriberModel = (arg: AppStateModel) => void
 export type ActionModel = {
   name: ""
   payload: never
-} |{
+} |{ //////       APP       ///////
   name: ACTION_NAMES.app_setTheme
   payload: THEME_TYPE
 } | {
@@ -53,7 +54,10 @@ export type ActionModel = {
 } | {
   name: ACTION_NAMES.app_setTemplate
   payload: TemplateModel
-}| {
+} | {
+  name: ACTION_NAMES.app_selectBlock
+  payload: string | null
+}| { //////    TEMPLATE     ///////
   name: ACTION_NAMES.template_setParam
   payload: {
     paramName: keyof TemplateModel
@@ -65,8 +69,25 @@ export type ActionModel = {
     miUUID: string 
     value: string
   }
+} | {
+  name: ACTION_NAMES.template_addBlock
+} | {
+  name: ACTION_NAMES.template_removeBlock
+} | {////////     BLOCK     /////////
+  name: ACTION_NAMES.block_setParam
+  payload: {
+    paramName: keyof BlockModel
+    value: string | number | boolean
+    blockUUID?: string
+  }
+} | {
+  name: ACTION_NAMES.block_setCSS
+  payload: {
+    miUUID: string 
+    value: string
+    blockUUID?: string
+  }
 }
-
 
 export interface AppStateModel {
   version: string
@@ -87,7 +108,7 @@ export interface TemplateModel {
   name: string
   pageSizeMM: string //in milimeters for width and height
   pageOrientation: "vertical" | "horizontal"
-  pageMargin: string[] //in any css units for top, right, bottom, left
+  pageMargin: string //in any css units for top, right, bottom, left
   copyColumns: string[]
   copyRefferenceIds: string[]
   copyRows: string[]
@@ -112,17 +133,17 @@ export type MenuItemTemplateModel = {
   uuid: string
   miListItemId: TemplateMINames
   miListItemValue: string | number | null
-  dateAdded: number
+  timeAdded: number
 }
 export type MenuItemBlockModel =  {
   uuid: string
-  miListItemId: string
+  miListItemId: BlockMINames
   miListItemValue: string | number | null
   valueType: CONTENT_TYPE
   variableLabel: string
   variableOptions: string[]
-  refferenceId: string
-  timeCreated: number
+  refferenceId: string | null
+  timeAdded: number
 }
 
 export interface SelectOption{
@@ -161,7 +182,6 @@ export type MenuItemBlockListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  onChange: (newVal: string | number) => void
 } | {
   uuid: string
   label: WordType
@@ -172,7 +192,6 @@ export type MenuItemBlockListItemModel = {
   isCopylinkable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  onChange: (newVal: string | number) => void
 }
 
 export type ReducerModel = (state: AppStateModel, action: ActionModel) => {state: AppStateModel, stateUpdated: boolean}
