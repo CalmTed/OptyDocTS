@@ -1,6 +1,6 @@
-import { ACTION_NAMES } from "src/models/constants";
-import { getInitialBlock } from "src/models/intials";
-import { ReducerModel } from "src/models/types";
+import { ACTION_NAMES, ZERO } from "src/models/constants";
+import { getId, getInitialBlock } from "src/models/intials";
+import { BlockModel, ReducerModel } from "src/models/types";
 
 const reducer: ReducerModel = (state, action) => {
   let stateUpdated = false;
@@ -90,6 +90,18 @@ const appReducer: ReducerModel = (state, action) => {
 const templateReducer: ReducerModel = (state, action) => {
   let stateUpdated = false;
   const template = state.templates[0];
+  const cleanUpBlock: (arg: BlockModel) => BlockModel = (block) => {
+    return  {
+      ...block,
+      uuid: getId("b"),
+      //changing uuids for all including mis
+      menuItems: block.menuItems.map(mi => {
+        return {
+          ...mi,
+          uuid: getId("bmi")};
+      })
+    };
+  };
   switch(action.name) {
   case ACTION_NAMES.template_setParam:
     if(Object.keys(template).includes(action.payload.paramName)) {
@@ -113,8 +125,8 @@ const templateReducer: ReducerModel = (state, action) => {
     stateUpdated = true;
     break;
   case ACTION_NAMES.template_removeBlock:
-    if(state.selectedBlock) {
-      const startingBlock = template.blocks.find(block => block.uuid === state.selectedBlock);
+    if(state.selectedBlock || action.payload) {
+      const startingBlock = template.blocks.find(block => { return block.uuid === (action.payload ? action.payload : state.selectedBlock); });
       if(startingBlock) {
         const getChildrenParents = (parentId: string) => {
           let idList: string[] = [parentId];
@@ -140,8 +152,60 @@ const templateReducer: ReducerModel = (state, action) => {
         state.selectedBlock = startingBlock ? startingBlock.parentId : null;
         stateUpdated = true;
       }
-      
     }
+    break;
+  case ACTION_NAMES.template_addBlockInside:
+
+    const newInsertedBlock: BlockModel = {
+      ...cleanUpBlock(action.payload.block),
+      parentId: action.payload.parentId
+    };
+    state.templates[0].blocks.push(newInsertedBlock);
+    if(action.payload.children) {
+      const getAndCleanUpChildren: (list: BlockModel[], fromParent: string, toParemt: string) => BlockModel[] = (list, fromParent, toParent) => {
+        let ret:BlockModel[] = [];
+        list.filter(block => block.parentId === fromParent).map(block => {
+          const clearedBlock = {
+            ...cleanUpBlock(block),
+            parentId: toParent
+          };
+          ret = [
+            ...ret,
+            clearedBlock,
+            ...getAndCleanUpChildren(list, block.uuid, clearedBlock.uuid)
+          ];
+        });
+        return ret;
+      };
+      const reparentedAndClearedChildren = getAndCleanUpChildren(action.payload.children, action.payload.block.uuid, newInsertedBlock.uuid);
+      reparentedAndClearedChildren.map(child => {
+        state.templates[0].blocks.push(child);
+      });
+    }
+    stateUpdated = true;
+    break;
+  case ACTION_NAMES.template_addBlockBefore:
+    const successorBlock = state.templates[0].blocks.find(block => block.uuid === action.payload.successorId);
+    if(!successorBlock) {
+      break;
+    }
+    const successorIndex = state.templates[0].blocks.indexOf(successorBlock);
+    const newNieigborBlock: BlockModel = {
+      ...cleanUpBlock(action.payload.block),
+      parentId: successorBlock.parentId
+    };
+    //adding right before successor block
+    state.templates[0].blocks.splice(successorIndex, ZERO, newNieigborBlock);
+    if(action.payload.children) {
+      action.payload.children.map(child => {
+        const clearedChild: BlockModel = {
+          ...cleanUpBlock(child),
+          parentId: newNieigborBlock.uuid
+        };
+        state.templates[0].blocks.push(clearedChild);
+      });
+    }
+    stateUpdated = true;
     break;
   default:
     console.error("unknown template reducer action", action);

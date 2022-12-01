@@ -21,6 +21,7 @@ const SidebarStyle = styled.div`
 
 const TreeBrunchStyle = styled.div`
   display: flex;
+  width: 100%;
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
@@ -56,12 +57,17 @@ const TreeBrunchStyle = styled.div`
     &.collapsed{
       transform: rotate(90deg);
     }
+    &.hidden{
+      visibility: hidden;
+    }
   }
   & .label{
     cursor: pointer;
-    width: 100%;
+    width: auto;
+    min-width: 4em;
     height: 100%;
     padding: 0.4em;
+    overflow: hidden;
   }
 `;
 
@@ -87,12 +93,17 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
   };
 
   const renderChildren: (parentId: string | null, level: number) => React.ReactNode = (parrentId, level) => {
+    const brunchChildren: Record<string, string[]> = {};
+    store.state.templates?.[0].blocks.map((block, bi, bList) => {
+      brunchChildren[block.uuid] = bList.filter(bCh => bCh.parentId === block.uuid).map(b => b.uuid);
+    });
     return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
       return <div key={block.uuid} >
         <TreeBrunch
           label={block.label.length ? block.label : block.uuid}
           level={level}
           colapsedState={block.treeViewCollapseState}
+          hasChildren={!!brunchChildren[block.uuid].length}
           selected={store.state.selectedBlock === block.uuid}
           onClick={ () => { handeBlockSelect(block.uuid); }}
           onCollapsedChange={() => { handeBlockBrunchCollapce(block); }}
@@ -112,7 +123,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
         }}>
           {
             store.state.selectedBlock === null &&
-            store.state.templates?.[0].menuItems.map(mi => {
+            store.state.templates?.[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
               return <MenuItemTemplate key={mi.uuid} store={store} mi={mi}/>;
             })
           }
@@ -120,7 +131,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
             store.state.selectedBlock !== null &&
             store.state.templates[0] &&
             store.state.templates[0].blocks &&
-            store.state.templates?.[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.map(mi => {
+            store.state.templates?.[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
               return <MenuItemBlock key={mi.uuid} store={store} mi={mi}/>;
             })
           }
@@ -142,19 +153,20 @@ interface TreeBrunchModel{
   label: string
   level: number
   colapsedState: boolean
+  hasChildren: boolean
   selected: boolean
   onClick: () => void
   onCollapsedChange: () => void
 }
 
-const TreeBrunch: FC<TreeBrunchModel> = ({label, level, colapsedState, selected, onClick, onCollapsedChange}) => {
+const TreeBrunch: FC<TreeBrunchModel> = ({label, level, colapsedState, hasChildren, selected, onClick, onCollapsedChange}) => {
   return <TreeBrunchStyle 
     className={`${selected ? "selected" : ""}`}
     style={{"paddingLeft":`${ (TWO / TWO) * level }em`}}
   >
     <span
-      className={`triangle ${colapsedState ? "collapsed" : ""}`}
-      onClick={onCollapsedChange}
+      className={`triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`}
+      onClick={() => { hasChildren ? onCollapsedChange() : null; }}
     ></span>
     <span className="label" onClick={onClick}>{label}</span>
   </TreeBrunchStyle>;

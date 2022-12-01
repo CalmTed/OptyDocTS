@@ -57,7 +57,7 @@ export type ActionModel = {
 } | {
   name: ACTION_NAMES.app_selectBlock
   payload: string | null
-}| { //////    TEMPLATE     ///////
+} | { //////    TEMPLATE     ///////
   name: ACTION_NAMES.template_setParam
   payload: {
     paramName: keyof TemplateModel
@@ -73,6 +73,21 @@ export type ActionModel = {
   name: ACTION_NAMES.template_addBlock
 } | {
   name: ACTION_NAMES.template_removeBlock
+  payload?: string
+} | {
+  name: ACTION_NAMES.template_addBlockInside
+  payload: {
+    block: BlockModel
+    parentId: string | null
+    children?: BlockModel[]
+  }
+} | {
+  name: ACTION_NAMES.template_addBlockBefore
+  payload: {
+    block: BlockModel
+    successorId: string
+    children?: BlockModel[]
+  }
 } | {////////     BLOCK     /////////
   name: ACTION_NAMES.block_setParam
   payload: {

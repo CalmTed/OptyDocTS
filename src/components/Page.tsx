@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { THEME_TYPE } from "src/models/constants";
 import { ActionModel, AppStateModel, StoreModel } from "src/models/types";
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
@@ -30,9 +29,19 @@ const PageStyle = styled.div`
     --second-color: #ECCF03;
     --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
   }
+  @media (prefers-color-scheme: light) {
+    &.auto{
+      --app-bg: #d9d9d9;
+      --section-bg: #eeeeee;
+      --text-color: #222222;
+      --main-color: #14ABF3;
+      --second-color: #ECCF03;
+      --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
+    }
+  }
   --transition: .1s ease-in;
   --sidebar-width: 20em;
-  --border-radius: 4px;
+  --border-radius: 8px;
 
   --z-select-list: 2000;
   --z-prompt-backdrop: 1000;
@@ -80,7 +89,7 @@ const Page: FC<PageModel> = ({state, dispach}) => {
     t
   };
 
-  return <PageStyle className={state.theme === THEME_TYPE.light ? THEME_TYPE.light : THEME_TYPE.dark}>
+  return <PageStyle className={state.theme}>
     <Topbar store={store}></Topbar>
     <Sidebar store={store}></Sidebar>
     <Toast toast={toast}></Toast>

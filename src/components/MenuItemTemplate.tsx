@@ -3,7 +3,7 @@ import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constant
 import { TemplateMIs } from "src/models/templateMIs";
 import { MenuItemTemplateListItemModel, MenuItemTemplateModel, StoreModel } from "src/models/types";
 import styled from "styled-components";
-import { MISelect, MIText } from "./ui/MiTypes";
+import { MISelect, MIText, MITextarea } from "./ui/MiTypes";
 
 interface MenuItemTemplateComponentModel{
   store: StoreModel
@@ -65,6 +65,10 @@ const MITemplateParam: FC<MITemplateParam> = ({store, listItemData}) => {
         (
           listItemData.inputType === INPUT_TYPES.text &&
           <MIText value={String(store.state.templates[0][listItemData.paramName])} onChange={handleChange}></MIText>
+        ) ||
+        (
+          listItemData.inputType === INPUT_TYPES.textarea &&
+          <MITextarea style={{"width": "100%"}} value={String(store.state.templates[0][listItemData.paramName])} onChange={handleChange}></MITextarea>
         )
       )
     }

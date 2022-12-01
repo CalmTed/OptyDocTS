@@ -25,6 +25,8 @@ export enum ACTION_NAMES{
   template_setCSS = "template_setCSS",
   template_addBlock = "template_addBlock",
   template_removeBlock = "template_removeBlock",
+  template_addBlockInside = "template_addBlockInside",
+  template_addBlockBefore = "template_addBlockBefore",
   
   block_setParam = "block_setParam",
   block_setCSS = "block_setCSS"

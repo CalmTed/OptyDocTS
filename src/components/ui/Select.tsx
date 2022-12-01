@@ -37,32 +37,44 @@ const SelectTriangleStyle = styled.div`
   }
 `;
 const SelectListStyle = styled.div`
-  position: absolute;
-  background: var(--section-bg);
+  height: 0;
+  width: 0;
   transform: translate(-1em, 50%);
-  border-radius: var(--border-radius);
-  border: 0.2em solid var(--app-bg);
   transition: all var(--transition);
   visibility: hidden;
   opacity: 0;
   max-height: 14em;
-  overflow-y: auto;
   z-index: var(--z-select-list);
+
 `;
-const SelectListItemStyle = styled.div`
+const SelectListItemStyle = styled.div` 
+  background: var(--section-bg);
   padding: 0.5em 1.2em;
   max-width: 17em;
   overflow: hidden;
   min-width: 5em;
   cursor: pointer;
+  border: 0.2em solid var(--app-bg);
+  border-bottom-width: 0;
+  border-top-width: 0;
+  &:first-child{
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-top-width: 0.2em;
+  }
+  &:last-child{
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-bottom-width: 0.2em;
+  }
   :hover{
     background: var(--app-bg);
+    border-color: var(--app-bg);
   }
   &.selected{
-    color: var(--app-bg);
+    color: var(--section-bg);
     background: var(--main-color);
+    border-color: var(--main-color);
     :hover{
-      color: var(--section-bg);
+      color: var(--app-bg);
     }
   }
 `;
@@ -91,6 +103,7 @@ const SelectWrapperStyle = styled.div`
   }
 
 `;
+
 
 const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => {
   const selectedValue = options.filter(
@@ -122,8 +135,6 @@ const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => 
     style={style}
     tabIndex={parseInt(FOCUS_ORDER.select)}
   >
-    <SelectValueStyle>{seletedValueString}</SelectValueStyle>
-    <SelectTriangleStyle></SelectTriangleStyle>
     <SelectListStyle className="optionsList">
       { options.map(item => {
         return <SelectListItemStyle
@@ -138,8 +149,27 @@ const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => 
           {item.label}
         </SelectListItemStyle>;
       }) }
-      
     </SelectListStyle>
+    <SelectValueStyle>{seletedValueString}</SelectValueStyle>
+    <SelectTriangleStyle></SelectTriangleStyle>
   </SelectWrapperStyle>;
+  // return <div className={`classes ${classes}`}>
+  //   <TitleStyle>{seletedValueString}</TitleStyle>
+  //   <SelectOptions>
+  //     { options.map(item => {
+  //       return <SelectOption
+  //         key={item.value}
+  //         vocab={item.value + ""}
+  //         className={`${selectedValue.map(selectedItem => selectedItem.value).includes(item.value) ? "selected" : ""}`}
+  //         onClick={ () => { 
+  //           handleOptionSelecting(item);
+  //         } }
+  //         tabIndex={parseInt(FOCUS_ORDER.select)}
+  //       >
+  //         {item.label}
+  //       </SelectOption>;
+  //     }) }
+  //   </SelectOptions>
+  // </div>;
 };
 export default Select;

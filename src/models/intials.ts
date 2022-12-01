@@ -2,14 +2,15 @@ import { LANG_CODES } from "src/store/translation";
 import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
 import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
-const getId: (atr: string)=>string = (prefix) => {
+type IdType = "t" | "b" | "tmi" | "bmi";
+export const getId: (atr: IdType)=>string = (prefix) => {
   return `${prefix}${Math.round(Math.random() * RandLength)}`;
 };
 
 export const getInitialAppState: ()=>AppStateModel = () => {
   return {
     version: Version,
-    theme: THEME_TYPE.dark,
+    theme: THEME_TYPE.auto,
     lastChange: new Date().getTime(),
     langCode: LANG_CODES[0],
     selectedTab: TAB_TYPE.Edit,
@@ -93,7 +94,7 @@ const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
   const dateAdded = new Date().getTime();
   return [
     {
-      uuid: getId("tmi"),
+      uuid: getId("bmi"),
       miListItemId: "mi0001",
       miListItemValue: "",
       valueType: CONTENT_TYPE.fixed,

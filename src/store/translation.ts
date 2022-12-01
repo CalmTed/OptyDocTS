@@ -14,9 +14,12 @@ export type WordType = keyof typeof wordsEN;
 
 const createT = (language: LanguageType) => {
   return (w: WordType) => {
-    // console.log(words);
-    // console.log(language);
-    return words[language]?.[w] || w;
+    if(words[language]?.[w]) {
+      return words[language][w];
+    }else{
+      console.warn("no translation for string:", w);
+      return w;
+    }
   };
 };
 

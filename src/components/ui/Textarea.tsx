@@ -18,6 +18,7 @@ const TextareaStyle = styled.textarea`
   padding: 0.5em 1em;
   color: var(--text-color);
   font-size: inherit;
+  font-family: inherit;
   :hover{
     opacity: 0.8;
   }
