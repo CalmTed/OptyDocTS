@@ -1,5 +1,7 @@
 import { LANG_CODES } from "src/store/translation";
+import { BLOCK_MI_NAMES } from "./blockMIs";
 import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
+import { TEMPLATE_MI_NAMES } from "./templateMIs";
 import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
 type IdType = "t" | "b" | "tmi" | "bmi";
@@ -43,31 +45,31 @@ const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
   return [
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0004",
+      miListItemName: TEMPLATE_MI_NAMES.name,
       miListItemValue: "",
       timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0003",
+      miListItemName: TEMPLATE_MI_NAMES.dateEdited,
       miListItemValue: "0",
       timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0001",
+      miListItemName: TEMPLATE_MI_NAMES.size,
       miListItemValue: A4,
       timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0002",
+      miListItemName: TEMPLATE_MI_NAMES.orientation,
       miListItemValue: "vertical",
       timeAdded: timeAdded
     },
     {
       uuid: getId("tmi"),
-      miListItemId: "mi0005",
+      miListItemName: TEMPLATE_MI_NAMES.pageMargin,
       miListItemValue: null,
       timeAdded: timeAdded
     }
@@ -95,7 +97,47 @@ const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
   return [
     {
       uuid: getId("bmi"),
-      miListItemId: "mi0001",
+      miListItemName: BLOCK_MI_NAMES.name,
+      miListItemValue: "",
+      valueType: CONTENT_TYPE.fixed,
+      variableLabel: "",
+      variableOptions: [],
+      refferenceId: null,
+      timeAdded: dateAdded
+    },
+    {
+      uuid: getId("bmi"),
+      miListItemName: BLOCK_MI_NAMES.content,
+      miListItemValue: "",
+      valueType: CONTENT_TYPE.fixed,
+      variableLabel: "",
+      variableOptions: [],
+      refferenceId: null,
+      timeAdded: dateAdded
+    },
+    {
+      uuid: getId("bmi"),
+      miListItemName:  BLOCK_MI_NAMES.display,
+      miListItemValue: "",
+      valueType: CONTENT_TYPE.fixed,
+      variableLabel: "",
+      variableOptions: [],
+      refferenceId: null,
+      timeAdded: dateAdded
+    },
+    {
+      uuid: getId("bmi"),
+      miListItemName: BLOCK_MI_NAMES.height,
+      miListItemValue: "",
+      valueType: CONTENT_TYPE.fixed,
+      variableLabel: "",
+      variableOptions: [],
+      refferenceId: null,
+      timeAdded: dateAdded
+    },
+    {
+      uuid: getId("bmi"),
+      miListItemName: BLOCK_MI_NAMES.width,
       miListItemValue: "",
       valueType: CONTENT_TYPE.fixed,
       variableLabel: "",

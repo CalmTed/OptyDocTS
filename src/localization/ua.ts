@@ -33,6 +33,18 @@ const wordsUA: Record<WordType, string> = {
   miPadding: "Відступи",
   miLastChangeTime: "Час останьої зміни",
   miName: "Назва",
+  miContent: "Kontent",
+  miDisplay: "Tip",
+  miDisplayInline: "Stroka",
+  miDisplayBlock: "Blok Tverdy",
+  miDisplayFlex: "Blok Myakiy",
+  miDisplayNone: "Pryhovano",
+  miDisplayInherit: "Nasliduye",
+  miWidth: "Shirota",
+  miHeight: "Vysota",
+  A4: "A4",
+  A5: "A5",
+  A3: "A3",
   undefined: ""
 };
 

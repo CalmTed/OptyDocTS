@@ -1,8 +1,8 @@
 import { LanguageType, WordType } from "src/store/translation";
-import { BlockMINames } from "./blockMIs";
+import { BLOCK_MI_NAMES } from "./blockMIs";
 import { ACTION_NAMES, THEME_TYPE, TAB_TYPE, CONTENT_TYPE, MI_LISTITEM_TYPE, INPUT_TYPES } from "./constants";
 import { IconTypeKey } from "./icons";
-import { TemplateMINames } from "./templateMIs";
+import { TEMPLATE_MI_NAMES } from "./templateMIs";
 
 export interface StoreModel {
   state: AppStateModel
@@ -93,14 +93,14 @@ export type ActionModel = {
   payload: {
     paramName: keyof BlockModel
     value: string | number | boolean
-    blockUUID?: string
+    blockUUID: string | null
   }
 } | {
   name: ACTION_NAMES.block_setCSS
   payload: {
     miUUID: string 
     value: string
-    blockUUID?: string
+    blockUUID: string | null
   }
 }
 
@@ -146,13 +146,13 @@ export interface BlockModel {
 
 export type MenuItemTemplateModel = {
   uuid: string
-  miListItemId: TemplateMINames
+  miListItemName: TEMPLATE_MI_NAMES
   miListItemValue: string | number | null
   timeAdded: number
 }
 export type MenuItemBlockModel =  {
   uuid: string
-  miListItemId: BlockMINames
+  miListItemName: BLOCK_MI_NAMES
   miListItemValue: string | number | null
   valueType: CONTENT_TYPE
   variableLabel: string
@@ -167,7 +167,7 @@ export interface SelectOption{
 }
 
 export type MenuItemTemplateListItemModel = {
-  uuid: string
+  name: TEMPLATE_MI_NAMES
   label: WordType
   miType: MI_LISTITEM_TYPE.templateParam
   paramName: keyof TemplateModel
@@ -177,7 +177,7 @@ export type MenuItemTemplateListItemModel = {
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
 } | {
-  uuid: string
+  name: TEMPLATE_MI_NAMES
   label: WordType
   miType: MI_LISTITEM_TYPE.templateCSS
   CSSParam: string
@@ -188,7 +188,7 @@ export type MenuItemTemplateListItemModel = {
 }
 
 export type MenuItemBlockListItemModel = {
-  uuid: string
+  name: BLOCK_MI_NAMES
   label: WordType
   miType: MI_LISTITEM_TYPE.blockParam
   paramName: keyof BlockModel
@@ -198,7 +198,7 @@ export type MenuItemBlockListItemModel = {
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
 } | {
-  uuid: string
+  name: BLOCK_MI_NAMES
   label: WordType
   miType: MI_LISTITEM_TYPE.blockCSS
   CSSParam: string

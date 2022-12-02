@@ -1,8 +1,19 @@
 import { A3, A4, A5, INPUT_TYPES, MI_LISTITEM_TYPE } from "./constants";
+import { MenuItemTemplateListItemModel } from "./types";
 
-export const TemplateMIs = {
-  mi0001: {
-    uuid: "mi0001",
+export enum TEMPLATE_MI_NAMES{
+  name = "name",
+  size = "size",
+  orientation = "orientation",
+  dateEdited = "dateEdited",
+  pageMargin = "pageMargin"
+}
+
+export type TemplateMINames = "mi0001" | "mi0002" | "mi0003" | "mi0004" | "mi0005"
+
+export const TemplateMIs:MenuItemTemplateListItemModel[] = [
+  {
+    name: TEMPLATE_MI_NAMES.size,
     label: "miPageSize",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "pageSizeMM",
@@ -25,8 +36,8 @@ export const TemplateMIs = {
       }
     ]
   },
-  mi0002: {
-    uuid: "mi0002",
+  {
+    name: TEMPLATE_MI_NAMES.orientation,
     label: "miPageOrientation",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "pageOrientation",
@@ -45,8 +56,8 @@ export const TemplateMIs = {
       }
     ]
   },
-  mi0003: {
-    uuid: "mi0003",
+  {
+    name: TEMPLATE_MI_NAMES.dateEdited,
     label: "miLastChangeTime",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "dateEdited",
@@ -56,8 +67,8 @@ export const TemplateMIs = {
     inputType: INPUT_TYPES.text,
     inputOptions: []
   },
-  mi0004: {
-    uuid: "mi0004",
+  {
+    name: TEMPLATE_MI_NAMES.name,
     label: "miName",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "name",
@@ -67,8 +78,8 @@ export const TemplateMIs = {
     inputType: INPUT_TYPES.text,
     inputOptions: []
   },
-  mi0005: {
-    uuid: "mi0005",
+  {
+    name: TEMPLATE_MI_NAMES.pageMargin,
     label: "miPadding",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "pageMargin",
@@ -78,6 +89,4 @@ export const TemplateMIs = {
     inputType: INPUT_TYPES.text,
     inputOptions: []
   }
-};
-
-export type TemplateMINames = keyof typeof TemplateMIs
+];

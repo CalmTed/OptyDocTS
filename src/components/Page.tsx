@@ -7,6 +7,7 @@ import Toast from "./ui/Toast";
 import Prompt from "./ui/Prompt";
 import useUI from "src/store/useUI";
 import createT from "src/store/translation";
+import Stack from "./Stack";
 
 interface PageModel {
   state: AppStateModel
@@ -40,6 +41,7 @@ const PageStyle = styled.div`
     }
   }
   --transition: .1s ease-in;
+  --topbar-height: 3em;
   --sidebar-width: 20em;
   --border-radius: 8px;
 
@@ -92,6 +94,7 @@ const Page: FC<PageModel> = ({state, dispach}) => {
   return <PageStyle className={state.theme}>
     <Topbar store={store}></Topbar>
     <Sidebar store={store}></Sidebar>
+    <Stack store={store}></Stack>
     <Toast toast={toast}></Toast>
     <Prompt t={t} prompt={prompt}></Prompt>
   </PageStyle>;

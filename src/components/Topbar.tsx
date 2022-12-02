@@ -17,17 +17,14 @@ const TopbarStyle = styled.div`
   width: calc(100vw - var(--sidebar-width));
   padding-left: var(--sidebar-width);
   transition: all var(--transition);
-  height: 3em;
+  height: var(--topbar-height);
   display: flex;
   justify-content: space-between;
   & .templateTools, & .appTools{
     display: flex;
     wlex-wrap: wrap;
-    width: 50%;
-    justify-content: flex-start;
-  }
-  & .appTools{
-    justify-content: flex-end;
+    max-width: 50%;
+    overflow-x: auto;
   }
 `;
 
@@ -127,8 +124,6 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       ></TopbarButton>
       <TopbarButton iconType="setting" onClick={handleLanguage}></TopbarButton>
     </div>
-
-
   </TopbarStyle>;
 };
 

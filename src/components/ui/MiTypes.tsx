@@ -46,3 +46,14 @@ interface MITextarea{
 export const MITextarea: FC<MITextarea> = ({value, onChange, classes, style}) => {
   return <Textarea style={style} value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes}></Textarea>;
 };
+
+interface MISize{
+  value: string
+  onChange: (newVal: string) => void
+  classes?: string
+  style?: React.CSSProperties
+}
+
+export const MISize: FC<MISize> = ({value, onChange, classes, style}) => {
+  return <Input value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes} style={style} ></Input>;
+};

@@ -10,8 +10,8 @@ interface TopbarButtonModel {
 }
 
 const TopbarButtonStyle = styled.div`
-  height: 100%;
-  aspect-ratio: 1;
+  min-height: var(--topbar-height);
+  min-width: var(--topbar-height);
   display: flex;
   justify-content: center;
   align-items: center;

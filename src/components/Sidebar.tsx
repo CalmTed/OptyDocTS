@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { BlockModel, StoreModel } from "src/models/types";
 import Tabs from "./Tabs";
 import Split from "./ui/Split";
-import { ACTION_NAMES, TAB_TYPE, TWO, ZERO } from "src/models/constants";
+import { ACTION_NAMES, CSS_DISPLAY_TYPE, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import MenuItemTemplate from "./MenuItemTemplate";
 import MenuItemBlock from "./MenuItemBlock";
+import { BLOCK_MI_NAMES } from "src/models/blockMIs";
 
 interface SidebarModel {
   store: StoreModel
@@ -19,12 +20,27 @@ const SidebarStyle = styled.div`
   height: 100vh;
 `;
 
+const SplitStyle = styled.div`
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  &>div{
+    width: 100%;
+  }
+`;
+
 const TreeBrunchStyle = styled.div`
   display: flex;
-  width: 100%;
+  min-width: 100%;
+  transition: all var(--transition);
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
+  }
+  &.hidden{
+    opacity: 0.5;
   }
   :hover{
     background: var(--app-bg);
@@ -100,10 +116,9 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
     return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
       return <div key={block.uuid} >
         <TreeBrunch
-          label={block.label.length ? block.label : block.uuid}
+          block={block}
           level={level}
-          colapsedState={block.treeViewCollapseState}
-          hasChildren={!!brunchChildren[block.uuid].length}
+          brunchChildren={brunchChildren}
           selected={store.state.selectedBlock === block.uuid}
           onClick={ () => { handeBlockSelect(block.uuid); }}
           onCollapsedChange={() => { handeBlockBrunchCollapce(block); }}
@@ -117,10 +132,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
     <Tabs store={store}></Tabs>
     { store.state.selectedTab === TAB_TYPE.Edit &&
       <Split store={store}>
-        <div style={{
-          "overflow":"auto",
-          "height":"100%"
-        }}>
+        <SplitStyle>
           {
             store.state.selectedBlock === null &&
             store.state.templates?.[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
@@ -135,34 +147,49 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
               return <MenuItemBlock key={mi.uuid} store={store} mi={mi}/>;
             })
           }
-        </div>
-        <div style={{
-          "overflow":"auto",
-          "height":"100%"
-        }}>
+        </SplitStyle>
+        <SplitStyle>
           {
             renderChildren(null, ZERO)
           }
-        </div>
+        </SplitStyle>
       </Split>
     }
   </SidebarStyle>;
 };
 
 interface TreeBrunchModel{
-  label: string
-  level: number
-  colapsedState: boolean
-  hasChildren: boolean
+  block: BlockModel
+  brunchChildren: Record<string, string[]>
   selected: boolean
+  level: number
   onClick: () => void
   onCollapsedChange: () => void
 }
-
-const TreeBrunch: FC<TreeBrunchModel> = ({label, level, colapsedState, hasChildren, selected, onClick, onCollapsedChange}) => {
+const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level, onClick, onCollapsedChange}) => {
+  const handleMouseEnter:(uuid: string) => void = (uuid) => {
+    const target = document.querySelector(`.uuid-${uuid}`);
+    if(!target) {
+      return;
+    }
+    target.classList.add("hovered");
+  };
+  const handleMouseLeave:(uuid: string) => void = (uuid) => {
+    const target = document.querySelector(`.uuid-${uuid}`);
+    if(!target) {
+      return;
+    }
+    target.classList.remove("hovered");
+  };
+  const label = block.label.length ? block.label : block.uuid;
+  const colapsedState = block.treeViewCollapseState;
+  const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
+  const hasChildren = !!brunchChildren[block.uuid].length;
   return <TreeBrunchStyle 
-    className={`${selected ? "selected" : ""}`}
+    className={`${selected ? "selected" : ""} ${isHideen ? "hidden" : ""}`}
     style={{"paddingLeft":`${ (TWO / TWO) * level }em`}}
+    onMouseEnter={() => { handleMouseEnter(block.uuid); }}
+    onMouseLeave={() => { handleMouseLeave(block.uuid); }}
   >
     <span
       className={`triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`}

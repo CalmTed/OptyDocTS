@@ -20,7 +20,7 @@ const MenuItemStyle = styled.div`
 `;
 
 const MenuItemTemplate: FC<MenuItemTemplateComponentModel> = ({mi, store}) => {
-  const listItemData = TemplateMIs[mi.miListItemId] as MenuItemTemplateListItemModel;
+  const listItemData = TemplateMIs.find(listMI => listMI.name === mi.miListItemName) as MenuItemTemplateListItemModel;
   if(!listItemData) {
     return <></>;
   }

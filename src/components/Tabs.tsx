@@ -8,7 +8,7 @@ const TabListStyle = styled.div`
 `;
 
 const TabStyle = styled.div`
-  height: 3em;
+  height: var(--topbar-height);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -30,6 +30,18 @@ const wordsEB = {
   miPadding: "Margins",
   miLastChangeTime: "Last change",
   miName: "Name",
+  miContent: "Content",
+  miDisplay: "Display",
+  miDisplayInline: "Inline",
+  miDisplayBlock: "Block",
+  miDisplayFlex: "Flex",
+  miDisplayNone: "None",
+  miDisplayInherit: "Inherit",
+  miWidth: "Width",
+  miHeight: "Height",
+  A4: "A4",
+  A5: "A5",
+  A3: "A3",
   undefined: ""
 };
 

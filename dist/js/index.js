@@ -34520,8 +34520,8 @@ const Icon = ({ iconType }) => {
 };
 
 const TopbarButtonStyle = qe.div `
-  height: 100%;
-  aspect-ratio: 1;
+  min-height: var(--topbar-height);
+  min-width: var(--topbar-height);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34607,6 +34607,14 @@ var FOCUS_ORDER;
 (function (FOCUS_ORDER) {
     FOCUS_ORDER["select"] = "3";
 })(FOCUS_ORDER || (FOCUS_ORDER = {}));
+var CSS_DISPLAY_TYPE;
+(function (CSS_DISPLAY_TYPE) {
+    CSS_DISPLAY_TYPE["none"] = "none";
+    CSS_DISPLAY_TYPE["block"] = "block";
+    CSS_DISPLAY_TYPE["flex"] = "flex";
+    CSS_DISPLAY_TYPE["inline"] = "inline";
+    CSS_DISPLAY_TYPE["inherit"] = "inherit";
+})(CSS_DISPLAY_TYPE || (CSS_DISPLAY_TYPE = {}));
 const A4 = "210mm 297.1mm";
 const A3 = "297mm 419.9mm";
 const A5 = "148mm 209.9mm";
@@ -34639,6 +34647,18 @@ const wordsEB = {
     miPadding: "Margins",
     miLastChangeTime: "Last change",
     miName: "Name",
+    miContent: "Content",
+    miDisplay: "Display",
+    miDisplayInline: "Inline",
+    miDisplayBlock: "Block",
+    miDisplayFlex: "Flex",
+    miDisplayNone: "None",
+    miDisplayInherit: "Inherit",
+    miWidth: "Width",
+    miHeight: "Height",
+    A4: "A4",
+    A5: "A5",
+    A3: "A3",
     undefined: ""
 };
 
@@ -34671,6 +34691,18 @@ const wordsUA = {
     miPadding: "Відступи",
     miLastChangeTime: "Час останьої зміни",
     miName: "Назва",
+    miContent: "Kontent",
+    miDisplay: "Tip",
+    miDisplayInline: "Stroka",
+    miDisplayBlock: "Blok Tverdy",
+    miDisplayFlex: "Blok Myakiy",
+    miDisplayNone: "Pryhovano",
+    miDisplayInherit: "Nasliduye",
+    miWidth: "Shirota",
+    miHeight: "Vysota",
+    A4: "A4",
+    A5: "A5",
+    A3: "A3",
     undefined: ""
 };
 
@@ -34690,6 +34722,181 @@ const createT = (language) => {
         }
     };
 };
+
+var BLOCK_MI_NAMES;
+(function (BLOCK_MI_NAMES) {
+    BLOCK_MI_NAMES["name"] = "blockName";
+    BLOCK_MI_NAMES["content"] = "blockContent";
+    BLOCK_MI_NAMES["display"] = "blockDisplay";
+    BLOCK_MI_NAMES["width"] = "width";
+    BLOCK_MI_NAMES["height"] = "height";
+})(BLOCK_MI_NAMES || (BLOCK_MI_NAMES = {}));
+const BlockMIs = [
+    {
+        name: BLOCK_MI_NAMES.name,
+        label: "miName",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "label",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.content,
+        label: "miContent",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "contentValue",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.textarea,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.display,
+        label: "miDisplay",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "display",
+        CSSDefaultValue: CSS_DISPLAY_TYPE.inherit,
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miDisplayInherit",
+                value: CSS_DISPLAY_TYPE.inherit
+            },
+            {
+                label: "miDisplayBlock",
+                value: CSS_DISPLAY_TYPE.block
+            },
+            {
+                label: "miDisplayFlex",
+                value: CSS_DISPLAY_TYPE.flex
+            },
+            {
+                label: "miDisplayInline",
+                value: CSS_DISPLAY_TYPE.inline
+            },
+            {
+                label: "miDisplayNone",
+                value: CSS_DISPLAY_TYPE.none
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.width,
+        label: "miWidth",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "width",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.size,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.height,
+        label: "miHeight",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "height",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.size,
+        inputOptions: []
+    }
+];
+
+var TEMPLATE_MI_NAMES;
+(function (TEMPLATE_MI_NAMES) {
+    TEMPLATE_MI_NAMES["name"] = "name";
+    TEMPLATE_MI_NAMES["size"] = "size";
+    TEMPLATE_MI_NAMES["orientation"] = "orientation";
+    TEMPLATE_MI_NAMES["dateEdited"] = "dateEdited";
+    TEMPLATE_MI_NAMES["pageMargin"] = "pageMargin";
+})(TEMPLATE_MI_NAMES || (TEMPLATE_MI_NAMES = {}));
+const TemplateMIs = [
+    {
+        name: TEMPLATE_MI_NAMES.size,
+        label: "miPageSize",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "pageSizeMM",
+        defaultValue: A4,
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "A4",
+                value: A4
+            },
+            {
+                label: "A3",
+                value: A3
+            },
+            {
+                label: "A5",
+                value: A5
+            }
+        ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.orientation,
+        label: "miPageOrientation",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "pageOrientation",
+        defaultValue: "vertical",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "vertical",
+                value: "vertical"
+            },
+            {
+                label: "horizontal",
+                value: "horizontal"
+            }
+        ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.dateEdited,
+        label: "miLastChangeTime",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "dateEdited",
+        defaultValue: "0",
+        isReadonly: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.name,
+        label: "miName",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "name",
+        defaultValue: "New template",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.pageMargin,
+        label: "miPadding",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "pageMargin",
+        defaultValue: "0mm",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    }
+];
 
 const getId = (prefix) => {
     return `${prefix}${Math.round(Math.random() * RandLength)}`;
@@ -34728,31 +34935,31 @@ const getInitialTemplateMis = () => {
     return [
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0004",
+            miListItemName: TEMPLATE_MI_NAMES.name,
             miListItemValue: "",
             timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0003",
+            miListItemName: TEMPLATE_MI_NAMES.dateEdited,
             miListItemValue: "0",
             timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0001",
+            miListItemName: TEMPLATE_MI_NAMES.size,
             miListItemValue: A4,
             timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0002",
+            miListItemName: TEMPLATE_MI_NAMES.orientation,
             miListItemValue: "vertical",
             timeAdded: timeAdded
         },
         {
             uuid: getId("tmi"),
-            miListItemId: "mi0005",
+            miListItemName: TEMPLATE_MI_NAMES.pageMargin,
             miListItemValue: null,
             timeAdded: timeAdded
         }
@@ -34778,7 +34985,47 @@ const getInitialBlockMis = () => {
     return [
         {
             uuid: getId("bmi"),
-            miListItemId: "mi0001",
+            miListItemName: BLOCK_MI_NAMES.name,
+            miListItemValue: "",
+            valueType: CONTENT_TYPE.fixed,
+            variableLabel: "",
+            variableOptions: [],
+            refferenceId: null,
+            timeAdded: dateAdded
+        },
+        {
+            uuid: getId("bmi"),
+            miListItemName: BLOCK_MI_NAMES.content,
+            miListItemValue: "",
+            valueType: CONTENT_TYPE.fixed,
+            variableLabel: "",
+            variableOptions: [],
+            refferenceId: null,
+            timeAdded: dateAdded
+        },
+        {
+            uuid: getId("bmi"),
+            miListItemName: BLOCK_MI_NAMES.display,
+            miListItemValue: "",
+            valueType: CONTENT_TYPE.fixed,
+            variableLabel: "",
+            variableOptions: [],
+            refferenceId: null,
+            timeAdded: dateAdded
+        },
+        {
+            uuid: getId("bmi"),
+            miListItemName: BLOCK_MI_NAMES.height,
+            miListItemValue: "",
+            valueType: CONTENT_TYPE.fixed,
+            variableLabel: "",
+            variableOptions: [],
+            refferenceId: null,
+            timeAdded: dateAdded
+        },
+        {
+            uuid: getId("bmi"),
+            miListItemName: BLOCK_MI_NAMES.width,
             miListItemValue: "",
             valueType: CONTENT_TYPE.fixed,
             variableLabel: "",
@@ -34862,17 +35109,14 @@ const TopbarStyle = qe.div `
   width: calc(100vw - var(--sidebar-width));
   padding-left: var(--sidebar-width);
   transition: all var(--transition);
-  height: 3em;
+  height: var(--topbar-height);
   display: flex;
   justify-content: space-between;
   & .templateTools, & .appTools{
     display: flex;
     wlex-wrap: wrap;
-    width: 50%;
-    justify-content: flex-start;
-  }
-  & .appTools{
-    justify-content: flex-end;
+    max-width: 50%;
+    overflow-x: auto;
   }
 `;
 const Topbar = ({ store }) => {
@@ -34972,7 +35216,7 @@ const TabListStyle = qe.div `
   display: flex;
 `;
 const TabStyle = qe.div `
-  height: 3em;
+  height: var(--topbar-height);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35005,7 +35249,7 @@ const Tabs = ({ store }) => {
     }));
 };
 
-const SplitStyle = qe.div `
+const SplitStyle$1 = qe.div `
   display: flex;
   height: 100%;
   width: 100%;
@@ -35102,90 +35346,10 @@ const Split = ({ store, children }) => {
             }
         }
     };
-    return (React.createElement(SplitStyle, { id: "split", style: { "--split-size": (store.state.sidebarSectionHeight + "px") }, property: store.state.sidebarSectionHeight + "" }, children && (React.createElement(React.Fragment, null,
+    return (React.createElement(SplitStyle$1, { id: "split", style: { "--split-size": (store.state.sidebarSectionHeight + "px") }, property: store.state.sidebarSectionHeight + "" }, children && (React.createElement(React.Fragment, null,
         React.createElement(UpperStyle, null, children[0]),
         React.createElement(GutterStyle, { className: "gutter", onMouseDown: (event) => { handleMouseDown(event); } }),
         React.createElement(LowerStyle, null, children[1])))));
-};
-
-const TemplateMIs = {
-    mi0001: {
-        uuid: "mi0001",
-        label: "miPageSize",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "pageSizeMM",
-        defaultValue: A4,
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.options,
-        inputOptions: [
-            {
-                label: "A4",
-                value: A4
-            },
-            {
-                label: "A3",
-                value: A3
-            },
-            {
-                label: "A5",
-                value: A5
-            }
-        ]
-    },
-    mi0002: {
-        uuid: "mi0002",
-        label: "miPageOrientation",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "pageOrientation",
-        defaultValue: "vertical",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.options,
-        inputOptions: [
-            {
-                label: "vertical",
-                value: "vertical"
-            },
-            {
-                label: "horizontal",
-                value: "horizontal"
-            }
-        ]
-    },
-    mi0003: {
-        uuid: "mi0003",
-        label: "miLastChangeTime",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "dateEdited",
-        defaultValue: "0",
-        isReadonly: true,
-        isAddable: true,
-        inputType: INPUT_TYPES.text,
-        inputOptions: []
-    },
-    mi0004: {
-        uuid: "mi0004",
-        label: "miName",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "name",
-        defaultValue: "New template",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.text,
-        inputOptions: []
-    },
-    mi0005: {
-        uuid: "mi0005",
-        label: "miPadding",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "pageMargin",
-        defaultValue: "0mm",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.text,
-        inputOptions: []
-    }
 };
 
 const InputStyle = qe.input `
@@ -35385,6 +35549,9 @@ const MIText = ({ value, onChange, classes, style }) => {
 const MITextarea = ({ value, onChange, classes, style }) => {
     return React.createElement(Textarea, { style: style, value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes });
 };
+const MISize = ({ value, onChange, classes, style }) => {
+    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style });
+};
 
 const MenuItemStyle$1 = qe.div `
   display: flex;
@@ -35395,7 +35562,7 @@ const MenuItemStyle$1 = qe.div `
   }
 `;
 const MenuItemTemplate = ({ mi, store }) => {
-    const listItemData = TemplateMIs[mi.miListItemId];
+    const listItemData = TemplateMIs.find(listMI => listMI.name === mi.miListItemName);
     if (!listItemData) {
         return React.createElement(React.Fragment, null);
     }
@@ -35446,20 +35613,6 @@ const MITemplateCSS = ({ store, listItemData, mi }) => {
             React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange }));
 };
 
-const BlockMIs = {
-    mi0001: {
-        uuid: "mi0001",
-        label: "miName",
-        miType: MI_LISTITEM_TYPE.blockParam,
-        paramName: "label",
-        defaultValue: "",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.text,
-        inputOptions: []
-    }
-};
-
 const MenuItemStyle = qe.div `
   display: flex;
   flex-wrap: wrap;
@@ -35469,7 +35622,7 @@ const MenuItemStyle = qe.div `
   }
 `;
 const MenuItemBlock = ({ mi, store }) => {
-    const listItemData = BlockMIs[mi.miListItemId];
+    const listItemData = BlockMIs.find(listMI => listMI.name === mi.miListItemName);
     if (!listItemData) {
         return React.createElement(React.Fragment, null);
     }
@@ -35488,51 +35641,82 @@ const MIBlockParam = ({ store, listItemData }) => {
                 name: ACTION_NAMES.block_setParam,
                 payload: {
                     paramName: listItemData.paramName,
-                    value: value
+                    value: value,
+                    blockUUID: null
                 }
             });
         }
     };
     const selectedBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
-    return React.createElement(React.Fragment, null, selectedBlock &&
-        listItemData.miType === MI_LISTITEM_TYPE.blockParam &&
-        ((listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: String(selectedBlock[listItemData.paramName]), t: store.t, options: listItemData.inputOptions, onChange: handleChange })) ||
-            (listItemData.inputType === INPUT_TYPES.text &&
-                React.createElement(MIText, { value: String(selectedBlock[listItemData.paramName]), onChange: handleChange }))));
+    if (!selectedBlock) {
+        return React.createElement(React.Fragment, null);
+    }
+    const getValue = (selectedBlock, listItemData) => {
+        if (listItemData.miType === MI_LISTITEM_TYPE.blockParam) {
+            return String(selectedBlock[listItemData.paramName]);
+        }
+        return "";
+    };
+    return React.createElement(React.Fragment, null, (listItemData.inputType === INPUT_TYPES.options &&
+        React.createElement(MISelect, { value: getValue(selectedBlock, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange })) ||
+        (listItemData.inputType === INPUT_TYPES.text &&
+            React.createElement(MIText, { value: getValue(selectedBlock, listItemData), onChange: handleChange })) ||
+        (listItemData.inputType === INPUT_TYPES.textarea &&
+            React.createElement(MITextarea, { value: getValue(selectedBlock, listItemData), onChange: handleChange, style: { "width": "100%" } })));
 };
 const MIBlockCSS = ({ store, listItemData, mi }) => {
     const handleChange = (value) => {
         store.dispach({
-            name: ACTION_NAMES.template_setCSS,
+            name: ACTION_NAMES.block_setCSS,
             payload: {
                 miUUID: mi.uuid,
-                value: String(value)
+                value: String(value),
+                blockUUID: null
             }
         });
     };
+    const getValue = (mi, listItemData) => {
+        if (listItemData.miType === MI_LISTITEM_TYPE.blockCSS) {
+            return String(mi.miListItemValue || listItemData.CSSDefaultValue);
+        }
+        return "";
+    };
     return React.createElement(React.Fragment, null,
-        listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
-            listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), t: store.t, options: listItemData.inputOptions, onChange: handleChange }),
-        listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
-            listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange }));
+        listItemData.inputType === INPUT_TYPES.options &&
+            React.createElement(MISelect, { value: getValue(mi, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange }),
+        listItemData.inputType === INPUT_TYPES.text &&
+            React.createElement(MIText, { value: getValue(mi, listItemData), onChange: handleChange }),
+        listItemData.inputType === INPUT_TYPES.size &&
+            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange }));
 };
 
-const SidebarStyle = qe.div `
+const SidebarStyle$1 = qe.div `
   background: var(--section-bg);
   position: fixed;
   width: var(--sidebar-width);
   left: 0px;
   height: 100vh;
 `;
+const SplitStyle = qe.div `
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  &>div{
+    width: 100%;
+  }
+`;
 const TreeBrunchStyle = qe.div `
   display: flex;
-  width: 100%;
+  min-width: 100%;
+  transition: all var(--transition);
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
+  }
+  &.hidden{
+    opacity: 0.5;
   }
   :hover{
     background: var(--app-bg);
@@ -35602,18 +35786,15 @@ const Sidebar = ({ store }) => {
         });
         return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
             return React.createElement("div", { key: block.uuid },
-                React.createElement(TreeBrunch, { label: block.label.length ? block.label : block.uuid, level: level, colapsedState: block.treeViewCollapseState, hasChildren: !!brunchChildren[block.uuid].length, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBlockSelect(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
+                React.createElement(TreeBrunch, { block: block, level: level, brunchChildren: brunchChildren, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBlockSelect(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
                 !block.treeViewCollapseState && renderChildren(block.uuid, level + (TWO / TWO)));
         });
     };
-    return React.createElement(SidebarStyle, null,
+    return React.createElement(SidebarStyle$1, null,
         React.createElement(Tabs, { store: store }),
         store.state.selectedTab === TAB_TYPE.Edit &&
             React.createElement(Split, { store: store },
-                React.createElement("div", { style: {
-                        "overflow": "auto",
-                        "height": "100%"
-                    } },
+                React.createElement(SplitStyle, null,
                     store.state.selectedBlock === null &&
                         store.state.templates?.[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
                             return React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi });
@@ -35624,13 +35805,28 @@ const Sidebar = ({ store }) => {
                         store.state.templates?.[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
                             return React.createElement(MenuItemBlock, { key: mi.uuid, store: store, mi: mi });
                         })),
-                React.createElement("div", { style: {
-                        "overflow": "auto",
-                        "height": "100%"
-                    } }, renderChildren(null, ZERO))));
+                React.createElement(SplitStyle, null, renderChildren(null, ZERO))));
 };
-const TreeBrunch = ({ label, level, colapsedState, hasChildren, selected, onClick, onCollapsedChange }) => {
-    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` } },
+const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollapsedChange }) => {
+    const handleMouseEnter = (uuid) => {
+        const target = document.querySelector(`.uuid-${uuid}`);
+        if (!target) {
+            return;
+        }
+        target.classList.add("hovered");
+    };
+    const handleMouseLeave = (uuid) => {
+        const target = document.querySelector(`.uuid-${uuid}`);
+        if (!target) {
+            return;
+        }
+        target.classList.remove("hovered");
+    };
+    const label = block.label.length ? block.label : block.uuid;
+    const colapsedState = block.treeViewCollapseState;
+    const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
+    const hasChildren = !!brunchChildren[block.uuid].length;
+    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""} ${isHideen ? "hidden" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
         React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } }),
         React.createElement("span", { className: "label", onClick: onClick }, label));
 };
@@ -35932,6 +36128,142 @@ const useUI = () => {
     };
 };
 
+const BlockStyle = qe.div `
+  transition: all var(--transition);
+  cursor: pointer;
+  outline: 1px dashed transparent;
+  &.selected{
+    outline: 1px dashed var(--main-color);
+  }
+  &.hovered:not(.selected):not(& *:hover),:hover:not(.selected){
+    outline: 1px dashed var(--app-bg);
+  }
+  p{
+    margin: 0;
+  }
+`;
+const handleSelectBlock = (store, uuid, e) => {
+    const getUUID = (s) => {
+        return s.split(" ").find(classItem => /(uuid-b)\d{1,}/g.test(classItem))?.replace("uuid-", "");
+    };
+    const target = e.target;
+    const targetUUID = getUUID(target.className);
+    if (targetUUID) {
+        store.dispach({
+            name: ACTION_NAMES.app_selectBlock,
+            payload: targetUUID
+        });
+        return;
+    }
+    const parent = target.parentElement;
+    if (!parent) {
+        return;
+    }
+    const parentUUID = getUUID(parent.className);
+    if (!parentUUID || parentUUID !== uuid) {
+        return;
+    }
+    store.dispach({
+        name: ACTION_NAMES.app_selectBlock,
+        payload: uuid
+    });
+};
+const getChildren = (children, store) => {
+    return children.map(child => {
+        return React.createElement(Block, { key: child.uuid, block: child, store: store });
+    });
+};
+const getContent = (block) => {
+    const formatText = (text) => {
+        return text.split("\n").map((line, i) => {
+            return React.createElement("p", { key: line.substring(ZERO, TWO * TWO * TWO) + i }, line.replace(/ /g, "\u00a0"));
+        });
+    };
+    // const handleContentEditableChange:(e:React.FormEvent) => void = (e) => {
+    //   e;
+    //   console.log(e);
+    //   return;
+    // };
+    //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
+    return React.createElement(React.Fragment, null, block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue));
+    // if(blockData.contentType === CONTENT_TYPE.copyFrom) {
+    //   return blockData.contentValue;
+    // }
+};
+const Block = ({ store, block }) => {
+    const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
+    const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
+    const getStyles = (mis) => {
+        let ret = {};
+        mis.map(mi => {
+            const listMI = BlockMIs.find(listMI => listMI.name === mi.miListItemName);
+            if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.blockCSS) {
+                return;
+            }
+            listMI.CSSParam;
+            ret = {
+                ...ret,
+                ...{ [String(listMI.CSSParam)]: mi.miListItemValue }
+            };
+        });
+        return ret;
+    };
+    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
+        (!children.length && getContent(block)));
+};
+
+const SidebarStyle = qe.div `
+  position: fixed;
+  top: var(--topbar-height);
+  left: var(--sidebar-width);
+  --stack-padding: 3em;
+  padding: var(--stack-padding);
+  width: calc(100vw - var(--sidebar-width) - var(--stack-padding) - var(--stack-padding));
+  height: calc(100vh - var(--topbar-height) - var(--stack-padding) - var(--stack-padding));
+  overflow: auto;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--stack-padding);
+  align-content: start;
+  justify-content: start;
+`;
+const PageStyle$1 = qe.div `
+  cursor: default;
+  background: var(--section-bg);
+  transition: all var(--transition);
+  min-width: var(--page-size-1);
+  min-height: var(--page-size-2);
+  max-width: var(--page-size-1);
+  max-height: var(--page-size-2);
+`;
+const Stack = ({ store }) => {
+    const handleBlockSelect = (uuid) => {
+        store.dispach({
+            name: ACTION_NAMES.app_selectBlock,
+            payload: uuid
+        });
+    };
+    const renderPage = (block, store) => {
+        return React.createElement(PageStyle$1, { key: block.uuid },
+            React.createElement(Block, { store: store, block: block }));
+    };
+    //strategy for calculating fitsToPage
+    //if dont know FTP render one block on one page 
+    //after rendering check saved FTP and real
+    //   if different >> dispatch change for block
+    const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
+    const isHorizontal = store.state.templates[0].pageOrientation === "horizontal";
+    const pageSize = store.state.templates[0].pageSizeMM.split(" ");
+    const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
+    return React.createElement(SidebarStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
+            "--page-size-1": modifiedSize[0],
+            "--page-size-2": modifiedSize[1]
+        } }, rootChildren.map(block => {
+        return renderPage(block, store);
+    }));
+};
+
 const PageStyle = qe.div `
   --app-bg: #4C4C4C;
   --section-bg: #222222;
@@ -35959,6 +36291,7 @@ const PageStyle = qe.div `
     }
   }
   --transition: .1s ease-in;
+  --topbar-height: 3em;
   --sidebar-width: 20em;
   --border-radius: 8px;
 
@@ -36006,6 +36339,7 @@ const Page = ({ state, dispach }) => {
     return React.createElement(PageStyle, { className: state.theme },
         React.createElement(Topbar, { store: store }),
         React.createElement(Sidebar, { store: store }),
+        React.createElement(Stack, { store: store }),
         React.createElement(Toast, { toast: toast }),
         React.createElement(Prompt, { t: t, prompt: prompt }));
 };

@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
-import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel } from "src/models/types";
+import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel, BlockModel } from "src/models/types";
 import styled from "styled-components";
-import { MISelect, MIText } from "./ui/MiTypes";
+import { MISelect, MISize, MIText, MITextarea } from "./ui/MiTypes";
 
 interface MenuItemBlockComponentModel{
   store: StoreModel
@@ -20,7 +20,7 @@ const MenuItemStyle = styled.div`
 `;
 
 const MenuItemBlock: FC<MenuItemBlockComponentModel> = ({mi, store}) => {
-  const listItemData = BlockMIs[mi.miListItemId] as MenuItemBlockListItemModel;
+  const listItemData = BlockMIs.find(listMI => listMI.name === mi.miListItemName) as MenuItemBlockListItemModel;
   if(!listItemData) {
     return <></>;
   }
@@ -49,25 +49,35 @@ const MIBlockParam: FC<MIBlockParam> = ({store, listItemData}) => {
         name: ACTION_NAMES.block_setParam,
         payload: {
           paramName: listItemData.paramName,
-          value: value
+          value: value,
+          blockUUID: null
         }
       });
     }
   };
   const selectedBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
+  if(!selectedBlock) {
+    return <></>;
+  }
+  const getValue:(selectedBlock: BlockModel, listItemData: MenuItemBlockListItemModel)=>string = (selectedBlock, listItemData) => {
+    if(listItemData.miType === MI_LISTITEM_TYPE.blockParam) {
+      return String(selectedBlock[listItemData.paramName]);
+    }
+    return "";
+  };
   return <>
     {
-      selectedBlock &&
-      listItemData.miType === MI_LISTITEM_TYPE.blockParam && 
       (
-        (
-          listItemData.inputType === INPUT_TYPES.options && 
-          <MISelect value={String(selectedBlock[listItemData.paramName])} t={store.t} options={listItemData.inputOptions} onChange={handleChange}></MISelect>
-        ) ||
-        (
-          listItemData.inputType === INPUT_TYPES.text &&
-          <MIText value={String(selectedBlock[listItemData.paramName])} onChange={handleChange}></MIText>
-        )
+        listItemData.inputType === INPUT_TYPES.options && 
+        <MISelect value={getValue(selectedBlock, listItemData)} t={store.t} options={listItemData.inputOptions} onChange={handleChange}></MISelect>
+      ) ||
+      (
+        listItemData.inputType === INPUT_TYPES.text &&
+        <MIText value={getValue(selectedBlock, listItemData)} onChange={handleChange}></MIText>
+      ) ||
+      (
+        listItemData.inputType === INPUT_TYPES.textarea &&
+        <MITextarea value={getValue(selectedBlock, listItemData)} onChange={handleChange} style={{"width":"100%"}}></MITextarea>
       )
     }
   </>;
@@ -82,23 +92,32 @@ interface MIBlockCSS{
 const MIBlockCSS: FC<MIBlockCSS> = ({store, listItemData, mi}) => {
   const handleChange: (arg: string | number) => void = (value) => {
     store.dispach({
-      name: ACTION_NAMES.template_setCSS,
+      name: ACTION_NAMES.block_setCSS,
       payload: {
         miUUID: mi.uuid,
-        value: String(value)
+        value: String(value),
+        blockUUID: null
       }
     });
   };
+  const getValue:(mi: MenuItemBlockModel, listItemData: MenuItemBlockListItemModel)=>string = (mi, listItemData) => {
+    if(listItemData.miType === MI_LISTITEM_TYPE.blockCSS) {
+      return String(mi.miListItemValue || listItemData.CSSDefaultValue);
+    }
+    return "";
+  };
   return <>
     {
-      listItemData.miType === MI_LISTITEM_TYPE.blockCSS && 
       listItemData.inputType === INPUT_TYPES.options && 
-      <MISelect value={String(mi.miListItemValue || listItemData.CSSDefaultValue)} t={store.t} options={listItemData.inputOptions} onChange={handleChange}></MISelect>
+      <MISelect value={getValue(mi, listItemData)} t={store.t} options={listItemData.inputOptions} onChange={handleChange}></MISelect>
     }
     {
-      listItemData.miType === MI_LISTITEM_TYPE.blockCSS && 
       listItemData.inputType === INPUT_TYPES.text && 
-      <MIText value={String(mi.miListItemValue || listItemData.CSSDefaultValue)} onChange={handleChange}></MIText>
+      <MIText value={getValue(mi, listItemData)} onChange={handleChange}></MIText>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.size && 
+      <MISize value={getValue(mi, listItemData)} onChange={handleChange}></MISize>
     }
   </>;
 };

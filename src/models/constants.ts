@@ -65,6 +65,15 @@ export enum FOCUS_ORDER{
   select = "3"
 }
 
+export enum CSS_DISPLAY_TYPE{
+  none = "none",
+  block = "block",
+  flex = "flex",
+  inline = "inline",
+  inherit = "inherit"
+}
+
+
 export const A4 = "210mm 297.1mm";
 export const A3 = "297mm 419.9mm";
 export const A5 = "148mm 209.9mm";
