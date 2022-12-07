@@ -88,7 +88,11 @@ export const getInitialBlock: (parentId: string | null)=>BlockModel = (parentId 
     variableOptions: [],
     referenceId: blockId,
     menuItems: getInitialBlockMis(),
-    treeViewCollapseState: false 
+    treeViewCollapseState: false,
+    FTPProportions: {
+      width: 0,
+      height: 0
+    }
   };
 };
 

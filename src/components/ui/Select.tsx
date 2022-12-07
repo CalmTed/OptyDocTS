@@ -50,9 +50,10 @@ const SelectListStyle = styled.div`
 const SelectListItemStyle = styled.div` 
   background: var(--section-bg);
   padding: 0.5em 1.2em;
-  max-width: 17em;
+  mmax-width: 17em;
+  mmin-width: 5em;
+  width: clamp(5em, 14.7em, 17em);
   overflow: hidden;
-  min-width: 5em;
   cursor: pointer;
   border: 0.2em solid var(--app-bg);
   border-bottom-width: 0;

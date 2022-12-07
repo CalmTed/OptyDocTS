@@ -5,7 +5,9 @@ export const ToastTime = 5000;
 export const MinHeightTop = 400;
 export const MinHeightBottom = 100;
 export const ZERO = 0;
+export const ONE = 1;
 export const TWO = 2;//Well... I had to... 
+export const THOUSAND = 1000;// b.c. it would be to long to colculate it from 2 :)
 
 export enum THEME_TYPE{
   light = "light",
@@ -29,7 +31,8 @@ export enum ACTION_NAMES{
   template_addBlockBefore = "template_addBlockBefore",
   
   block_setParam = "block_setParam",
-  block_setCSS = "block_setCSS"
+  block_setCSS = "block_setCSS",
+  block_setFTP = "block_setFTP"
 }
 
 export enum TAB_TYPE{
@@ -73,6 +76,7 @@ export enum CSS_DISPLAY_TYPE{
   inherit = "inherit"
 }
 
+export const AFTER_ANIMATION = 300;
 
 export const A4 = "210mm 297.1mm";
 export const A3 = "297mm 419.9mm";

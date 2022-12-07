@@ -253,6 +253,22 @@ const blockReducer: ReducerModel = (state, action) => {
       }
     }
     break;
+  case ACTION_NAMES.block_setFTP:
+    const blockSetFTP = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
+    if(!blockSetFTP) {
+      return {
+        state,
+        stateUpdated
+      };
+    }
+    if(blockSetFTP.FTPProportions.width !== action.payload.width || blockSetFTP.FTPProportions.height !== action.payload.height) {
+      blockSetFTP.FTPProportions = {
+        width: action.payload.width,
+        height: action.payload.height
+      };
+      stateUpdated = true;
+    }
+    break;
   default:
     console.error("unknown block reducer action", action);
   }

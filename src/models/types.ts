@@ -102,6 +102,13 @@ export type ActionModel = {
     value: string
     blockUUID: string | null
   }
+} | {
+  name: ACTION_NAMES.block_setFTP
+  payload: {
+    blockUUID: string
+    width: number
+    height: number
+  }
 }
 
 export interface AppStateModel {
@@ -142,6 +149,10 @@ export interface BlockModel {
   referenceId: string
   menuItems: MenuItemBlockModel[]
   treeViewCollapseState: boolean
+  FTPProportions: {
+    width: number,
+    height: number
+  }
 }
 
 export type MenuItemTemplateModel = {

@@ -34550,7 +34550,9 @@ const ToastTime = 5000;
 const MinHeightTop = 400;
 const MinHeightBottom = 100;
 const ZERO = 0;
+const ONE = 1;
 const TWO = 2; //Well... I had to... 
+const THOUSAND = 1000; // b.c. it would be to long to colculate it from 2 :)
 var THEME_TYPE;
 (function (THEME_TYPE) {
     THEME_TYPE["light"] = "light";
@@ -34573,6 +34575,7 @@ var ACTION_NAMES;
     ACTION_NAMES["template_addBlockBefore"] = "template_addBlockBefore";
     ACTION_NAMES["block_setParam"] = "block_setParam";
     ACTION_NAMES["block_setCSS"] = "block_setCSS";
+    ACTION_NAMES["block_setFTP"] = "block_setFTP";
 })(ACTION_NAMES || (ACTION_NAMES = {}));
 var TAB_TYPE;
 (function (TAB_TYPE) {
@@ -34615,6 +34618,7 @@ var CSS_DISPLAY_TYPE;
     CSS_DISPLAY_TYPE["inline"] = "inline";
     CSS_DISPLAY_TYPE["inherit"] = "inherit";
 })(CSS_DISPLAY_TYPE || (CSS_DISPLAY_TYPE = {}));
+const AFTER_ANIMATION = 300;
 const A4 = "210mm 297.1mm";
 const A3 = "297mm 419.9mm";
 const A5 = "148mm 209.9mm";
@@ -34977,7 +34981,11 @@ const getInitialBlock = (parentId = null) => {
         variableOptions: [],
         referenceId: blockId,
         menuItems: getInitialBlockMis(),
-        treeViewCollapseState: false
+        treeViewCollapseState: false,
+        FTPProportions: {
+            width: 0,
+            height: 0
+        }
     };
 };
 const getInitialBlockMis = () => {
@@ -35409,9 +35417,10 @@ const SelectListStyle = qe.div `
 const SelectListItemStyle = qe.div ` 
   background: var(--section-bg);
   padding: 0.5em 1.2em;
-  max-width: 17em;
+  mmax-width: 17em;
+  mmin-width: 5em;
+  width: clamp(5em, 14.7em, 17em);
   overflow: hidden;
-  min-width: 5em;
   cursor: pointer;
   border: 0.2em solid var(--app-bg);
   border-bottom-width: 0;
@@ -36190,7 +36199,7 @@ const getContent = (block) => {
     //   return blockData.contentValue;
     // }
 };
-const Block = ({ store, block }) => {
+const Block = ({ store, block, classes }) => {
     const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
     const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
     const getStyles = (mis) => {
@@ -36208,7 +36217,7 @@ const Block = ({ store, block }) => {
         });
         return ret;
     };
-    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
+    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
         (!children.length && getContent(block)));
 };
 
@@ -36236,6 +36245,10 @@ const PageStyle$1 = qe.div `
   min-height: var(--page-size-2);
   max-width: var(--page-size-1);
   max-height: var(--page-size-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justyfy-content: flex-start;
 `;
 const Stack = ({ store }) => {
     const handleBlockSelect = (uuid) => {
@@ -36244,23 +36257,120 @@ const Stack = ({ store }) => {
             payload: uuid
         });
     };
-    const renderPage = (block, store) => {
-        return React.createElement(PageStyle$1, { key: block.uuid },
-            React.createElement(Block, { store: store, block: block }));
+    //it seems like this is the only reliable way to get correct dom element size
+    setTimeout(() => {
+        const rootBlocks = document.querySelectorAll(".rootBlock");
+        [...rootBlocks].map((block) => {
+            const pageDOM = block.parentElement;
+            //getting block uuid
+            const blockUUID = block.className.split(" ").find(name => /uuid-b(\d){1,}/.test(name))?.replace("uuid-", "") || "";
+            //getting size proportions
+            const pageRightBorder = pageDOM.clientWidth;
+            const pageBottomBorder = pageDOM.clientHeight;
+            const blockHeight = block.clientHeight;
+            const blockWidth = block.clientWidth;
+            const widthProportion = Math.round(blockWidth / pageRightBorder * THOUSAND) / THOUSAND;
+            const heightProportion = Math.round(blockHeight / pageBottomBorder * THOUSAND) / THOUSAND;
+            //comparing to state saved
+            const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
+            if (targetBlock) {
+                if (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion) {
+                    store.dispach({
+                        name: ACTION_NAMES.block_setFTP,
+                        payload: {
+                            blockUUID: blockUUID,
+                            width: widthProportion,
+                            height: heightProportion
+                        }
+                    });
+                }
+            }
+        });
+    }, AFTER_ANIMATION);
+    const renderPage = (blocks, store) => {
+        const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
+        return React.createElement(PageStyle$1, { key: pageKey, className: "page" }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
     };
-    //strategy for calculating fitsToPage
-    //if dont know FTP render one block on one page 
-    //after rendering check saved FTP and real
-    //   if different >> dispatch change for block
     const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
-    const isHorizontal = store.state.templates[0].pageOrientation === "horizontal";
     const pageSize = store.state.templates[0].pageSizeMM.split(" ");
+    const isHorizontal = store.state.templates[0].pageOrientation === "horizontal";
     const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
+    const rootBlocks = (blocks) => {
+        //v.3
+        //we expect page style to be
+        // display: flex, justify-content: start, align-content: start
+        const ret = [];
+        let pageIndex = ZERO;
+        let blockIndex = ZERO;
+        const blocksLength = blocks.length - ONE;
+        let rowTop = ZERO;
+        let borderB = ZERO;
+        let borderR = ZERO;
+        while (blockIndex <= blocksLength) {
+            const blockFtpW = blocks[blockIndex].FTPProportions.width;
+            const blockFtpH = blocks[blockIndex].FTPProportions.height;
+            // console.log(`BLOCK ${blockIndex}`);
+            // console.log("start");
+            // console.log("rowTop", rowTop);
+            // console.log("blockH", blockFtpH);
+            // console.log("blockW", blockFtpW);
+            // console.log("borderB", borderB);
+            // console.log("borderR", borderR);
+            //do we need to break page?
+            if (rowTop + blockFtpH > ONE) {
+                pageIndex++;
+                rowTop = ZERO;
+                borderB = ZERO;
+                borderR = ZERO;
+            }
+            else {
+                //do we need to break line?
+                if (borderR + blockFtpW > ONE) {
+                    rowTop = borderB;
+                    borderR = blockFtpW;
+                    borderB = borderB + blockFtpH;
+                    //do we need to break page now?
+                    if (borderB > ONE) {
+                        pageIndex++;
+                        rowTop = ZERO;
+                        borderB = ZERO;
+                        borderR = ZERO;
+                        //do we need to update borderB?
+                        if (rowTop + blockFtpH > borderB) {
+                            borderB = rowTop + blockFtpH;
+                        }
+                        //at least updating borderR
+                        borderR += blockFtpW;
+                    }
+                }
+                else {
+                    //do we need to update borderB?
+                    if (rowTop + blockFtpH > borderB) {
+                        borderB = rowTop + blockFtpH;
+                    }
+                    //at least updating borderR
+                    borderR += blockFtpW;
+                }
+            }
+            if (!ret[pageIndex]) {
+                ret[pageIndex] = [];
+            }
+            ret[pageIndex].push(blocks[blockIndex]);
+            blockIndex++;
+            // console.log("end");
+            // console.log("rowTop", rowTop);
+            // console.log("blockH", blockFtpH);
+            // console.log("blockW", blockFtpW);
+            // console.log("borderB", borderB);
+            // console.log("borderR", borderR);
+        }
+        return ret;
+    };
     return React.createElement(SidebarStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
             "--page-size-1": modifiedSize[0],
             "--page-size-2": modifiedSize[1]
-        } }, rootChildren.map(block => {
-        return renderPage(block, store);
+        } }, rootBlocks(rootChildren).map(childList => {
+        return renderPage(childList, store);
     }));
 };
 
@@ -36591,6 +36701,22 @@ const blockReducer = (state, action) => {
                     targetMI.miListItemValue = action.payload.value;
                     stateUpdated = true;
                 }
+            }
+            break;
+        case ACTION_NAMES.block_setFTP:
+            const blockSetFTP = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
+            if (!blockSetFTP) {
+                return {
+                    state,
+                    stateUpdated
+                };
+            }
+            if (blockSetFTP.FTPProportions.width !== action.payload.width || blockSetFTP.FTPProportions.height !== action.payload.height) {
+                blockSetFTP.FTPProportions = {
+                    width: action.payload.width,
+                    height: action.payload.height
+                };
+                stateUpdated = true;
             }
             break;
         default:

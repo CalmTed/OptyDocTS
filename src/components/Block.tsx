@@ -7,6 +7,7 @@ import styled from "styled-components";
 interface BlockComponentModel{
   store: StoreModel
   block: BlockModel
+  classes?: string
 }
 
 const BlockStyle = styled.div`
@@ -78,7 +79,7 @@ const getContent: (block: BlockModel) => React.ReactNode = (block) => {
 };
 
 
-export const Block: FC<BlockComponentModel> = ({store, block}) => {
+export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
   const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
   const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
   const getStyles: (mis: MenuItemBlockModel[]) =>  React.CSSProperties = (mis) => {
@@ -96,7 +97,7 @@ export const Block: FC<BlockComponentModel> = ({store, block}) => {
     });
     return ret;
   };
-  return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>
+  return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected} ${classes}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>
     {
       (!!children.length && getChildren(children, store)) ||
       (!children.length && getContent(block))
