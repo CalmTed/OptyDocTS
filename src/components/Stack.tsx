@@ -1,8 +1,10 @@
 import React, { FC } from "react";
 import styled, { CSSProperties } from "styled-components";
-import { BlockModel, StoreModel } from "src/models/types";
-import { ACTION_NAMES, AFTER_ANIMATION, ONE, THOUSAND, ZERO } from "src/models/constants";
+import { AppStateModel, BlockModel, StoreModel } from "src/models/types";
+import { ACTION_NAMES, AFTER_ANIMATION, MI_LISTITEM_TYPE, ONE, THOUSAND, ZERO } from "src/models/constants";
 import { Block } from "./Block";
+import { TemplateMIs } from "src/models/templateMIs";
+import considerZooming from "src/store/considerZooming";
 
 interface StackModel {
   store: StoreModel
@@ -23,20 +25,34 @@ const SidebarStyle = styled.div`
   gap: var(--stack-padding);
   align-content: start;
   justify-content: start;
+  --zoom: 1;
+  --page-margin-top: 0mm;
+  --page-margin-right: 0mm;
+  --page-margin-bottom: 0mm;
+  --page-margin-left: 0mm;
 `;
 
 const PageStyle = styled.div`
   cursor: default;
   background: var(--section-bg);
   transition: all var(--transition);
-  min-width: var(--page-size-1);
-  min-height: var(--page-size-2);
-  max-width: var(--page-size-1);
-  max-height: var(--page-size-2);
+  --width: calc( var(--zoom) * (var(--page-size-1) - var(--page-margin-left) - var(--page-margin-right)));
+  --height: calc( var(--zoom) * (var(--page-size-2) - var(--page-margin-top) - var(--page-margin-bottom)));
+  width: var(--width);
+  height: var(--height);
+  min-width: var(--width);
+  min-height: var(--height);
+  max-width: var(--width);
+  max-height: var(--height);
+  padding-top: calc( var(--zoom) * var(--page-margin-top));
+  padding-right: calc( var(--zoom) * var(--page-margin-right));
+  padding-bottom: calc( var(--zoom) * var(--page-margin-bottom));
+  padding-left: calc( var(--zoom) * var(--page-margin-left));
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   justyfy-content: flex-start;
+  overflow: hidden;
 `;
 
 const Stack: FC<StackModel> = ({store}) => {
@@ -65,7 +81,8 @@ const Stack: FC<StackModel> = ({store}) => {
       //comparing to state saved
       const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
       if(targetBlock) {
-        if(targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion) {
+        if(heightProportion && widthProportion &&
+          (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion)) {
           store.dispach({
             name: ACTION_NAMES.block_setFTP,
             payload: {
@@ -78,10 +95,32 @@ const Stack: FC<StackModel> = ({store}) => {
       }
     });
   }, AFTER_ANIMATION);
-
+  const pageStyles: (arg: AppStateModel) => React.CSSProperties = (state) => {
+    let ret:CSSProperties = {};
+    state.templates[0].menuItems.filter(
+      mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(
+      cssMI => {
+        const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
+        if(!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
+          return;
+        }
+        if(!listMI.CSSParam) {
+          return;
+        }
+        ret = {
+          ...ret,
+          [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
+        };
+      });
+    return ret;
+  };
   const renderPage: (block: BlockModel[], store: StoreModel) => React.ReactNode = (blocks, store) => {
     const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
-    return <PageStyle key={pageKey} className="page">
+    return <PageStyle
+      key={pageKey}
+      className="page"
+      style={pageStyles(store.state)}
+    >
       {
         blocks.map(block => 
           <Block key={block.uuid} classes="rootBlock" store={store} block={block}></Block>
@@ -162,10 +201,37 @@ const Stack: FC<StackModel> = ({store}) => {
     }
     return ret;
   };
+
+  // THIS MARGINS ARE BREAKING FTP CALCULATING SO BETTER TO USE BLOCK MARGINS
+
+  // const getMargins: (arg: string) => CSSProperties = (string) => {
+  //   let marginsRet: string[] = ["0", "0", "0", "0"];
+  //   const margins = string.trim().replace(/\s{2,}/g, " ").split(" ");
+  //   switch (margins.length) {
+  //   case ONE:
+  //     marginsRet = marginsRet.map(() => margins[0]);
+  //     break;
+  //   case TWO + ONE:
+  //   case TWO:
+  //     marginsRet = marginsRet.map((ret, i) => margins[(i + ONE) % TWO]);
+  //     break;
+  //   case TWO + TWO:
+  //     marginsRet = marginsRet.map((ret, i) => margins[i]);
+  //     break;
+  //   }
+  //   return {
+  //     "--page-margin-top": marginsRet[0],
+  //     "--page-margin-right": marginsRet[1],
+  //     "--page-margin-bottom": marginsRet[2],
+  //     "--page-margin-left": marginsRet[3]
+  //   } as CSSProperties;
+  // };
   return <SidebarStyle
     className="stack"
     onClick={(e) => { (e.target as HTMLElement).classList.contains("stack") && handleBlockSelect(null); }}
     style={({
+      // ...getMargins(store.state.templates[0].pageMargin),
+      "--zoom":store.state.zoomByTab[store.state.selectedTab],
       "--page-size-1":modifiedSize[0],
       "--page-size-2":modifiedSize[1]
     } as CSSProperties)}

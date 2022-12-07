@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, CONTENT_TYPE, MI_LISTITEM_TYPE, TWO, ZERO } from "src/models/constants";
 import { BlockModel, MenuItemBlockModel, StoreModel } from "src/models/types";
+import considerZooming from "src/store/considerZooming";
 import styled from "styled-components";
 
 interface BlockComponentModel{
@@ -12,8 +13,11 @@ interface BlockComponentModel{
 
 const BlockStyle = styled.div`
   transition: all var(--transition);
+  font-size: calc(var(--zoom) * 100%);
   cursor: pointer;
   outline: 1px dashed transparent;
+  overflow: hidden;
+  line-break: anywhere;
   &.selected{
     outline: 1px dashed var(--main-color);
   }
@@ -92,7 +96,7 @@ export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
       listMI.CSSParam;
       ret = {
         ...ret,
-        ...{[String(listMI.CSSParam)]: mi.miListItemValue}
+        ...{[String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue))}
       };
     });
     return ret;

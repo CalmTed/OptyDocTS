@@ -80,6 +80,12 @@ const appReducer: ReducerModel = (state, action) => {
       stateUpdated = true;
     }
     break;
+  case ACTION_NAMES.app_setZoom:
+    if(action.payload !== state.zoomByTab[state.selectedTab]) {
+      state.zoomByTab[state.selectedTab] = action.payload;
+      stateUpdated = true;
+    }
+    break;
   default:
     console.error("unknown app reducer action", action);
   }

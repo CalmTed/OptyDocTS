@@ -34567,6 +34567,7 @@ var ACTION_NAMES;
     ACTION_NAMES["app_setsidebarSectionHeight"] = "app_setsidebarSectionHeight";
     ACTION_NAMES["app_setTemplate"] = "app_setTemplate";
     ACTION_NAMES["app_selectBlock"] = "app_selectBlock";
+    ACTION_NAMES["app_setZoom"] = "app_setZoom";
     ACTION_NAMES["template_setParam"] = "template_setParam";
     ACTION_NAMES["template_setCSS"] = "template_setCSS";
     ACTION_NAMES["template_addBlock"] = "template_addBlock";
@@ -34915,7 +34916,11 @@ const getInitialAppState = () => {
         selectedBlock: null,
         selectedCopy: null,
         sidebarSectionHeight: 100,
-        templates: [getInitialTamplate()]
+        templates: [getInitialTamplate()],
+        zoomByTab: {
+            [TAB_TYPE.Edit]: 1,
+            [TAB_TYPE.Copy]: 1
+        }
     };
 };
 const getInitialTamplate = () => {
@@ -34960,13 +34965,14 @@ const getInitialTemplateMis = () => {
             miListItemName: TEMPLATE_MI_NAMES.orientation,
             miListItemValue: "vertical",
             timeAdded: timeAdded
-        },
-        {
-            uuid: getId("tmi"),
-            miListItemName: TEMPLATE_MI_NAMES.pageMargin,
-            miListItemValue: null,
-            timeAdded: timeAdded
         }
+        //THIS MI BREAKS FTP, better to use full page block and copylink margins
+        // {
+        //   uuid: getId("tmi"),
+        //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
+        //   miListItemValue: null,
+        //   timeAdded: timeAdded
+        // }
     ];
 };
 const getInitialBlock = (parentId = null) => {
@@ -36137,10 +36143,22 @@ const useUI = () => {
     };
 };
 
+const considerZooming = (value) => {
+    //does not replaces %, b.c % are scalable on it own
+    const mask = /\d{1,}(mm|cm|in|pt|px)/g;
+    const newValue = value.replace(mask, (str) => {
+        return `calc( var(--zoom) * ${str})`;
+    });
+    return newValue;
+};
+
 const BlockStyle = qe.div `
   transition: all var(--transition);
+  font-size: calc(var(--zoom) * 100%);
   cursor: pointer;
   outline: 1px dashed transparent;
+  overflow: hidden;
+  line-break: anywhere;
   &.selected{
     outline: 1px dashed var(--main-color);
   }
@@ -36212,7 +36230,7 @@ const Block = ({ store, block, classes }) => {
             listMI.CSSParam;
             ret = {
                 ...ret,
-                ...{ [String(listMI.CSSParam)]: mi.miListItemValue }
+                ...{ [String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue)) }
             };
         });
         return ret;
@@ -36236,19 +36254,33 @@ const SidebarStyle = qe.div `
   gap: var(--stack-padding);
   align-content: start;
   justify-content: start;
+  --zoom: 1;
+  --page-margin-top: 0mm;
+  --page-margin-right: 0mm;
+  --page-margin-bottom: 0mm;
+  --page-margin-left: 0mm;
 `;
 const PageStyle$1 = qe.div `
   cursor: default;
   background: var(--section-bg);
   transition: all var(--transition);
-  min-width: var(--page-size-1);
-  min-height: var(--page-size-2);
-  max-width: var(--page-size-1);
-  max-height: var(--page-size-2);
+  --width: calc( var(--zoom) * (var(--page-size-1) - var(--page-margin-left) - var(--page-margin-right)));
+  --height: calc( var(--zoom) * (var(--page-size-2) - var(--page-margin-top) - var(--page-margin-bottom)));
+  width: var(--width);
+  height: var(--height);
+  min-width: var(--width);
+  min-height: var(--height);
+  max-width: var(--width);
+  max-height: var(--height);
+  padding-top: calc( var(--zoom) * var(--page-margin-top));
+  padding-right: calc( var(--zoom) * var(--page-margin-right));
+  padding-bottom: calc( var(--zoom) * var(--page-margin-bottom));
+  padding-left: calc( var(--zoom) * var(--page-margin-left));
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   justyfy-content: flex-start;
+  overflow: hidden;
 `;
 const Stack = ({ store }) => {
     const handleBlockSelect = (uuid) => {
@@ -36274,7 +36306,8 @@ const Stack = ({ store }) => {
             //comparing to state saved
             const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
             if (targetBlock) {
-                if (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion) {
+                if (heightProportion && widthProportion &&
+                    (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion)) {
                     store.dispach({
                         name: ACTION_NAMES.block_setFTP,
                         payload: {
@@ -36287,9 +36320,26 @@ const Stack = ({ store }) => {
             }
         });
     }, AFTER_ANIMATION);
+    const pageStyles = (state) => {
+        let ret = {};
+        state.templates[0].menuItems.filter(mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(cssMI => {
+            const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
+            if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
+                return;
+            }
+            if (!listMI.CSSParam) {
+                return;
+            }
+            ret = {
+                ...ret,
+                [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
+            };
+        });
+        return ret;
+    };
     const renderPage = (blocks, store) => {
         const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
-        return React.createElement(PageStyle$1, { key: pageKey, className: "page" }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
+        return React.createElement(PageStyle$1, { key: pageKey, className: "page", style: pageStyles(store.state) }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
     };
     const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
     const pageSize = store.state.templates[0].pageSizeMM.split(" ");
@@ -36366,7 +36416,32 @@ const Stack = ({ store }) => {
         }
         return ret;
     };
+    // THIS MARGINS ARE BREAKING FTP CALCULATING SO BETTER TO USE BLOCK MARGINS
+    // const getMargins: (arg: string) => CSSProperties = (string) => {
+    //   let marginsRet: string[] = ["0", "0", "0", "0"];
+    //   const margins = string.trim().replace(/\s{2,}/g, " ").split(" ");
+    //   switch (margins.length) {
+    //   case ONE:
+    //     marginsRet = marginsRet.map(() => margins[0]);
+    //     break;
+    //   case TWO + ONE:
+    //   case TWO:
+    //     marginsRet = marginsRet.map((ret, i) => margins[(i + ONE) % TWO]);
+    //     break;
+    //   case TWO + TWO:
+    //     marginsRet = marginsRet.map((ret, i) => margins[i]);
+    //     break;
+    //   }
+    //   return {
+    //     "--page-margin-top": marginsRet[0],
+    //     "--page-margin-right": marginsRet[1],
+    //     "--page-margin-bottom": marginsRet[2],
+    //     "--page-margin-left": marginsRet[3]
+    //   } as CSSProperties;
+    // };
     return React.createElement(SidebarStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
+            // ...getMargins(store.state.templates[0].pageMargin),
+            "--zoom": store.state.zoomByTab[store.state.selectedTab],
             "--page-size-1": modifiedSize[0],
             "--page-size-2": modifiedSize[1]
         } }, rootBlocks(rootChildren).map(childList => {
@@ -36446,6 +36521,46 @@ const Page = ({ state, dispach }) => {
         showPrompt,
         t
     };
+    react.exports.useEffect(() => {
+        const setZoom = (arg, reset = false) => {
+            const getNewZoom = (zoom, portion) => {
+                const min = 0.1;
+                const max = 10;
+                const boundSafePostion = (zoom <= min && portion < ZERO) ? ZERO : (zoom > max && portion > ZERO) ? ZERO : portion;
+                const a = 0.5;
+                const factor = boundSafePostion * (Math.pow(zoom, a)) || ZERO;
+                return zoom + factor < min ? min : zoom + factor > max ? max : zoom + factor;
+            };
+            const newZoom = reset ? ONE : getNewZoom(store.state.zoomByTab[store.state.selectedTab], arg);
+            dispach({
+                name: ACTION_NAMES.app_setZoom,
+                payload: newZoom
+            });
+            const sto = 100;
+            store.showToast(`${Math.round(newZoom * sto)}%`);
+        };
+        const handleWheel = (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                const SCROLLFACTOR = 500;
+                setZoom((-e.deltaY / SCROLLFACTOR));
+            }
+        };
+        const handleKeyUp = (e) => {
+            if (e.ctrlKey && (e.key === "-" || e.key === "=" || e.key === "0")) {
+                e.preventDefault();
+                const zoomKoof = 0.1;
+                const zoomDelta = e.key === "-" ? -zoomKoof : zoomKoof;
+                setZoom(zoomDelta, e.key === "0");
+            }
+        };
+        document.addEventListener("wheel", handleWheel, { passive: false });
+        document.addEventListener("keydown", handleKeyUp, { passive: false });
+        return () => {
+            document.removeEventListener("wheel", handleWheel);
+            document.removeEventListener("keydown", handleKeyUp);
+        };
+    });
     return React.createElement(PageStyle, { className: state.theme },
         React.createElement(Topbar, { store: store }),
         React.createElement(Sidebar, { store: store }),
@@ -36528,6 +36643,12 @@ const appReducer = (state, action) => {
         case ACTION_NAMES.app_selectBlock:
             if (action.payload !== state.selectedBlock) {
                 state.selectedBlock = action.payload;
+                stateUpdated = true;
+            }
+            break;
+        case ACTION_NAMES.app_setZoom:
+            if (action.payload !== state.zoomByTab[state.selectedTab]) {
+                state.zoomByTab[state.selectedTab] = action.payload;
                 stateUpdated = true;
             }
             break;

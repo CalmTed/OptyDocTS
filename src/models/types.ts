@@ -57,6 +57,9 @@ export type ActionModel = {
 } | {
   name: ACTION_NAMES.app_selectBlock
   payload: string | null
+} | {
+  name: ACTION_NAMES.app_setZoom
+  payload: number
 } | { //////    TEMPLATE     ///////
   name: ACTION_NAMES.template_setParam
   payload: {
@@ -121,6 +124,11 @@ export interface AppStateModel {
   selectedCopy: number | null
   sidebarSectionHeight: number
   templates: TemplateModel[]
+  zoomByTab: {
+    [TAB_TYPE.Edit] : number
+    [TAB_TYPE.Copy] : number
+  }
+  
 }
 
 export interface TemplateModel {

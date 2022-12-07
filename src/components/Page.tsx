@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import styled from "styled-components";
 import { ActionModel, AppStateModel, StoreModel } from "src/models/types";
 import Topbar from "./Topbar";
@@ -8,6 +8,7 @@ import Prompt from "./ui/Prompt";
 import useUI from "src/store/useUI";
 import createT from "src/store/translation";
 import Stack from "./Stack";
+import { ACTION_NAMES, ONE, ZERO } from "src/models/constants";
 
 interface PageModel {
   state: AppStateModel
@@ -90,6 +91,47 @@ const Page: FC<PageModel> = ({state, dispach}) => {
     showPrompt,
     t
   };
+  useEffect(() => {
+    const setZoom: (arg: number, reset?: boolean) => void =  (arg, reset = false) => {
+      const getNewZoom: (zoom: number, portion: number) => number = (zoom, portion) => {
+        const min = 0.1;
+        const max = 10;
+        const boundSafePostion = (zoom <= min && portion < ZERO) ? ZERO : (zoom > max && portion > ZERO) ? ZERO : portion;
+        const a = 0.5;
+        const factor = boundSafePostion * (Math.pow(zoom, a)) || ZERO;
+        return zoom + factor < min ? min : zoom + factor > max ? max : zoom + factor;
+      };
+      const newZoom = reset ? ONE : getNewZoom(store.state.zoomByTab[store.state.selectedTab], arg);
+      dispach({
+        name: ACTION_NAMES.app_setZoom,
+        payload: newZoom
+      });
+      const sto = 100;
+      store.showToast(`${Math.round(newZoom * sto)}%`);
+    };
+    
+    const handleWheel = (e: WheelEvent) => {
+      if(e.ctrlKey) {
+        e.preventDefault();
+        const SCROLLFACTOR = 500;
+        setZoom((-e.deltaY / SCROLLFACTOR));
+      }
+    };
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if(e.ctrlKey && (e.key === "-" || e.key === "=" || e.key === "0")) {
+        e.preventDefault();
+        const zoomKoof = 0.1;
+        const zoomDelta = e.key === "-" ? -zoomKoof : zoomKoof;
+        setZoom(zoomDelta, e.key === "0");
+      }
+    };
+    document.addEventListener("wheel", handleWheel, {passive: false});
+    document.addEventListener("keydown", handleKeyUp, {passive: false});
+    return () => {
+      document.removeEventListener("wheel", handleWheel);
+      document.removeEventListener("keydown", handleKeyUp);
+    };
+  });
 
   return <PageStyle className={state.theme}>
     <Topbar store={store}></Topbar>

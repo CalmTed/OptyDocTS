@@ -19,7 +19,11 @@ export const getInitialAppState: ()=>AppStateModel = () => {
     selectedBlock: null,
     selectedCopy: null,
     sidebarSectionHeight: 100,
-    templates: [getInitialTamplate()]
+    templates: [getInitialTamplate()],
+    zoomByTab: {
+      [TAB_TYPE.Edit]: 1,
+      [TAB_TYPE.Copy]: 1
+    }
   };
 };
 
@@ -66,13 +70,14 @@ const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
       miListItemName: TEMPLATE_MI_NAMES.orientation,
       miListItemValue: "vertical",
       timeAdded: timeAdded
-    },
-    {
-      uuid: getId("tmi"),
-      miListItemName: TEMPLATE_MI_NAMES.pageMargin,
-      miListItemValue: null,
-      timeAdded: timeAdded
     }
+    //THIS MI BREAKS FTP, better to use full page block and copylink margins
+    // {
+    //   uuid: getId("tmi"),
+    //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
+    //   miListItemValue: null,
+    //   timeAdded: timeAdded
+    // }
   ];
 };
 

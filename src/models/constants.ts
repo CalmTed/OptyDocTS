@@ -22,6 +22,7 @@ export enum ACTION_NAMES{
   app_setsidebarSectionHeight = "app_setsidebarSectionHeight",
   app_setTemplate = "app_setTemplate",
   app_selectBlock = "app_selectBlock",
+  app_setZoom = "app_setZoom",
 
   template_setParam = "template_setParam",
   template_setCSS = "template_setCSS",
