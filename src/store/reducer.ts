@@ -1,5 +1,6 @@
+import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, ZERO } from "src/models/constants";
-import { getId, getInitialBlock } from "src/models/intials";
+import { getId, getInitialBlock, initialBlockMIFactory } from "src/models/intials";
 import { BlockModel, ReducerModel } from "src/models/types";
 
 const reducer: ReducerModel = (state, action) => {
@@ -67,10 +68,12 @@ const appReducer: ReducerModel = (state, action) => {
   case ACTION_NAMES.app_setTemplate:
     if(!state.templates?.[0]) {
       state.templates.push(action.payload);
+      state.selectedBlock = null;
       stateUpdated = true;
     }
     if(action.payload.uuid !== state.templates[0].uuid) {
       state.templates[0] = action.payload;
+      state.selectedBlock = null;
       stateUpdated = true;
     }
     break;
@@ -273,6 +276,26 @@ const blockReducer: ReducerModel = (state, action) => {
         height: action.payload.height
       };
       stateUpdated = true;
+    }
+    break;
+  case  ACTION_NAMES.block_toggleMI:
+    const blockToggleMI = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
+    if(!blockToggleMI) {
+      return {
+        state,
+        stateUpdated
+      };
+    }
+    const miToChange = blockToggleMI.menuItems.find(mi => mi.miListItemName === action.payload.miName);
+    if(miToChange) { //remove mi from list if exists 
+      blockToggleMI.menuItems = blockToggleMI.menuItems.filter(mi => mi.miListItemName !== action.payload.miName);
+      stateUpdated = true;
+    }else { //add mi to mist id not exists 
+      if(BlockMIs.find(mi => mi.name === action.payload.miName)) {
+        console.log(initialBlockMIFactory(action.payload.miName));
+        blockToggleMI.menuItems = [...blockToggleMI.menuItems, ...[initialBlockMIFactory(action.payload.miName)]];
+        stateUpdated = true;
+      }
     }
     break;
   default:

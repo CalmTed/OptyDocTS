@@ -3,10 +3,9 @@ import styled from "styled-components";
 import { BlockModel, StoreModel } from "src/models/types";
 import Tabs from "./Tabs";
 import Split from "./ui/Split";
-import { ACTION_NAMES, CSS_DISPLAY_TYPE, TAB_TYPE, TWO, ZERO } from "src/models/constants";
-import MenuItemTemplate from "./MenuItemTemplate";
-import MenuItemBlock from "./MenuItemBlock";
+import { ACTION_NAMES, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import { BLOCK_MI_NAMES } from "src/models/blockMIs";
+import { MIPicker, MIs } from "./ui/Mis";
 
 interface SidebarModel {
   store: StoreModel
@@ -128,25 +127,18 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
     });
   };
 
+  const nonBlock = store.state.selectedBlock === null;
+  const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
   return <SidebarStyle> 
     <Tabs store={store}></Tabs>
     { store.state.selectedTab === TAB_TYPE.Edit &&
       <Split store={store}>
         <SplitStyle>
-          {
-            store.state.selectedBlock === null &&
-            store.state.templates?.[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
-              return <MenuItemTemplate key={mi.uuid} store={store} mi={mi}/>;
-            })
-          }
-          {
-            store.state.selectedBlock !== null &&
-            store.state.templates[0] &&
-            store.state.templates[0].blocks &&
-            store.state.templates?.[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; }).map(mi => {
-              return <MenuItemBlock key={mi.uuid} store={store} mi={mi}/>;
-            })
-          }
+          <>
+            <MIs store={store} addableType="fixed" targetType={MItaget}/>
+            <MIPicker store={store} target={MItaget}/>   
+            <MIs store={store} addableType="addable" targetType={MItaget}/>
+          </>
         </SplitStyle>
         <SplitStyle>
           {

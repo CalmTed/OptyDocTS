@@ -30,10 +30,12 @@ export enum ACTION_NAMES{
   template_removeBlock = "template_removeBlock",
   template_addBlockInside = "template_addBlockInside",
   template_addBlockBefore = "template_addBlockBefore",
+  template_toggleMI = "template_toggleMI",
   
   block_setParam = "block_setParam",
   block_setCSS = "block_setCSS",
-  block_setFTP = "block_setFTP"
+  block_setFTP = "block_setFTP",
+  block_toggleMI = "block_toggleMI"
 }
 
 export enum TAB_TYPE{
@@ -55,6 +57,11 @@ export enum MI_LISTITEM_TYPE {
   blockCSS = "blockCSS"
 }
 
+export enum MI_TARGET {
+  template = "template",
+  block = "block"
+} 
+
 export enum INPUT_TYPES{
   text = "text",
   textarea = "textarea",
@@ -66,7 +73,8 @@ export enum INPUT_TYPES{
 }
 
 export enum FOCUS_ORDER{
-  select = "3"
+  select = "3",
+  miPicker = "12"
 }
 
 export enum CSS_DISPLAY_TYPE{

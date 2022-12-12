@@ -7,7 +7,9 @@ export enum BLOCK_MI_NAMES{
   content = "blockContent",
   display = "blockDisplay",
   width = "width",
-  height = "height"
+  height = "height",
+  flexAlignHorizontal = "flexAlignHorizontal",
+  flexAlignVertical = "flexAlignVertical"
 }
 
 export const BlockMIs:(MenuItemBlockListItemModel)[] = [
@@ -86,5 +88,53 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     isAddable: true,
     inputType: INPUT_TYPES.size,
     inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.flexAlignHorizontal,
+    label: "miFlexAlignHorizontal",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "justify-content",
+    CSSDefaultValue: "flex-start",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "left",
+        value: "flex-start"
+      },
+      {
+        label: "center",
+        value: "center"
+      },
+      {
+        label: "right",
+        value: "flex-end"
+      }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.flexAlignVertical,
+    label: "miFlexAlignVertical",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "align-items",
+    CSSDefaultValue: "flex-start",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "top",
+        value: "flex-start"
+      },
+      {
+        label: "center",
+        value: "center"
+      },
+      {
+        label: "bottom",
+        value: "flex-end"
+      }
+    ]
   }
 ];

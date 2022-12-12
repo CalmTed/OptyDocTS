@@ -16,7 +16,7 @@ const BlockStyle = styled.div`
   font-size: calc(var(--zoom) * 100%);
   cursor: pointer;
   outline: 1px dashed transparent;
-  overflow: hidden;
+  ooverflow: hidden;
   line-break: anywhere;
   &.selected{
     outline: 1px dashed var(--main-color);
@@ -99,6 +99,7 @@ export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
         ...{[String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue))}
       };
     });
+    console.log(ret);
     return ret;
   };
   return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected} ${classes}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>

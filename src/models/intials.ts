@@ -101,58 +101,27 @@ export const getInitialBlock: (parentId: string | null)=>BlockModel = (parentId 
   };
 };
 
-const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
+export const initialBlockMIFactory: (name: BLOCK_MI_NAMES) => MenuItemBlockModel = (name) => {
   const dateAdded = new Date().getTime();
-  return [
-    {
-      uuid: getId("bmi"),
-      miListItemName: BLOCK_MI_NAMES.name,
-      miListItemValue: "",
-      valueType: CONTENT_TYPE.fixed,
-      variableLabel: "",
-      variableOptions: [],
-      refferenceId: null,
-      timeAdded: dateAdded
-    },
-    {
-      uuid: getId("bmi"),
-      miListItemName: BLOCK_MI_NAMES.content,
-      miListItemValue: "",
-      valueType: CONTENT_TYPE.fixed,
-      variableLabel: "",
-      variableOptions: [],
-      refferenceId: null,
-      timeAdded: dateAdded
-    },
-    {
-      uuid: getId("bmi"),
-      miListItemName:  BLOCK_MI_NAMES.display,
-      miListItemValue: "",
-      valueType: CONTENT_TYPE.fixed,
-      variableLabel: "",
-      variableOptions: [],
-      refferenceId: null,
-      timeAdded: dateAdded
-    },
-    {
-      uuid: getId("bmi"),
-      miListItemName: BLOCK_MI_NAMES.height,
-      miListItemValue: "",
-      valueType: CONTENT_TYPE.fixed,
-      variableLabel: "",
-      variableOptions: [],
-      refferenceId: null,
-      timeAdded: dateAdded
-    },
-    {
-      uuid: getId("bmi"),
-      miListItemName: BLOCK_MI_NAMES.width,
-      miListItemValue: "",
-      valueType: CONTENT_TYPE.fixed,
-      variableLabel: "",
-      variableOptions: [],
-      refferenceId: null,
-      timeAdded: dateAdded
-    }
+  return {
+    uuid: getId("bmi"),
+    miListItemName: name,
+    miListItemValue: "",
+    valueType: CONTENT_TYPE.fixed,
+    variableLabel: "",
+    variableOptions: [],
+    refferenceId: null,
+    timeAdded: dateAdded
+  };
+};
+
+const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
+  const initialMINames = [
+    BLOCK_MI_NAMES.name,
+    BLOCK_MI_NAMES.content,
+    BLOCK_MI_NAMES.display,
+    BLOCK_MI_NAMES.height,
+    BLOCK_MI_NAMES.width
   ];
+  return initialMINames.map(name => initialBlockMIFactory(name));
 };

@@ -91,6 +91,11 @@ export type ActionModel = {
     successorId: string
     children?: BlockModel[]
   }
+} | {
+  name: ACTION_NAMES.template_toggleMI
+  payload: {
+    miName: TEMPLATE_MI_NAMES
+  }
 } | {////////     BLOCK     /////////
   name: ACTION_NAMES.block_setParam
   payload: {
@@ -111,6 +116,12 @@ export type ActionModel = {
     blockUUID: string
     width: number
     height: number
+  }
+} | {
+  name: ACTION_NAMES.block_toggleMI
+  payload: {
+    blockUUID: string | null
+    miName: BLOCK_MI_NAMES
   }
 }
 
@@ -195,6 +206,7 @@ export type MenuItemTemplateListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
+  condition?:MICondition[]
 } | {
   name: TEMPLATE_MI_NAMES
   label: WordType
@@ -204,6 +216,7 @@ export type MenuItemTemplateListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
+  condition?:MICondition[]
 }
 
 export type MenuItemBlockListItemModel = {
@@ -216,6 +229,7 @@ export type MenuItemBlockListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
+  condition?:MICondition[]
 } | {
   name: BLOCK_MI_NAMES
   label: WordType
@@ -226,6 +240,19 @@ export type MenuItemBlockListItemModel = {
   isCopylinkable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
+  condition?:MICondition[]
+}
+
+export type MICondition = {
+  type: "prop"
+  propName: keyof TemplateModel | keyof BlockModel
+  whiteList: (string | number)[]
+  blackList: (string | number)[] 
+} | {
+  type: "css"
+  cssPropName: keyof TemplateModel | keyof BlockModel
+  whiteList: string[]
+  blackList: string[]
 }
 
 export type ReducerModel = (state: AppStateModel, action: ActionModel) => {state: AppStateModel, stateUpdated: boolean}

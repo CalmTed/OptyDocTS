@@ -42,6 +42,8 @@ const wordsUA: Record<WordType, string> = {
   miDisplayInherit: "Nasliduye",
   miWidth: "Shirota",
   miHeight: "Vysota",
+  miFlexAlignHorizontal: "Flex align horizontal",
+  miFlexAlignVertical: "Flex align vertical",
   A4: "A4",
   A5: "A5",
   A3: "A3",
