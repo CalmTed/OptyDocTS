@@ -51,7 +51,7 @@ const wordsUA: Record<WordType, string> = {
   miDisplayBlock: "Blokom",
   miDisplayFlex: "Fleks",
   miDisplayNone: "Pryhovano",
-  miDisplayInherit: "Nasliduye",
+  miInherit: "Nasliduye",
   miWidth: "Shirota",
   miHeight: "Vysota",
   miFlexAlignHorizontal: "Fleks align horizontal",

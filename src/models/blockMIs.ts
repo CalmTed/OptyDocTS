@@ -23,7 +23,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     label: "miName",
     miType: MI_LISTITEM_TYPE.blockParam,
     paramName: "label",
-    defaultValue: "",
+    defaultValue: "New Block",
     isReadonly: false,
     isAddable: false,
     inputType: INPUT_TYPES.text,
@@ -41,34 +41,6 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputOptions: []
   },
   {
-    name: BLOCK_MI_NAMES.contentType,
-    label: "miContentType",
-    miType: MI_LISTITEM_TYPE.blockParam,
-    paramName: "contentType",
-    defaultValue: "",
-    isReadonly: false,
-    isAddable: false,
-    inputType: INPUT_TYPES.options,
-    inputOptions: [
-      {
-        label: "miFixed",
-        value: CONTENT_TYPE.fixed
-      },
-      {
-        label: "miVariable",
-        value: CONTENT_TYPE.variable
-      },
-      {
-        label: "miSelect",
-        value: CONTENT_TYPE.select
-      },
-      {
-        label: "miCopyFrom",
-        value: CONTENT_TYPE.copyFrom
-      }
-    ]
-  },
-  {
     name: BLOCK_MI_NAMES.display,
     label: "miDisplay",
     miType: MI_LISTITEM_TYPE.blockCSS,
@@ -79,7 +51,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "miDisplayInherit",
+        label: "miInherit",
         value: CSS_DISPLAY_TYPE.inherit
       },
       {
@@ -97,6 +69,34 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
       {
         label: "miDisplayNone",
         value: CSS_DISPLAY_TYPE.none
+      }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.contentType,
+    label: "miContentType",
+    miType: MI_LISTITEM_TYPE.blockParam,
+    paramName: "contentType",
+    defaultValue: CONTENT_TYPE.fixed,
+    isReadonly: false,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miFixed",
+        value: CONTENT_TYPE.fixed
+      },
+      {
+        label: "miVariable",
+        value: CONTENT_TYPE.variable
+      },
+      {
+        label: "miSelect",
+        value: CONTENT_TYPE.select
+      },
+      {
+        label: "miCopyFrom",
+        value: CONTENT_TYPE.copyFrom
       }
     ]
   },
@@ -143,6 +143,10 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
       {
         label: "miAlignRight",
         value: "flex-end"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
       }
     ],
     conditions:[
@@ -175,6 +179,10 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
       {
         label: "miAlignBottom",
         value: "flex-end"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
       }
     ],
     conditions:[
@@ -191,7 +199,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     label: "miFlexWrap",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "flexWrap",
-    CSSDefaultValue: "wrap",
+    CSSDefaultValue: "inherit",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.options,
@@ -203,6 +211,10 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
       {
         label: "miNoWrap",
         value: "nowrap"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
       }
     ]
   },

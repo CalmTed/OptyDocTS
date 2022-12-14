@@ -1,5 +1,5 @@
 import { LANG_CODES } from "src/store/translation";
-import { BLOCK_MI_NAMES } from "./blockMIs";
+import { BlockMIs, BLOCK_MI_NAMES } from "./blockMIs";
 import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
 import { TemplateMIs, TEMPLATE_MI_NAMES } from "./templateMIs";
 import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
@@ -47,7 +47,7 @@ export const getInitialTamplate: ()=>TemplateModel = () => {
 export const initialTemplateMIFactory: (name: TEMPLATE_MI_NAMES) => MenuItemTemplateModel = (name) => {
   const dateAdded = new Date().getTime();
   const getDefaultValue = () => {
-    const listMI = TemplateMIs.find(mi => NodeIterator.name === name);
+    const listMI = TemplateMIs.find(() => NodeIterator.name === name);
     if(!listMI) {
       return;
     }
@@ -98,10 +98,18 @@ export const getInitialBlock: (parentId: string | null)=>BlockModel = (parentId 
 
 export const initialBlockMIFactory: (name: BLOCK_MI_NAMES) => MenuItemBlockModel = (name) => {
   const dateAdded = new Date().getTime();
+  const getDefaultValue = () => {
+    const listMI = BlockMIs.find(listMI => listMI.name === name);
+    if(!listMI) {
+      return;
+    }
+    const isCSSParam = listMI.miType === MI_LISTITEM_TYPE.blockParam;
+    return isCSSParam ? listMI.defaultValue : listMI.CSSDefaultValue;
+  };
   return {
     uuid: getId("bmi"),
     miListItemName: name,
-    miListItemValue: "",
+    miListItemValue: getDefaultValue() || "",
     valueType: CONTENT_TYPE.fixed,
     variableLabel: "",
     variableOptions: [],

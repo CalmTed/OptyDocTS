@@ -34690,7 +34690,7 @@ const wordsEB = {
     miDisplayBlock: "Block",
     miDisplayFlex: "Flex",
     miDisplayNone: "None",
-    miDisplayInherit: "Inherit",
+    miInherit: "Inherit",
     miWidth: "Width",
     miHeight: "Height",
     miFlexAlignHorizontal: "Flex align horizontal",
@@ -34763,7 +34763,7 @@ const wordsUA = {
     miDisplayBlock: "Blokom",
     miDisplayFlex: "Fleks",
     miDisplayNone: "Pryhovano",
-    miDisplayInherit: "Nasliduye",
+    miInherit: "Nasliduye",
     miWidth: "Shirota",
     miHeight: "Vysota",
     miFlexAlignHorizontal: "Fleks align horizontal",
@@ -34825,7 +34825,7 @@ const BlockMIs = [
         label: "miName",
         miType: MI_LISTITEM_TYPE.blockParam,
         paramName: "label",
-        defaultValue: "",
+        defaultValue: "New Block",
         isReadonly: false,
         isAddable: false,
         inputType: INPUT_TYPES.text,
@@ -34843,34 +34843,6 @@ const BlockMIs = [
         inputOptions: []
     },
     {
-        name: BLOCK_MI_NAMES.contentType,
-        label: "miContentType",
-        miType: MI_LISTITEM_TYPE.blockParam,
-        paramName: "contentType",
-        defaultValue: "",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.options,
-        inputOptions: [
-            {
-                label: "miFixed",
-                value: CONTENT_TYPE.fixed
-            },
-            {
-                label: "miVariable",
-                value: CONTENT_TYPE.variable
-            },
-            {
-                label: "miSelect",
-                value: CONTENT_TYPE.select
-            },
-            {
-                label: "miCopyFrom",
-                value: CONTENT_TYPE.copyFrom
-            }
-        ]
-    },
-    {
         name: BLOCK_MI_NAMES.display,
         label: "miDisplay",
         miType: MI_LISTITEM_TYPE.blockCSS,
@@ -34881,7 +34853,7 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "miDisplayInherit",
+                label: "miInherit",
                 value: CSS_DISPLAY_TYPE.inherit
             },
             {
@@ -34899,6 +34871,34 @@ const BlockMIs = [
             {
                 label: "miDisplayNone",
                 value: CSS_DISPLAY_TYPE.none
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.contentType,
+        label: "miContentType",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "contentType",
+        defaultValue: CONTENT_TYPE.fixed,
+        isReadonly: false,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miFixed",
+                value: CONTENT_TYPE.fixed
+            },
+            {
+                label: "miVariable",
+                value: CONTENT_TYPE.variable
+            },
+            {
+                label: "miSelect",
+                value: CONTENT_TYPE.select
+            },
+            {
+                label: "miCopyFrom",
+                value: CONTENT_TYPE.copyFrom
             }
         ]
     },
@@ -34945,6 +34945,10 @@ const BlockMIs = [
             {
                 label: "miAlignRight",
                 value: "flex-end"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
             }
         ],
         conditions: [
@@ -34977,6 +34981,10 @@ const BlockMIs = [
             {
                 label: "miAlignBottom",
                 value: "flex-end"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
             }
         ],
         conditions: [
@@ -34993,7 +35001,7 @@ const BlockMIs = [
         label: "miFlexWrap",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "flexWrap",
-        CSSDefaultValue: "wrap",
+        CSSDefaultValue: "inherit",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.options,
@@ -35005,6 +35013,10 @@ const BlockMIs = [
             {
                 label: "miNoWrap",
                 value: "nowrap"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
             }
         ]
     },
@@ -35205,7 +35217,7 @@ const getInitialTamplate = () => {
 const initialTemplateMIFactory = (name) => {
     const dateAdded = new Date().getTime();
     const getDefaultValue = () => {
-        const listMI = TemplateMIs.find(mi => NodeIterator.name === name);
+        const listMI = TemplateMIs.find(() => NodeIterator.name === name);
         if (!listMI) {
             return;
         }
@@ -35251,10 +35263,18 @@ const getInitialBlock = (parentId = null) => {
 };
 const initialBlockMIFactory = (name) => {
     const dateAdded = new Date().getTime();
+    const getDefaultValue = () => {
+        const listMI = BlockMIs.find(listMI => listMI.name === name);
+        if (!listMI) {
+            return;
+        }
+        const isCSSParam = listMI.miType === MI_LISTITEM_TYPE.blockParam;
+        return isCSSParam ? listMI.defaultValue : listMI.CSSDefaultValue;
+    };
     return {
         uuid: getId("bmi"),
         miListItemName: name,
-        miListItemValue: "",
+        miListItemValue: getDefaultValue() || "",
         valueType: CONTENT_TYPE.fixed,
         variableLabel: "",
         variableOptions: [],
@@ -35451,9 +35471,10 @@ const Topbar = ({ store }) => {
             }
         });
     };
+    const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
     return React.createElement(TopbarStyle, null,
         React.createElement("div", { className: "templateTools" },
-            React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock }),
+            React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock, disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
             React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: handleRemoveBlock, disabled: !store.state.selectedBlock }),
             React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: handleCopy, disabled: !store.state.selectedBlock }),
             React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false) }),
@@ -36071,13 +36092,16 @@ const PickerListStyle = qe.div `
   align-content: flex-start;
   --row-height: 2.5em;
   overflow-y: auto;
+  position: fixed;
+  width: var(--sidebar-width);
+  top: var(--topbar-height);
   & div{
     width: 100%;
     height: var(--row-height);
   }
 `;
 const PickerStyle = qe.div `
-  padding: 0.6em 1em;
+  padding: 0;
   :focus-within ${PickerListStyle}{
     visibility: visible;
     opacity: 1;
@@ -36089,16 +36113,30 @@ const PickerListItemStyle = qe.div `
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  &.active{
+  padding: 0 var(--sidebar-padding);
+  background: var(--section-bg);
+  border: 0.2em solid var(--app-bg);
+  border-bottom-width: 0;
+  border-top-width: 0;
+  &:first-child{
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-top-width: 0.2em;
+  }
+  &:last-child{
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-bottom-width: 0.2em;
+  }
+  &.active.addable{
     color: var(--main-color);
     & .icon{
       --icon-color: var(--main-color);
     }
   }
-  &:hover{
+  &.addable:hover{
     background: var(--main-color);
     cursor: pointer;
     color: var(--section-bg);
+    border-color: var(--main-color);
     & .icon{
       --icon-color: var(--section-bg);
     }
@@ -36111,6 +36149,7 @@ const PickerLabelStyle = qe.span `
   display: flex;
   cursor: pointer;
   font-size: 110%;
+  padding: var(--sidebar-padding);
 `;
 const MIPicker = ({ store, target }) => {
     const isBlockTarget = target === MI_TARGET.block;
@@ -36118,10 +36157,11 @@ const MIPicker = ({ store, target }) => {
     const getMiList = (isBlockTarget, selectedBlock) => {
         if (isBlockTarget) {
             if (selectedBlock) {
-                return BlockMIs.filter(listMI => listMI.isAddable).map(listMI => {
+                return BlockMIs.map(listMI => {
                     return {
                         data: listMI,
-                        isActive: !!selectedBlock.menuItems.find(mi => mi.miListItemName === listMI.name)
+                        isActive: !!selectedBlock.menuItems.find(mi => mi.miListItemName === listMI.name),
+                        isAddable: listMI.isAddable
                     };
                 });
             }
@@ -36133,7 +36173,8 @@ const MIPicker = ({ store, target }) => {
             return TemplateMIs.filter(listMI => listMI.isAddable).map(listMI => {
                 return {
                     data: listMI,
-                    isActive: !!store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMI.name)
+                    isActive: !!store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMI.name),
+                    isAddable: listMI.isAddable
                 };
             });
         }
@@ -36159,12 +36200,15 @@ const MIPicker = ({ store, target }) => {
         }
         return;
     };
+    const geticonType = (mi) => {
+        return mi.isAddable ? mi.isActive ? "minus" : "plus" : "lock";
+    };
     return React.createElement(PickerStyle, null,
         React.createElement(PickerLabelStyle, { tabIndex: 12 },
             React.createElement(Icon, { iconType: "plus" }),
             store.t("miEditMiList")),
-        React.createElement(PickerListStyle, null, miList.map(mi => React.createElement(PickerListItemStyle, { key: mi.data.name, className: mi.isActive ? "active" : "", tabIndex: 12, onClick: () => { handleChangeMI(mi.data.name, isBlockTarget); } },
-            React.createElement(Icon, { iconType: mi.isActive ? "minus" : "plus" }),
+        React.createElement(PickerListStyle, null, miList.map(mi => React.createElement(PickerListItemStyle, { key: mi.data.name, className: `${mi.isActive ? "active" : ""} ${mi.isAddable ? "addable" : ""}`, tabIndex: 12, onClick: () => { mi.isAddable ? handleChangeMI(mi.data.name, isBlockTarget) : null; } },
+            React.createElement(Icon, { iconType: geticonType(mi) }),
             store.t(mi.data.label)))));
 };
 
@@ -36194,6 +36238,10 @@ const TreeBrunchStyle = qe.div `
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
+    font-weight: bold; 
+  }
+  &.variable{
+    color: var(--second-color);
   }
   &.hidden{
     opacity: 0.5;
@@ -36279,8 +36327,8 @@ const Sidebar = ({ store }) => {
             React.createElement(Split, { store: store },
                 React.createElement(SplitStyle, null,
                     React.createElement(React.Fragment, null,
-                        React.createElement(MIs, { store: store, addableType: "fixed", targetType: MItaget }),
                         React.createElement(MIPicker, { store: store, target: MItaget }),
+                        React.createElement(MIs, { store: store, addableType: "fixed", targetType: MItaget }),
                         React.createElement(MIs, { store: store, addableType: "addable", targetType: MItaget }))),
                 React.createElement(SplitStyle, null, renderChildren(null, ZERO))));
 };
@@ -36302,8 +36350,9 @@ const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollaps
     const label = block.label.length ? block.label : block.uuid;
     const colapsedState = block.treeViewCollapseState;
     const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
+    const isVariable = block.contentType === CONTENT_TYPE.variable;
     const hasChildren = !!brunchChildren[block.uuid].length;
-    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""} ${isHideen ? "hidden" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
+    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
         !isHideen && (React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } })),
         isHideen && (React.createElement(Icon, { style: {
                 "marginLeft": ".2em",
@@ -36330,6 +36379,7 @@ const ToastStyle = qe.div `
   transform: translateY(10px);
   border: 1px solid var(--main-color);
   z-index: var(--z-toast);
+  box-shadow: var(--box-shadow);
   &.shown{
     opacity: 1;
     transform: translateY(0px);
@@ -36409,7 +36459,7 @@ const PromptStyle = qe.div `
     opacity: 0;
     transform: translateY(10px);
     z-index: var(--z-prompt-block);
-    border: 1px solid var(--main-color);
+    box-shadow: var(--box-shadow);
     & #promptHeader{
       margin: 0;
       width: 100%;
@@ -36625,11 +36675,15 @@ const BlockStyle = qe.div `
   outline: 1px dashed transparent;
   ooverflow: hidden;
   line-break: anywhere;
+  outline: 1px dashed transparent;
   &.selected{
-    outline: 1px dashed var(--main-color);
+    outline-color: var(--main-color);
   }
   &.hovered:not(.selected):not(& *:hover),:hover:not(.selected){
-    outline: 1px dashed var(--app-bg);
+    outline-color: var(--app-bg);
+  }
+  &.variable{
+    outline-color: var(--second-color);
   }
   p{
     margin: 0;
@@ -36677,7 +36731,9 @@ const getContent = (block) => {
     //   return;
     // };
     //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
-    return React.createElement(React.Fragment, null, block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue));
+    return React.createElement(React.Fragment, null,
+        block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue),
+        block.contentType === CONTENT_TYPE.variable && formatText(block.contentValue));
     // if(blockData.contentType === CONTENT_TYPE.copyFrom) {
     //   return blockData.contentValue;
     // }
@@ -36685,6 +36741,7 @@ const getContent = (block) => {
 const Block = ({ store, block, classes }) => {
     const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
     const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
+    const variable = block.contentType === CONTENT_TYPE.variable ? "variable" : "";
     const getStyles = (mis) => {
         let ret = {};
         mis.map(mi => {
@@ -36699,7 +36756,7 @@ const Block = ({ store, block, classes }) => {
         });
         return ret;
     };
-    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
+    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes} ${variable}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
         (!children.length && getContent(block)));
 };
 
@@ -36745,6 +36802,7 @@ const PageStyle$1 = qe.div `
   align-content: flex-start;
   justyfy-content: flex-start;
   overflow: hidden;
+  box-shadow: var(--box-shadow);
 `;
 const Stack = ({ store }) => {
     const handleBlockSelect = (uuid) => {
@@ -36921,6 +36979,7 @@ const PageStyle = qe.div `
   --second-color: #14ABF3;
   --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #ECCF03 0%, #14ABF3 100%);
   --main-button-text: #222222;
+  --shadow-color: #222;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -36928,6 +36987,7 @@ const PageStyle = qe.div `
     --main-color: #14ABF3;
     --second-color: #ECCF03;
     --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
+    --shadow-color: #888;
   }
   @media (prefers-color-scheme: light) {
     &.auto{
@@ -36937,12 +36997,15 @@ const PageStyle = qe.div `
       --main-color: #14ABF3;
       --second-color: #ECCF03;
       --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
+      --shadow-color: #888;
     }
   }
   --transition: .1s ease-in;
   --topbar-height: 3em;
   --sidebar-width: 20em;
+  --sidebar-padding: 0.6em;
   --border-radius: 8px;
+  --box-shadow: 0 0 .8em 0 var(--shadow-color);
 
   --z-select-list: 2000;
   --z-prompt-backdrop: 1000;
@@ -37110,6 +37173,19 @@ const appReducer = (state, action) => {
             if (action.payload !== state.selectedBlock) {
                 state.selectedBlock = action.payload;
                 stateUpdated = true;
+                //oncollapsing all parents
+                if (action.payload) {
+                    const selectedBlock = state.templates[0].blocks.find(b => b.uuid === action.payload);
+                    let targetBlock = state.templates[0].blocks.find(b => b.uuid === selectedBlock?.parentId);
+                    let i = 10000; //loop fallback b.c. js
+                    while (targetBlock || i) {
+                        if (targetBlock) {
+                            targetBlock.treeViewCollapseState = false;
+                            targetBlock = state.templates[0].blocks.find(b => b.uuid === targetBlock?.parentId);
+                        }
+                        i--;
+                    }
+                }
             }
             break;
         case ACTION_NAMES.app_setZoom:

@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { IconTypeKey } from "src/models/icons";
 import Icon from "./ui/Icon";
-import { WordType } from "src/store/translation";
 
 interface TopbarButtonModel {
   iconType: IconTypeKey

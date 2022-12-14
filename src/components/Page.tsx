@@ -23,6 +23,7 @@ const PageStyle = styled.div`
   --second-color: #14ABF3;
   --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #ECCF03 0%, #14ABF3 100%);
   --main-button-text: #222222;
+  --shadow-color: #222;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -30,6 +31,7 @@ const PageStyle = styled.div`
     --main-color: #14ABF3;
     --second-color: #ECCF03;
     --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
+    --shadow-color: #888;
   }
   @media (prefers-color-scheme: light) {
     &.auto{
@@ -39,12 +41,15 @@ const PageStyle = styled.div`
       --main-color: #14ABF3;
       --second-color: #ECCF03;
       --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
+      --shadow-color: #888;
     }
   }
   --transition: .1s ease-in;
   --topbar-height: 3em;
   --sidebar-width: 20em;
+  --sidebar-padding: 0.6em;
   --border-radius: 8px;
+  --box-shadow: 0 0 .8em 0 var(--shadow-color);
 
   --z-select-list: 2000;
   --z-prompt-backdrop: 1000;

@@ -45,7 +45,7 @@ const PromptStyle = styled.div`
     opacity: 0;
     transform: translateY(10px);
     z-index: var(--z-prompt-block);
-    border: 1px solid var(--main-color);
+    box-shadow: var(--box-shadow);
     & #promptHeader{
       margin: 0;
       width: 100%;

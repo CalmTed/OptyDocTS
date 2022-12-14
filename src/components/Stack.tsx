@@ -53,6 +53,7 @@ const PageStyle = styled.div`
   align-content: flex-start;
   justyfy-content: flex-start;
   overflow: hidden;
+  box-shadow: var(--box-shadow);
 `;
 
 const Stack: FC<StackModel> = ({store}) => {

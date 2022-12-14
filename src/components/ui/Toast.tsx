@@ -21,6 +21,7 @@ const ToastStyle = styled.div`
   transform: translateY(10px);
   border: 1px solid var(--main-color);
   z-index: var(--z-toast);
+  box-shadow: var(--box-shadow);
   &.shown{
     opacity: 1;
     transform: translateY(0px);

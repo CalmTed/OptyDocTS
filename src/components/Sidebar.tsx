@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BlockModel, StoreModel } from "src/models/types";
 import Tabs from "./Tabs";
 import Split from "./ui/Split";
-import { ACTION_NAMES, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
+import { ACTION_NAMES, CONTENT_TYPE, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import { BLOCK_MI_NAMES } from "src/models/blockMIs";
 import { MIPicker, MIs } from "./ui/Mis";
 import Icon from "./ui/Icon";
@@ -40,6 +40,10 @@ const TreeBrunchStyle = styled.div`
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
+    font-weight: bold; 
+  }
+  &.variable{
+    color: var(--second-color);
   }
   &.hidden{
     opacity: 0.5;
@@ -139,8 +143,8 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
       <Split store={store}>
         <SplitStyle>
           <>
-            <MIs store={store} addableType="fixed" targetType={MItaget}/>
             <MIPicker store={store} target={MItaget}/>   
+            <MIs store={store} addableType="fixed" targetType={MItaget}/>
             <MIs store={store} addableType="addable" targetType={MItaget}/>
           </>
         </SplitStyle>
@@ -180,9 +184,10 @@ const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level
   const label = block.label.length ? block.label : block.uuid;
   const colapsedState = block.treeViewCollapseState;
   const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
+  const isVariable = block.contentType === CONTENT_TYPE.variable;
   const hasChildren = !!brunchChildren[block.uuid].length;
-  return <TreeBrunchStyle 
-    className={`${selected ? "selected" : ""} ${isHideen ? "hidden" : ""}`}
+  return <TreeBrunchStyle
+    className={`${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""}`}
     style={{"paddingLeft":`${ (TWO / TWO) * level }em`}}
     onMouseEnter={() => { handleMouseEnter(block.uuid); }}
     onMouseLeave={() => { handleMouseLeave(block.uuid); }}

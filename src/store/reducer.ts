@@ -82,6 +82,19 @@ const appReducer: ReducerModel = (state, action) => {
     if(action.payload !== state.selectedBlock) {
       state.selectedBlock = action.payload;
       stateUpdated = true;
+      //oncollapsing all parents
+      if(action.payload) {
+        const selectedBlock = state.templates[0].blocks.find(b => b.uuid === action.payload);
+        let targetBlock = state.templates[0].blocks.find(b => b.uuid === selectedBlock?.parentId);
+        let i = 10000;//loop fallback b.c. js
+        while(targetBlock || i) {
+          if(targetBlock) {
+            targetBlock.treeViewCollapseState = false;
+            targetBlock = state.templates[0].blocks.find(b => b.uuid === targetBlock?.parentId);
+          }
+          i--;
+        }
+      }
     }
     break;
   case ACTION_NAMES.app_setZoom:

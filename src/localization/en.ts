@@ -47,7 +47,7 @@ const wordsEB = {
   miDisplayBlock: "Block",
   miDisplayFlex: "Flex",
   miDisplayNone: "None",
-  miDisplayInherit: "Inherit",
+  miInherit: "Inherit",
   miWidth: "Width",
   miHeight: "Height",
   miFlexAlignHorizontal: "Flex align horizontal",

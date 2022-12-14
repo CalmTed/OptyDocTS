@@ -18,11 +18,15 @@ const BlockStyle = styled.div`
   outline: 1px dashed transparent;
   ooverflow: hidden;
   line-break: anywhere;
+  outline: 1px dashed transparent;
   &.selected{
-    outline: 1px dashed var(--main-color);
+    outline-color: var(--main-color);
   }
   &.hovered:not(.selected):not(& *:hover),:hover:not(.selected){
-    outline: 1px dashed var(--app-bg);
+    outline-color: var(--app-bg);
+  }
+  &.variable{
+    outline-color: var(--second-color);
   }
   p{
     margin: 0;
@@ -75,6 +79,7 @@ const getContent: (block: BlockModel) => React.ReactNode = (block) => {
   //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
   return <>
     {block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue)}
+    {block.contentType === CONTENT_TYPE.variable && formatText(block.contentValue)}
   </>;
   // if(blockData.contentType === CONTENT_TYPE.copyFrom) {
   //   return blockData.contentValue;
@@ -85,6 +90,7 @@ const getContent: (block: BlockModel) => React.ReactNode = (block) => {
 export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
   const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
   const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
+  const variable = block.contentType === CONTENT_TYPE.variable ? "variable" : "";
   const getStyles: (mis: MenuItemBlockModel[]) =>  React.CSSProperties = (mis) => {
     let ret:React.CSSProperties = {};
     mis.map(mi => {
@@ -99,7 +105,7 @@ export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
     });
     return ret;
   };
-  return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected} ${classes}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>
+  return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected} ${classes} ${variable}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>
     {
       (!!children.length && getChildren(children, store)) ||
       (!children.length && getContent(block))
