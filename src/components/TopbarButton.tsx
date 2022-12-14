@@ -2,11 +2,13 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { IconTypeKey } from "src/models/icons";
 import Icon from "./ui/Icon";
+import { WordType } from "src/store/translation";
 
 interface TopbarButtonModel {
   iconType: IconTypeKey
   onClick: () => void
   disabled?: boolean
+  title?: string
 }
 
 const TopbarButtonStyle = styled.div`
@@ -29,8 +31,12 @@ const TopbarButtonStyle = styled.div`
   }
 `;
 
-const TopbarButton: FC<TopbarButtonModel> = ({iconType, onClick, disabled = false}) => {
-  return <TopbarButtonStyle onClick={() => { !disabled ? onClick() : null; }} className={`${disabled ? "disabled" : ""}`}>
+const TopbarButton: FC<TopbarButtonModel> = ({iconType, onClick, disabled = false, title}) => {
+  return <TopbarButtonStyle
+    onClick={() => { !disabled ? onClick() : null; }}
+    className={`${disabled ? "disabled" : ""}`}
+    title={title}
+  >
     <Icon iconType={iconType}/>
   </TopbarButtonStyle>;
 };

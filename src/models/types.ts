@@ -1,6 +1,6 @@
 import { LanguageType, WordType } from "src/store/translation";
 import { BLOCK_MI_NAMES } from "./blockMIs";
-import { ACTION_NAMES, THEME_TYPE, TAB_TYPE, CONTENT_TYPE, MI_LISTITEM_TYPE, INPUT_TYPES } from "./constants";
+import { ACTION_NAMES, THEME_TYPE, TAB_TYPE, CONTENT_TYPE, MI_LISTITEM_TYPE, INPUT_TYPES, PAGE_ORIENTATION } from "./constants";
 import { IconTypeKey } from "./icons";
 import { TEMPLATE_MI_NAMES } from "./templateMIs";
 
@@ -148,7 +148,7 @@ export interface TemplateModel {
   dateEdited: number
   name: string
   pageSizeMM: string //in milimeters for width and height
-  pageOrientation: "vertical" | "horizontal"
+  pageOrientation: PAGE_ORIENTATION;
   pageMargin: string //in any css units for top, right, bottom, left
   copyColumns: string[]
   copyRefferenceIds: string[]
@@ -206,7 +206,7 @@ export type MenuItemTemplateListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  condition?:MICondition[]
+  conditions?:MICondition[]
 } | {
   name: TEMPLATE_MI_NAMES
   label: WordType
@@ -216,7 +216,7 @@ export type MenuItemTemplateListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  condition?:MICondition[]
+  conditions?:MICondition[]
 }
 
 export type MenuItemBlockListItemModel = {
@@ -229,7 +229,7 @@ export type MenuItemBlockListItemModel = {
   isAddable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  condition?:MICondition[]
+  conditions?:MICondition[]
 } | {
   name: BLOCK_MI_NAMES
   label: WordType
@@ -240,7 +240,7 @@ export type MenuItemBlockListItemModel = {
   isCopylinkable: boolean
   inputType: INPUT_TYPES
   inputOptions: SelectOption[]
-  condition?:MICondition[]
+  conditions?:MICondition[]
 }
 
 export type MICondition = {
@@ -250,9 +250,9 @@ export type MICondition = {
   blackList: (string | number)[] 
 } | {
   type: "css"
-  cssPropName: keyof TemplateModel | keyof BlockModel
-  whiteList: string[]
-  blackList: string[]
+  cssPropName: BLOCK_MI_NAMES | TEMPLATE_MI_NAMES
+  whiteList: (string | number)[]
+  blackList: (string | number)[]
 }
 
 export type ReducerModel = (state: AppStateModel, action: ActionModel) => {state: AppStateModel, stateUpdated: boolean}

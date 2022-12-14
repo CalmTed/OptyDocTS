@@ -90,3 +90,8 @@ export const AFTER_ANIMATION = 300;
 export const A4 = "210mm 297.1mm";
 export const A3 = "297mm 419.9mm";
 export const A5 = "148mm 209.9mm";
+
+export enum PAGE_ORIENTATION{
+  vertical = "vertical",
+  horizontal = "horizontal" 
+}

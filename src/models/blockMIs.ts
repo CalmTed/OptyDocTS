@@ -1,5 +1,5 @@
 
-import { CSS_DISPLAY_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE } from "./constants";
+import { CONTENT_TYPE, CSS_DISPLAY_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE } from "./constants";
 import { MenuItemBlockListItemModel} from "./types";
 
 export enum BLOCK_MI_NAMES{
@@ -9,7 +9,12 @@ export enum BLOCK_MI_NAMES{
   width = "width",
   height = "height",
   flexAlignHorizontal = "flexAlignHorizontal",
-  flexAlignVertical = "flexAlignVertical"
+  flexAlignVertical = "flexAlignVertical",
+  flexWrap = "flexWrap",
+  contentType = "contentType",
+  background = "background",
+  textColor = "textColor"
+
 }
 
 export const BlockMIs:(MenuItemBlockListItemModel)[] = [
@@ -36,13 +41,41 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputOptions: []
   },
   {
+    name: BLOCK_MI_NAMES.contentType,
+    label: "miContentType",
+    miType: MI_LISTITEM_TYPE.blockParam,
+    paramName: "contentType",
+    defaultValue: "",
+    isReadonly: false,
+    isAddable: false,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miFixed",
+        value: CONTENT_TYPE.fixed
+      },
+      {
+        label: "miVariable",
+        value: CONTENT_TYPE.variable
+      },
+      {
+        label: "miSelect",
+        value: CONTENT_TYPE.select
+      },
+      {
+        label: "miCopyFrom",
+        value: CONTENT_TYPE.copyFrom
+      }
+    ]
+  },
+  {
     name: BLOCK_MI_NAMES.display,
     label: "miDisplay",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "display",
     CSSDefaultValue: CSS_DISPLAY_TYPE.inherit,
     isCopylinkable: true,
-    isAddable: true,
+    isAddable: false,
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
@@ -93,23 +126,31 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     name: BLOCK_MI_NAMES.flexAlignHorizontal,
     label: "miFlexAlignHorizontal",
     miType: MI_LISTITEM_TYPE.blockCSS,
-    CSSParam: "justify-content",
+    CSSParam: "justifyContent",
     CSSDefaultValue: "flex-start",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "left",
+        label: "miAlignLeft",
         value: "flex-start"
       },
       {
-        label: "center",
+        label: "miAlignCenter",
         value: "center"
       },
       {
-        label: "right",
+        label: "miAlignRight",
         value: "flex-end"
+      }
+    ],
+    conditions:[
+      {
+        type: "css",
+        cssPropName: BLOCK_MI_NAMES.display,
+        whiteList: [CSS_DISPLAY_TYPE.flex],
+        blackList: []
       }
     ]
   },
@@ -117,24 +158,74 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     name: BLOCK_MI_NAMES.flexAlignVertical,
     label: "miFlexAlignVertical",
     miType: MI_LISTITEM_TYPE.blockCSS,
-    CSSParam: "align-items",
+    CSSParam: "alignItems",
     CSSDefaultValue: "flex-start",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "top",
+        label: "miAlignTop",
         value: "flex-start"
       },
       {
-        label: "center",
+        label: "miAlignCenter",
         value: "center"
       },
       {
-        label: "bottom",
+        label: "miAlignBottom",
         value: "flex-end"
       }
+    ],
+    conditions:[
+      {
+        type: "css",
+        cssPropName: BLOCK_MI_NAMES.display,
+        whiteList: [CSS_DISPLAY_TYPE.flex],
+        blackList: []
+      }
     ]
+  },
+  {
+    name: BLOCK_MI_NAMES.flexWrap,
+    label: "miFlexWrap",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "flexWrap",
+    CSSDefaultValue: "wrap",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miWrap",
+        value: "wrap"
+      },
+      {
+        label: "miNoWrap",
+        value: "nowrap"
+      }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.textColor,
+    label: "miTextColor",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "color",
+    CSSDefaultValue: "#0000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.background,
+    label: "miBackground",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "background",
+    CSSDefaultValue: "#0000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
   }
 ];

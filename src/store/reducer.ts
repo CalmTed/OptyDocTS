@@ -1,6 +1,7 @@
 import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, ZERO } from "src/models/constants";
-import { getId, getInitialBlock, initialBlockMIFactory } from "src/models/intials";
+import { getId, getInitialBlock, initialBlockMIFactory, initialTemplateMIFactory } from "src/models/intials";
+import { TemplateMIs } from "src/models/templateMIs";
 import { BlockModel, ReducerModel } from "src/models/types";
 
 const reducer: ReducerModel = (state, action) => {
@@ -205,16 +206,43 @@ const templateReducer: ReducerModel = (state, action) => {
     };
     //adding right before successor block
     state.templates[0].blocks.splice(successorIndex, ZERO, newNieigborBlock);
+    //adding all pasted block's children
     if(action.payload.children) {
-      action.payload.children.map(child => {
-        const clearedChild: BlockModel = {
-          ...cleanUpBlock(child),
-          parentId: newNieigborBlock.uuid
-        };
-        state.templates[0].blocks.push(clearedChild);
+      const getAndCleanUpChildren: (list: BlockModel[], fromParent: string, toParemt: string) => BlockModel[] = (list, fromParent, toParent) => {
+        let ret:BlockModel[] = [];
+        list.filter(block => block.parentId === fromParent).map(block => {
+          const clearedBlock = {
+            ...cleanUpBlock(block),
+            parentId: toParent
+          };
+          ret = [
+            ...ret,
+            clearedBlock,
+            ...getAndCleanUpChildren(list, block.uuid, clearedBlock.uuid)
+          ];
+        });
+        return ret;
+      };
+      const reparentedAndClearedChildren = getAndCleanUpChildren(action.payload.children, action.payload.block.uuid, newNieigborBlock.uuid);
+      reparentedAndClearedChildren.map(child => {
+        state.templates[0].blocks.push(child);
       });
     }
     stateUpdated = true;
+    break;
+  case  ACTION_NAMES.template_toggleMI:
+    const templateToggleMI = state.templates[0];
+    
+    const miToChange = templateToggleMI.menuItems.find(mi => mi.miListItemName === action.payload.miName);
+    if(miToChange) { //remove mi from list if exists 
+      templateToggleMI.menuItems = templateToggleMI.menuItems.filter(mi => mi.miListItemName !== action.payload.miName);
+      stateUpdated = true;
+    }else { //add mi to mist id not exists 
+      if(TemplateMIs.find(mi => mi.name === action.payload.miName)) {
+        templateToggleMI.menuItems = [...templateToggleMI.menuItems, ...[initialTemplateMIFactory(action.payload.miName)]];
+        stateUpdated = true;
+      }
+    }
     break;
   default:
     console.error("unknown template reducer action", action);
@@ -292,7 +320,6 @@ const blockReducer: ReducerModel = (state, action) => {
       stateUpdated = true;
     }else { //add mi to mist id not exists 
       if(BlockMIs.find(mi => mi.name === action.payload.miName)) {
-        console.log(initialBlockMIFactory(action.payload.miName));
         blockToggleMI.menuItems = [...blockToggleMI.menuItems, ...[initialBlockMIFactory(action.payload.miName)]];
         stateUpdated = true;
       }

@@ -9,6 +9,7 @@ interface SelectModel{
   options: SelectOption[]
   classes?: string
   style?: React.CSSProperties
+  disabled?: boolean
 }
 
 const SelectValueStyle = styled.div`
@@ -92,7 +93,9 @@ const SelectWrapperStyle = styled.div`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  :hover{
+  &.disabled{
+    cursor: default;
+    opacity: 0.6;
   }
   &:focus-within ${SelectListStyle}{
     transform: translate(-1em, calc(50% + 1em));
@@ -106,7 +109,7 @@ const SelectWrapperStyle = styled.div`
 `;
 
 
-const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => {
+const Select: FC<SelectModel> = ({value, onChange, options, classes, style, disabled}) => {
   const selectedValue = options.filter(
     option => {
       if(["string", "number"].includes(typeof value)) {
@@ -132,9 +135,9 @@ const Select: FC<SelectModel> = ({value, onChange, options, classes, style}) => 
   };
 
   return <SelectWrapperStyle
-    className={classes}
+    className={`${classes} ${disabled ? "disabled" : ""}`}
     style={style}
-    tabIndex={parseInt(FOCUS_ORDER.select)}
+    tabIndex={disabled ? undefined : parseInt(FOCUS_ORDER.select)}
   >
     <SelectListStyle className="optionsList">
       { options.map(item => {

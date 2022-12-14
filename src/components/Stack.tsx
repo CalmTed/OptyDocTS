@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled, { CSSProperties } from "styled-components";
 import { AppStateModel, BlockModel, StoreModel } from "src/models/types";
-import { ACTION_NAMES, AFTER_ANIMATION, MI_LISTITEM_TYPE, ONE, THOUSAND, ZERO } from "src/models/constants";
+import { ACTION_NAMES, AFTER_ANIMATION, MI_LISTITEM_TYPE, ONE, PAGE_ORIENTATION, THOUSAND, ZERO } from "src/models/constants";
 import { Block } from "./Block";
 import { TemplateMIs } from "src/models/templateMIs";
 import considerZooming from "src/store/considerZooming";
@@ -130,7 +130,7 @@ const Stack: FC<StackModel> = ({store}) => {
   };
   const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
   const pageSize = store.state.templates[0].pageSizeMM.split(" ");
-  const isHorizontal = store.state.templates[0].pageOrientation === "horizontal";
+  const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
   const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
   const rootBlocks: (blocks: BlockModel[]) => BlockModel[][] = (blocks) => {
     //v.3

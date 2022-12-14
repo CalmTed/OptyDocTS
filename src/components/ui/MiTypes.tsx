@@ -12,16 +12,17 @@ interface MISelect{
   onChange: (newVal: string | number) => void
   classes?: string
   style?: React.CSSProperties
+  disabled?:boolean
 }
 
-export const MISelect: FC<MISelect> = ({value, t, options, onChange, classes, style}) => {
+export const MISelect: FC<MISelect> = ({value, t, options, onChange, classes, style, disabled}) => {
   const translatedOptions = options.map(option => {
     return {
       ...option,
       label: t(option.label as WordType)
     };
   });
-  return <Select value={value} options={translatedOptions} onChange={ (option) => onChange(option.value) } classes={classes} style={style} ></Select>;
+  return <Select value={value} options={translatedOptions} onChange={ (option) => onChange(option.value) } classes={classes} style={style} disabled={disabled}></Select>;
 };
 
 interface MIText{
@@ -29,6 +30,7 @@ interface MIText{
   onChange: (newVal: string) => void
   classes?: string
   style?: React.CSSProperties
+  disabled?:boolean
 }
 
 export const MIText: FC<MIText> = ({value, onChange, classes, style}) => {
@@ -41,6 +43,7 @@ interface MITextarea{
   onChange: (newVal: string) => void
   classes?: string
   style?: React.CSSProperties
+  disabled?:boolean
 }
 
 export const MITextarea: FC<MITextarea> = ({value, onChange, classes, style}) => {
@@ -52,6 +55,7 @@ interface MISize{
   onChange: (newVal: string) => void
   classes?: string
   style?: React.CSSProperties
+  disabled?:boolean
 }
 
 export const MISize: FC<MISize> = ({value, onChange, classes, style}) => {

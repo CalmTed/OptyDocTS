@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { BlockMIs, BLOCK_MI_NAMES } from "src/models/blockMIs";
-import { ACTION_NAMES, MI_TARGET } from "src/models/constants";
+import { ACTION_NAMES, MI_TARGET, ZERO } from "src/models/constants";
 import { TemplateMIs, TEMPLATE_MI_NAMES } from "src/models/templateMIs";
-import { BlockModel, MenuItemBlockListItemModel, MenuItemBlockModel, MenuItemTemplateListItemModel, MenuItemTemplateModel, StoreModel } from "src/models/types";
+import { BlockModel, MenuItemBlockListItemModel, MenuItemBlockModel, MenuItemTemplateListItemModel, MenuItemTemplateModel, StoreModel, TemplateModel } from "src/models/types";
 import styled from "styled-components";
 import MenuItemBlock from "../MenuItemBlock";
 import MenuItemTemplate from "../MenuItemTemplate";
@@ -17,36 +17,115 @@ interface MIsInterface {
 export const MIs: FC<MIsInterface> = ({store, targetType, addableType}) => {
   const isAddable = addableType === "addable";
   const isBlock = targetType === MI_TARGET.block;
-  const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });  
+  const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems;//.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });  
   if(!targetMIs) {
     return <></>;
   }
   if(isBlock) {
+    const targetBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
     return <>{
       (targetMIs as MenuItemBlockModel[]).map(mi => {
+        const checkIfDisabled = (listMI?: MenuItemBlockListItemModel) => { //true = disabled false = enabled
+          if(!listMI) {
+            return false;
+          }
+          if(listMI.conditions && targetBlock) {
+            //true is possitive
+            return listMI.conditions.map(condition => {
+              switch(condition.type) {
+              case "prop":
+                const blackListResult = condition.blackList.includes(String(targetBlock[condition.propName as keyof BlockModel]));
+                const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName as keyof BlockModel])) && condition.whiteList.length;
+                return blackListResult || whiteListResult;
+              case "css":
+                const CSSValue = targetBlock.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;
+                if(!CSSValue) {
+                  return false;
+                }
+                const CSSblackListResult = condition.blackList.includes(CSSValue);
+                const CSSwhiteListResult = !condition.whiteList.includes(CSSValue) && condition.whiteList.length;
+                return CSSblackListResult || CSSwhiteListResult;
+              default:
+                console.warn("MI conditions checking: unknown condition type:", condition);
+              }
+              return false;
+            }).filter(r => !!r).length > ZERO;
+          }else{
+            return false;
+          }
+        };
+        const listMI = BlockMIs.find(listMI => listMI.name === mi.miListItemName);
         return {
           mi: mi,
-          listMI: BlockMIs.find(listMI => listMI.name === mi.miListItemName)
+          listMI: listMI,
+          isDisabled: checkIfDisabled(listMI)
         };
-      }).filter(mi => 
-        mi.listMI ? mi.listMI.isAddable === isAddable : false
+      }).filter(mi => {
+        if(!mi.listMI) {
+          return false;
+        }
+        if(mi.listMI.isAddable !== isAddable) {
+          return false;
+        }
+        return true;
+      }
       ).map((
-        {mi, listMI}) => 
-        listMI && <MenuItemBlock key={mi.uuid} store={store} mi={mi}/>
+        {mi, listMI, isDisabled}) => 
+        listMI && <MenuItemBlock key={mi.uuid} store={store} mi={mi} disabled={isDisabled}/>
       ) as React.ReactElement[]
     }</>;
   }else{
+    const targetTemplate = store.state.templates[0];
     return <>{
       (targetMIs as MenuItemTemplateModel[]).map(mi => {
+        const checkIfDisabled = (listMI?: MenuItemTemplateListItemModel) => { //true = disabled false = enabled
+          if(!listMI) {
+            return false;
+          }
+          if(listMI.conditions && targetTemplate) {
+            //true is possitive
+            return listMI.conditions.map(condition => {
+              switch(condition.type) {
+              case "prop":
+                const blackListResult = condition.blackList.includes(String(targetTemplate[condition.propName as keyof TemplateModel]));
+                const whiteListResult = !condition.whiteList.includes(String(targetTemplate[condition.propName as keyof TemplateModel])) && condition.whiteList.length;
+                return blackListResult || whiteListResult;
+              case "css":
+                const CSSValue = targetTemplate.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;
+                if(!CSSValue) {
+                  return false;
+                }
+                const CSSblackListResult = condition.blackList.includes(CSSValue);
+                const CSSwhiteListResult = !condition.whiteList.includes(CSSValue) && condition.whiteList.length;
+                return CSSblackListResult || CSSwhiteListResult;
+              default:
+                console.warn("MI conditions checking: unknown condition type:", condition);
+              }
+              return false;
+            }).filter(r => !!r).length > ZERO;
+          }else{
+            return false;
+          }
+        };
+        const listMI = TemplateMIs.find(listMI => listMI.name === mi.miListItemName);
         return {
           mi: mi,
-          listMI: TemplateMIs.find(listMI => listMI.name === mi.miListItemName)
+          listMI: listMI,
+          isDisabled: checkIfDisabled(listMI)
         };
-      }).filter(mi => 
-        mi.listMI ? mi.listMI.isAddable === isAddable : false
+      }).filter(mi => {
+        if(!mi.listMI) {
+          return false;
+        }
+        if(mi.listMI.isAddable !== isAddable) {
+          return false;
+        }
+        //TODO CONDITIONS
+        return true;
+      }
       ).map((
-        {mi, listMI}) => 
-        listMI && <MenuItemTemplate key={mi.uuid} store={store} mi={mi}/>
+        {mi, listMI, isDisabled}) => 
+        listMI && <MenuItemTemplate key={mi.uuid} store={store} mi={mi} disabled={isDisabled}/>
       ) as React.ReactElement[]
     }</>;
   }
@@ -60,6 +139,7 @@ const PickerListStyle = styled.div`
   transition: all var(--transition);
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   --row-height: 2.5em;
   overflow-y: auto;
   & div{
@@ -72,7 +152,7 @@ const PickerStyle = styled.div`
   :focus-within ${PickerListStyle}{
     visibility: visible;
     opacity: 1;
-    height: calc( var(--row-height) * 4.5);
+    min-height: calc( var(--row-height) * 4.5);
   }
 
 `;
@@ -123,11 +203,16 @@ export const MIPicker: FC<MIPicker> = ({store, target}) => {
         return [];
       }
     }else{
-      return [];
+      return TemplateMIs.filter(listMI => listMI.isAddable).map(listMI => {
+        return {
+          data: listMI,
+          isActive: !!store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMI.name)
+        };
+      }); 
     }
   };
   const miList = getMiList(isBlockTarget, selectedBlock);
-  const handleBlockChangeMI:(name: BLOCK_MI_NAMES | TEMPLATE_MI_NAMES, isBlock: boolean) => void = (name, isBlock) => {
+  const handleChangeMI:(name: BLOCK_MI_NAMES | TEMPLATE_MI_NAMES, isBlock: boolean) => void = (name, isBlock) => {
     if(isBlock) {
       store.dispach({
         name: ACTION_NAMES.block_toggleMI,
@@ -147,14 +232,14 @@ export const MIPicker: FC<MIPicker> = ({store, target}) => {
     return;
   };
   return <PickerStyle>
-    <PickerLabelStyle tabIndex={12}><Icon iconType="plus"/>Choose your pokemon</PickerLabelStyle>
+    <PickerLabelStyle tabIndex={12}><Icon iconType="plus"/>{store.t("miEditMiList")}</PickerLabelStyle>
     <PickerListStyle>
       {miList.map(mi =>
         <PickerListItemStyle
           key={mi.data.name}
           className={mi.isActive ? "active" : ""}
           tabIndex={12}
-          onClick={() => { handleBlockChangeMI(mi.data.name, isBlockTarget); }}
+          onClick={() => { handleChangeMI(mi.data.name, isBlockTarget); }}
         >
           <Icon iconType={mi.isActive ? "minus" : "plus"}/>
           {store.t(mi.data.label)}

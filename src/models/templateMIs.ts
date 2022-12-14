@@ -1,4 +1,4 @@
-import { A3, A4, A5, INPUT_TYPES, MI_LISTITEM_TYPE } from "./constants";
+import { A3, A4, A5, INPUT_TYPES, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
 import { MenuItemTemplateListItemModel } from "./types";
 
 export enum TEMPLATE_MI_NAMES{
@@ -6,7 +6,10 @@ export enum TEMPLATE_MI_NAMES{
   size = "size",
   orientation = "orientation",
   dateEdited = "dateEdited",
-  pageMargin = "pageMargin"
+  pageMargin = "pageMargin",
+  background = "background",
+  textColor = "textColor",
+  fontFamily = "fontFamily"
 }
 
 export type TemplateMINames = "mi0001" | "mi0002" | "mi0003" | "mi0004" | "mi0005"
@@ -41,18 +44,18 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     label: "miPageOrientation",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "pageOrientation",
-    defaultValue: "vertical",
+    defaultValue: PAGE_ORIENTATION.vertical,
     isReadonly: false,
     isAddable: false,
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
         label: "vertical",
-        value: "vertical"
+        value: PAGE_ORIENTATION.vertical
       },
       {
         label: "horizontal",
-        value: "horizontal"
+        value: PAGE_ORIENTATION.horizontal
       }
     ]
   },
@@ -88,5 +91,48 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     isAddable: false,
     inputType: INPUT_TYPES.text,
     inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.background,
+    label: "miBackground",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "background",
+    CSSDefaultValue: "#fff",
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.textColor,
+    label: "miTextColor",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "color",
+    CSSDefaultValue: "#000",
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.fontFamily,
+    label: "miFontFamily",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "fontFamily",
+    CSSDefaultValue: "sans-serif",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label:"Serif",
+        value:"serif"
+      },
+      {
+        label:"Sans-serif",
+        value:"sans-serif"
+      },
+      {
+        label:"Monospace",
+        value:"monospace"
+      } 
+    ]
   }
 ];

@@ -62,12 +62,12 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       });
     });
   };
-  const handleSelectNone = () => {
-    store.dispach({
-      name: ACTION_NAMES.app_selectBlock,
-      payload: null
-    });
-  };
+  // const handleSelectNone = () => {
+  //   store.dispach({
+  //     name: ACTION_NAMES.app_selectBlock,
+  //     payload: null
+  //   });
+  // };
 
   const handleCopy = () => {
     const selectedBlock = store.state.templates[0].blocks.find(block => block.uuid === store.state.selectedBlock);
@@ -87,42 +87,59 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       store.showToast(store.t("uiBlockCopiedToClipboard"), "info");
     }
   };
-  const handlePaste = () => {
+  const handlePaste = (isPasteBefore: boolean) => {
     store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
       const {result, block, children} = decodeBlock(text);
       const selectedBlock = store.state.selectedBlock || null;
       if(!result || !block) {
         store.showToast(store.t("uiBlockDecodingProblem"), "alert");
       } else {
-        store.dispach({
-          name:ACTION_NAMES.template_addBlockInside,
-          payload: {
-            block: block,
-            children: children || [],
-            parentId: selectedBlock
+        if(!isPasteBefore) {
+          store.dispach({
+            name:ACTION_NAMES.template_addBlockInside,
+            payload: {
+              block: block,
+              children: children || [],
+              parentId: selectedBlock
+            }
+          });
+        }else{
+          if(selectedBlock) {
+            store.dispach({
+              name:ACTION_NAMES.template_addBlockBefore,
+              payload: {
+                block: block,
+                children: children || [],
+                successorId: selectedBlock
+              }
+            });
+          }else{
+            store.showToast(store.t("uiNoBlockSelected"));
           }
-        });
+        }
       }
     });
   };
 
   return <TopbarStyle>
     <div className="templateTools">
-      <TopbarButton iconType="newBlock" onClick={handleNewBlock}></TopbarButton>
-      <TopbarButton iconType="removeBlock" onClick={handleRemoveBlock} disabled={!store.state.selectedBlock}></TopbarButton>
-      <TopbarButton iconType="minus" onClick={handleSelectNone} disabled={!store.state.selectedBlock}></TopbarButton>
-      <TopbarButton iconType="export" onClick={handleCopy} disabled={!store.state.selectedBlock}></TopbarButton>
-      <TopbarButton iconType="import" onClick={handlePaste} ></TopbarButton>
+      <TopbarButton title={store.t("topBarAddBlock")} iconType="newBlock" onClick={handleNewBlock}></TopbarButton>
+      <TopbarButton title={store.t("topBarRemoveBlock")} iconType="removeBlock" onClick={handleRemoveBlock} disabled={!store.state.selectedBlock}></TopbarButton>
+      {/* <TopbarButton iconType="minus" onClick={handleSelectNone} disabled={!store.state.selectedBlock}></TopbarButton> */}
+      <TopbarButton title={store.t("topBarCopyBlock")} iconType="copy" onClick={handleCopy} disabled={!store.state.selectedBlock}></TopbarButton>
+      <TopbarButton title={store.t("topBarPasteInside")} iconType="paste" onClick={() => handlePaste(false)} ></TopbarButton>
+      <TopbarButton title={store.t("topBarPasteBefore")} iconType="pasteBefore" onClick={() => handlePaste(true)} disabled={!store.state.selectedBlock} ></TopbarButton>
     </div>
     <div className="appTools">
-      <TopbarButton iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>
-      <TopbarButton iconType="export" onClick={() => { null; }} disabled={true}></TopbarButton>
-      <TopbarButton iconType="newTemplate" onClick={handleNewTemplate} disabled={ store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false}></TopbarButton>
+      <TopbarButton title={store.t("topBarImportTemplate")} iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>
+      <TopbarButton title={store.t("topBarExportTemplate")} iconType="export" onClick={() => { null; }} disabled={true}></TopbarButton>
+      <TopbarButton title={store.t("topBarNewTemplate")} iconType="newTemplate" onClick={handleNewTemplate} disabled={ store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false}></TopbarButton>
       <TopbarButton
+        title={store.t("topBarChangeTheme")}
         iconType={store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme"}
         onClick={handleTheme}
       ></TopbarButton>
-      <TopbarButton iconType="setting" onClick={handleLanguage}></TopbarButton>
+      <TopbarButton title={store.t("topBarChangeLanguage")} iconType="setting" onClick={handleLanguage}></TopbarButton>
     </div>
   </TopbarStyle>;
 };

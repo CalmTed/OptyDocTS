@@ -2,15 +2,23 @@ const wordsEB = {
   name: "OptyDoc",
 
   //topBar
-
+  topBarAddBlock: "Add block",
+  topBarRemoveBlock: "RemoveBlock",
+  topBarCopyBlock: "Copy block",
+  topBarPasteInside: "Paste inside",
+  topBarPasteBefore: "Paste before selected",
+  topBarImportTemplate: "Import template",
+  topBarExportTemplate: "Export template",
+  topBarNewTemplate: "New template",
+  topBarChangeTheme: "Change color mode",
+  topBarChangeLanguage: "Change language",
   //sideBar
   sideBarEdit: "Edit",
   sideBarCopy: "Copy",
-
   //ui
   uiConfirmNewTemplateHeader: "Confirm action",
   uiConfirmNewTemplateText: "Are you sure you want to overwrite current template",
-  uiPasteHeader: "Paste here",
+  uiPasteHeader: "Paste block text here",
   uiPasteText: "Sorry there is no better way to do it for now",
   //toasts
   uiNewTemplateCreated: "New template created",
@@ -24,6 +32,9 @@ const wordsEB = {
 
   //mi
   miPageSize: "Page size",
+  A4: "A4",
+  A5: "A5",
+  A3: "A3",
   miPageOrientation: "Page orientation",
   horizontal: "Horizontal",
   vertical: "Vertical",
@@ -41,9 +52,23 @@ const wordsEB = {
   miHeight: "Height",
   miFlexAlignHorizontal: "Flex align horizontal",
   miFlexAlignVertical: "Flex align vertical",
-  A4: "A4",
-  A5: "A5",
-  A3: "A3",
+  miAlignTop: "Top",
+  miAlignBottom: "Bottom",
+  miAlignCenter: "Center",
+  miAlignRight: "Right",
+  miAlignLeft: "Left",
+  miContentType: "Content type",
+  miFixed: "Fixed",
+  miVariable: "Variable",
+  miSelect: "Select",
+  miCopyFrom: "CopyFrom",
+  miBackground: "Background",
+  miEditMiList: "Edit styles list",
+  miTextColor: "Text color",
+  miFontFamily: "Font",
+  miFlexWrap: "Flex wrap",
+  miWrap: "Wrap",
+  miNoWrap: "No wrap",
   undefined: ""
 };
 

@@ -1,7 +1,7 @@
 import { LANG_CODES } from "src/store/translation";
 import { BLOCK_MI_NAMES } from "./blockMIs";
-import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE } from "./constants";
-import { TEMPLATE_MI_NAMES } from "./templateMIs";
+import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
+import { TemplateMIs, TEMPLATE_MI_NAMES } from "./templateMIs";
 import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
 type IdType = "t" | "b" | "tmi" | "bmi";
@@ -34,7 +34,7 @@ export const getInitialTamplate: ()=>TemplateModel = () => {
     dateEdited: 0,
     name: "",
     pageSizeMM: A4,
-    pageOrientation: "vertical",
+    pageOrientation: PAGE_ORIENTATION.vertical,
     pageMargin: "0mm 0mm 0mm 0mm",
     copyColumns: [],
     copyRefferenceIds: [],
@@ -44,42 +44,37 @@ export const getInitialTamplate: ()=>TemplateModel = () => {
   };
 };
 
-const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
-  const timeAdded = new Date().getTime();
-  return [
-    {
-      uuid: getId("tmi"),
-      miListItemName: TEMPLATE_MI_NAMES.name,
-      miListItemValue: "",
-      timeAdded: timeAdded
-    },
-    {
-      uuid: getId("tmi"),
-      miListItemName: TEMPLATE_MI_NAMES.dateEdited,
-      miListItemValue: "0",
-      timeAdded: timeAdded
-    },
-    {
-      uuid: getId("tmi"),
-      miListItemName: TEMPLATE_MI_NAMES.size,
-      miListItemValue: A4,
-      timeAdded: timeAdded
-    },
-    {
-      uuid: getId("tmi"),
-      miListItemName: TEMPLATE_MI_NAMES.orientation,
-      miListItemValue: "vertical",
-      timeAdded: timeAdded
+export const initialTemplateMIFactory: (name: TEMPLATE_MI_NAMES) => MenuItemTemplateModel = (name) => {
+  const dateAdded = new Date().getTime();
+  const getDefaultValue = () => {
+    const listMI = TemplateMIs.find(mi => NodeIterator.name === name);
+    if(!listMI) {
+      return;
     }
-    //THIS MI BREAKS FTP, better to use full page block and copylink margins
-    // {
-    //   uuid: getId("tmi"),
-    //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
-    //   miListItemValue: null,
-    //   timeAdded: timeAdded
-    // }
-  ];
+    const isCSSParam = listMI.miType === MI_LISTITEM_TYPE.templateParam;
+    return isCSSParam ? listMI.defaultValue : listMI.CSSDefaultValue;
+  };
+  return {
+    uuid: getId("tmi"),
+    miListItemName: name,
+    miListItemValue: getDefaultValue() || "",
+    timeAdded: dateAdded
+  };
 };
+
+const getInitialTemplateMis: ()=>MenuItemTemplateModel[] = () => {
+  const initialTemplateMINames = [TEMPLATE_MI_NAMES.name, TEMPLATE_MI_NAMES.size, TEMPLATE_MI_NAMES.orientation];
+  return initialTemplateMINames.map(name => initialTemplateMIFactory(name));
+  //THIS MI BREAKS FTP, better to use full page block and copylink margins
+  // {
+  //   uuid: getId("tmi"),
+  //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
+  //   miListItemValue: null,
+  //   timeAdded: timeAdded
+  // }
+};
+
+
 
 export const getInitialBlock: (parentId: string | null)=>BlockModel = (parentId = null) => {
   const blockId = getId("b");

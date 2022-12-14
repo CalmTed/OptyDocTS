@@ -34506,7 +34506,13 @@ const ICON = {
     select: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 17H16M12.5 9H15.5L14 11.5L12.5 9Z' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>",
     left: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M13 14L13 7L7 10.5L13 14Z' fill='var(--icon-color)' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>",
     right: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7 7L7 14L13 10.5L7 7Z' fill='var(--icon-color)' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>",
-    print: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7.11111 12V15.5C7.11111 15.7761 7.33497 16 7.61111 16H12.3889C12.665 16 12.8889 15.7761 12.8889 15.5V12' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/><path d='M7.11111 14.1539H4.30952C4.03338 14.1539 3.80952 13.93 3.80952 13.6539V7.73077C3.80952 7.45463 4.03338 7.23077 4.30952 7.23077H15.6905C15.9666 7.23077 16.1905 7.45463 16.1905 7.73077V13.6539C16.1905 13.93 15.9666 14.1539 15.6905 14.1539H12.8889' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/><path d='M12.8889 6.76923V4.5C12.8889 4.22386 12.665 4 12.3889 4H7.61112C7.33497 4 7.11111 4.22386 7.11111 4.5V6.76923' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/></svg>"
+    print: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7.11111 12V15.5C7.11111 15.7761 7.33497 16 7.61111 16H12.3889C12.665 16 12.8889 15.7761 12.8889 15.5V12' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/><path d='M7.11111 14.1539H4.30952C4.03338 14.1539 3.80952 13.93 3.80952 13.6539V7.73077C3.80952 7.45463 4.03338 7.23077 4.30952 7.23077H15.6905C15.9666 7.23077 16.1905 7.45463 16.1905 7.73077V13.6539C16.1905 13.93 15.9666 14.1539 15.6905 14.1539H12.8889' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/><path d='M12.8889 6.76923V4.5C12.8889 4.22386 12.665 4 12.3889 4H7.61112C7.33497 4 7.11111 4.22386 7.11111 4.5V6.76923' stroke='var(--icon-color)' stroke-width='1.9' stroke-linecap='round'/></svg>",
+    copy: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_289)'><path d='M5 7H10.3333L13 9.11765V17.5H5V7Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='mask0_403_289' style='mask-type:alpha' maskUnits='userSpaceOnUse' x='0' y='0'  width='100%' height='100%' ><path d='M0 0V5H15V20H20V0H0Z' fill='#D9D9D9'/></mask><g mask='url(#mask0_403_289)'><path d='M9 3H14.3333L17 5.11765V14H9V3Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/></g></g><defs><clipPath id='clip0_403_289'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
+    cut: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='5' cy='6' r='2' stroke='var(--icon-color)' stroke-width='2'/><path d='M7 12.5L17 6M7 7.5L17 14' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round'/><path d='M7 14C7 15.1046 6.10457 16 5 16C3.89543 16 3 15.1046 3 14C3 12.8954 3.89543 12 5 12C6.10457 12 7 12.8954 7 14Z' stroke='var(--icon-color)' stroke-width='2'/></svg>",
+    duplicate: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_316)'><path d='M5 7H10.3333L13 9.11765V17.5H5V7Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='mask0_403_316' style='mask-type:alpha' maskUnits='userSpaceOnUse' x='0' y='0'  width='100%' height='100%' ><path d='M0 0V5H15V20H20V0H0Z' fill='#D9D9D9'/></mask><g mask='url(#mask0_403_316)'><path d='M9 3H14.3333L17 5.11765V14H9V3Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/></g><path d='M9 14V11' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M7.5 12.5L10.5 12.5' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></g><defs><clipPath id='clip0_403_316'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
+    hidden: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2 8.5C5.5 12.5 14.5 12.5 18 8.5' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M9 14.5C9 15.0523 9.44772 15.5 10 15.5C10.5523 15.5 11 15.0523 11 14.5H9ZM11 12V11H9V12H11ZM11 14.5V12H9V14.5H11Z' fill='var(--icon-color)'/><path d='M3.61839 13.0586C3.42047 13.5742 3.678 14.1526 4.1936 14.3505C4.70921 14.5484 5.28763 14.2909 5.48555 13.7753L3.61839 13.0586ZM6.38147 11.4413L6.73984 10.5078L4.87268 9.79103L4.51431 10.7246L6.38147 11.4413ZM5.48555 13.7753L6.38147 11.4413L4.51431 10.7246L3.61839 13.0586L5.48555 13.7753Z' fill='var(--icon-color)'/><path d='M14.5144 13.7753C14.7124 14.2909 15.2908 14.5484 15.8064 14.3505C16.322 14.1526 16.5795 13.5742 16.3816 13.0586L14.5144 13.7753ZM15.4857 10.7246L15.1273 9.79103L13.2602 10.5078L13.6185 11.4413L15.4857 10.7246ZM16.3816 13.0586L15.4857 10.7246L13.6185 11.4413L14.5144 13.7753L16.3816 13.0586Z' fill='var(--icon-color)'/></svg>",
+    paste: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_295)'><path d='M5 4H11.6667H15V6.42017V16H5V4Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='path-3-inside-1_403_295' fill='white'><rect x='7' y='2' width='6' height='4' rx='0.5'/></mask><rect x='7' y='2' width='6' height='4' rx='0.5' stroke='var(--icon-color)' stroke-width='2' mask='url(#path-3-inside-1_403_295)'/></g><defs><clipPath id='clip0_403_295'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
+    pasteBefore: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_328)'><path d='M8 6H14.6667H18V8.42017V18H8V6Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='path-3-inside-1_403_328' fill='white'><rect x='10' y='4' width='6' height='4' rx='0.5'/></mask><rect x='10' y='4' width='6' height='4' rx='0.5' stroke='var(--icon-color)' stroke-width='2' mask='url(#path-3-inside-1_403_328)'/><path d='M8.5 2.5C7.32843 2.5 6.67157 2.5 5.5 2.5C4.5 2.5 3.5 3.5 3.5 4.5C3.5 5.5 3.5 7.5 3.5 7.5M3.5 7.5H2L3.5 9.5L5 7.5H3.5Z' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></g><defs><clipPath id='clip0_403_328'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>"
 };
 
 const IconStyle = qe.div `
@@ -34515,8 +34521,8 @@ const IconStyle = qe.div `
   --icon-color: var(--text-color);
   --icon-bg: var(--section-bg);
 `;
-const Icon = ({ iconType }) => {
-    return React.createElement(IconStyle, { className: 'icon', dangerouslySetInnerHTML: { __html: ICON[iconType] } });
+const Icon = ({ iconType, style }) => {
+    return React.createElement(IconStyle, { className: 'icon', style: style, dangerouslySetInnerHTML: { __html: ICON[iconType] } });
 };
 
 const TopbarButtonStyle = qe.div `
@@ -34538,8 +34544,8 @@ const TopbarButtonStyle = qe.div `
     font-size: 1.6em;
   }
 `;
-const TopbarButton = ({ iconType, onClick, disabled = false }) => {
-    return React.createElement(TopbarButtonStyle, { onClick: () => { !disabled ? onClick() : null; }, className: `${disabled ? "disabled" : ""}` },
+const TopbarButton = ({ iconType, onClick, disabled = false, title }) => {
+    return React.createElement(TopbarButtonStyle, { onClick: () => { !disabled ? onClick() : null; }, className: `${disabled ? "disabled" : ""}`, title: title },
         React.createElement(Icon, { iconType: iconType }));
 };
 
@@ -34631,17 +34637,32 @@ const AFTER_ANIMATION = 300;
 const A4 = "210mm 297.1mm";
 const A3 = "297mm 419.9mm";
 const A5 = "148mm 209.9mm";
+var PAGE_ORIENTATION;
+(function (PAGE_ORIENTATION) {
+    PAGE_ORIENTATION["vertical"] = "vertical";
+    PAGE_ORIENTATION["horizontal"] = "horizontal";
+})(PAGE_ORIENTATION || (PAGE_ORIENTATION = {}));
 
 const wordsEB = {
     name: "OptyDoc",
     //topBar
+    topBarAddBlock: "Add block",
+    topBarRemoveBlock: "RemoveBlock",
+    topBarCopyBlock: "Copy block",
+    topBarPasteInside: "Paste inside",
+    topBarPasteBefore: "Paste before selected",
+    topBarImportTemplate: "Import template",
+    topBarExportTemplate: "Export template",
+    topBarNewTemplate: "New template",
+    topBarChangeTheme: "Change color mode",
+    topBarChangeLanguage: "Change language",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
     //ui
     uiConfirmNewTemplateHeader: "Confirm action",
     uiConfirmNewTemplateText: "Are you sure you want to overwrite current template",
-    uiPasteHeader: "Paste here",
+    uiPasteHeader: "Paste block text here",
     uiPasteText: "Sorry there is no better way to do it for now",
     //toasts
     uiNewTemplateCreated: "New template created",
@@ -34654,6 +34675,9 @@ const wordsEB = {
     uiProseed: "Proseed",
     //mi
     miPageSize: "Page size",
+    A4: "A4",
+    A5: "A5",
+    A3: "A3",
     miPageOrientation: "Page orientation",
     horizontal: "Horizontal",
     vertical: "Vertical",
@@ -34671,15 +34695,39 @@ const wordsEB = {
     miHeight: "Height",
     miFlexAlignHorizontal: "Flex align horizontal",
     miFlexAlignVertical: "Flex align vertical",
-    A4: "A4",
-    A5: "A5",
-    A3: "A3",
+    miAlignTop: "Top",
+    miAlignBottom: "Bottom",
+    miAlignCenter: "Center",
+    miAlignRight: "Right",
+    miAlignLeft: "Left",
+    miContentType: "Content type",
+    miFixed: "Fixed",
+    miVariable: "Variable",
+    miSelect: "Select",
+    miCopyFrom: "CopyFrom",
+    miBackground: "Background",
+    miEditMiList: "Edit styles list",
+    miTextColor: "Text color",
+    miFontFamily: "Font",
+    miFlexWrap: "Flex wrap",
+    miWrap: "Wrap",
+    miNoWrap: "No wrap",
     undefined: ""
 };
 
 const wordsUA = {
     name: "OptyDoc",
     //topBar
+    topBarAddBlock: "Dodaty blok",
+    topBarRemoveBlock: "Vydalyty blok",
+    topBarCopyBlock: "Kopiyuvaty",
+    topBarPasteInside: "Vstavity vseredinu",
+    topBarPasteBefore: "Vstavity poperedu",
+    topBarImportTemplate: "Importuvaty maket",
+    topBarExportTemplate: "Eksportuvaty maket",
+    topBarNewTemplate: "Novy maket",
+    topBarChangeTheme: "Zminyty temu",
+    topBarChangeLanguage: "Zminyty movu",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34687,7 +34735,7 @@ const wordsUA = {
     //confirms, prompts
     uiConfirmNewTemplateHeader: "Підтрердіть дію",
     uiConfirmNewTemplateText: "Впевнені що хочете перезаписати цей макет?",
-    uiPasteHeader: "Vsavte sudy",
+    uiPasteHeader: "Vsavte tekst sudy",
     uiPasteText: "No znaishov krashogo vohodu",
     //toasts
     uiNewTemplateCreated: "Новий мекет створено",
@@ -34700,6 +34748,9 @@ const wordsUA = {
     uiProseed: "Продовжити",
     //mi
     miPageSize: "Розмір аркуша",
+    A4: "A4",
+    A5: "A5",
+    A3: "A3",
     miPageOrientation: "Орієнтація сторінки",
     horizontal: "Горизонтально",
     vertical: "Вертикально",
@@ -34707,19 +34758,33 @@ const wordsUA = {
     miLastChangeTime: "Час останьої зміни",
     miName: "Назва",
     miContent: "Kontent",
-    miDisplay: "Tip",
-    miDisplayInline: "Stroka",
-    miDisplayBlock: "Blok Tverdy",
-    miDisplayFlex: "Blok Myakiy",
+    miDisplay: "Vidobrajannya",
+    miDisplayInline: "Strokoy",
+    miDisplayBlock: "Blokom",
+    miDisplayFlex: "Fleks",
     miDisplayNone: "Pryhovano",
     miDisplayInherit: "Nasliduye",
     miWidth: "Shirota",
     miHeight: "Vysota",
-    miFlexAlignHorizontal: "Flex align horizontal",
-    miFlexAlignVertical: "Flex align vertical",
-    A4: "A4",
-    A5: "A5",
-    A3: "A3",
+    miFlexAlignHorizontal: "Fleks align horizontal",
+    miFlexAlignVertical: "Fleks align vertical",
+    miAlignTop: "Zverhu",
+    miAlignBottom: "Znizu",
+    miAlignCenter: "Po centru",
+    miAlignRight: "Zprava",
+    miAlignLeft: "Zliva",
+    miContentType: "Tip kontentu",
+    miFixed: "Statychny",
+    miVariable: "Zminna",
+    miSelect: "Vibir",
+    miCopyFrom: "Kopiyuvaty z",
+    miBackground: "Fon",
+    miEditMiList: "Zminyty spisok styliv",
+    miTextColor: "Kolir tekstu",
+    miFontFamily: "Shrift",
+    miFlexWrap: "Fleks perenos blokov",
+    miWrap: "Perenosit'",
+    miNoWrap: "Ne perenosit'",
     undefined: ""
 };
 
@@ -34749,6 +34814,10 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["height"] = "height";
     BLOCK_MI_NAMES["flexAlignHorizontal"] = "flexAlignHorizontal";
     BLOCK_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
+    BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
+    BLOCK_MI_NAMES["contentType"] = "contentType";
+    BLOCK_MI_NAMES["background"] = "background";
+    BLOCK_MI_NAMES["textColor"] = "textColor";
 })(BLOCK_MI_NAMES || (BLOCK_MI_NAMES = {}));
 const BlockMIs = [
     {
@@ -34774,13 +34843,41 @@ const BlockMIs = [
         inputOptions: []
     },
     {
+        name: BLOCK_MI_NAMES.contentType,
+        label: "miContentType",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "contentType",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miFixed",
+                value: CONTENT_TYPE.fixed
+            },
+            {
+                label: "miVariable",
+                value: CONTENT_TYPE.variable
+            },
+            {
+                label: "miSelect",
+                value: CONTENT_TYPE.select
+            },
+            {
+                label: "miCopyFrom",
+                value: CONTENT_TYPE.copyFrom
+            }
+        ]
+    },
+    {
         name: BLOCK_MI_NAMES.display,
         label: "miDisplay",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "display",
         CSSDefaultValue: CSS_DISPLAY_TYPE.inherit,
         isCopylinkable: true,
-        isAddable: true,
+        isAddable: false,
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
@@ -34831,23 +34928,31 @@ const BlockMIs = [
         name: BLOCK_MI_NAMES.flexAlignHorizontal,
         label: "miFlexAlignHorizontal",
         miType: MI_LISTITEM_TYPE.blockCSS,
-        CSSParam: "justify-content",
+        CSSParam: "justifyContent",
         CSSDefaultValue: "flex-start",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "left",
+                label: "miAlignLeft",
                 value: "flex-start"
             },
             {
-                label: "center",
+                label: "miAlignCenter",
                 value: "center"
             },
             {
-                label: "right",
+                label: "miAlignRight",
                 value: "flex-end"
+            }
+        ],
+        conditions: [
+            {
+                type: "css",
+                cssPropName: BLOCK_MI_NAMES.display,
+                whiteList: [CSS_DISPLAY_TYPE.flex],
+                blackList: []
             }
         ]
     },
@@ -34855,25 +34960,75 @@ const BlockMIs = [
         name: BLOCK_MI_NAMES.flexAlignVertical,
         label: "miFlexAlignVertical",
         miType: MI_LISTITEM_TYPE.blockCSS,
-        CSSParam: "align-items",
+        CSSParam: "alignItems",
         CSSDefaultValue: "flex-start",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "top",
+                label: "miAlignTop",
                 value: "flex-start"
             },
             {
-                label: "center",
+                label: "miAlignCenter",
                 value: "center"
             },
             {
-                label: "bottom",
+                label: "miAlignBottom",
                 value: "flex-end"
             }
+        ],
+        conditions: [
+            {
+                type: "css",
+                cssPropName: BLOCK_MI_NAMES.display,
+                whiteList: [CSS_DISPLAY_TYPE.flex],
+                blackList: []
+            }
         ]
+    },
+    {
+        name: BLOCK_MI_NAMES.flexWrap,
+        label: "miFlexWrap",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "flexWrap",
+        CSSDefaultValue: "wrap",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miWrap",
+                value: "wrap"
+            },
+            {
+                label: "miNoWrap",
+                value: "nowrap"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.textColor,
+        label: "miTextColor",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "color",
+        CSSDefaultValue: "#0000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.background,
+        label: "miBackground",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "background",
+        CSSDefaultValue: "#0000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
     }
 ];
 
@@ -34884,6 +35039,9 @@ var TEMPLATE_MI_NAMES;
     TEMPLATE_MI_NAMES["orientation"] = "orientation";
     TEMPLATE_MI_NAMES["dateEdited"] = "dateEdited";
     TEMPLATE_MI_NAMES["pageMargin"] = "pageMargin";
+    TEMPLATE_MI_NAMES["background"] = "background";
+    TEMPLATE_MI_NAMES["textColor"] = "textColor";
+    TEMPLATE_MI_NAMES["fontFamily"] = "fontFamily";
 })(TEMPLATE_MI_NAMES || (TEMPLATE_MI_NAMES = {}));
 const TemplateMIs = [
     {
@@ -34915,18 +35073,18 @@ const TemplateMIs = [
         label: "miPageOrientation",
         miType: MI_LISTITEM_TYPE.templateParam,
         paramName: "pageOrientation",
-        defaultValue: "vertical",
+        defaultValue: PAGE_ORIENTATION.vertical,
         isReadonly: false,
         isAddable: false,
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
                 label: "vertical",
-                value: "vertical"
+                value: PAGE_ORIENTATION.vertical
             },
             {
                 label: "horizontal",
-                value: "horizontal"
+                value: PAGE_ORIENTATION.horizontal
             }
         ]
     },
@@ -34962,6 +35120,49 @@ const TemplateMIs = [
         isAddable: false,
         inputType: INPUT_TYPES.text,
         inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.background,
+        label: "miBackground",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "background",
+        CSSDefaultValue: "#fff",
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.textColor,
+        label: "miTextColor",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "color",
+        CSSDefaultValue: "#000",
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.fontFamily,
+        label: "miFontFamily",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "fontFamily",
+        CSSDefaultValue: "sans-serif",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "Serif",
+                value: "serif"
+            },
+            {
+                label: "Sans-serif",
+                value: "sans-serif"
+            },
+            {
+                label: "Monospace",
+                value: "monospace"
+            }
+        ]
     }
 ];
 
@@ -34992,7 +35193,7 @@ const getInitialTamplate = () => {
         dateEdited: 0,
         name: "",
         pageSizeMM: A4,
-        pageOrientation: "vertical",
+        pageOrientation: PAGE_ORIENTATION.vertical,
         pageMargin: "0mm 0mm 0mm 0mm",
         copyColumns: [],
         copyRefferenceIds: [],
@@ -35001,41 +35202,33 @@ const getInitialTamplate = () => {
         menuItems: getInitialTemplateMis()
     };
 };
-const getInitialTemplateMis = () => {
-    const timeAdded = new Date().getTime();
-    return [
-        {
-            uuid: getId("tmi"),
-            miListItemName: TEMPLATE_MI_NAMES.name,
-            miListItemValue: "",
-            timeAdded: timeAdded
-        },
-        {
-            uuid: getId("tmi"),
-            miListItemName: TEMPLATE_MI_NAMES.dateEdited,
-            miListItemValue: "0",
-            timeAdded: timeAdded
-        },
-        {
-            uuid: getId("tmi"),
-            miListItemName: TEMPLATE_MI_NAMES.size,
-            miListItemValue: A4,
-            timeAdded: timeAdded
-        },
-        {
-            uuid: getId("tmi"),
-            miListItemName: TEMPLATE_MI_NAMES.orientation,
-            miListItemValue: "vertical",
-            timeAdded: timeAdded
+const initialTemplateMIFactory = (name) => {
+    const dateAdded = new Date().getTime();
+    const getDefaultValue = () => {
+        const listMI = TemplateMIs.find(mi => NodeIterator.name === name);
+        if (!listMI) {
+            return;
         }
-        //THIS MI BREAKS FTP, better to use full page block and copylink margins
-        // {
-        //   uuid: getId("tmi"),
-        //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
-        //   miListItemValue: null,
-        //   timeAdded: timeAdded
-        // }
-    ];
+        const isCSSParam = listMI.miType === MI_LISTITEM_TYPE.templateParam;
+        return isCSSParam ? listMI.defaultValue : listMI.CSSDefaultValue;
+    };
+    return {
+        uuid: getId("tmi"),
+        miListItemName: name,
+        miListItemValue: getDefaultValue() || "",
+        timeAdded: dateAdded
+    };
+};
+const getInitialTemplateMis = () => {
+    const initialTemplateMINames = [TEMPLATE_MI_NAMES.name, TEMPLATE_MI_NAMES.size, TEMPLATE_MI_NAMES.orientation];
+    return initialTemplateMINames.map(name => initialTemplateMIFactory(name));
+    //THIS MI BREAKS FTP, better to use full page block and copylink margins
+    // {
+    //   uuid: getId("tmi"),
+    //   miListItemName: TEMPLATE_MI_NAMES.pageMargin,
+    //   miListItemValue: null,
+    //   timeAdded: timeAdded
+    // }
 };
 const getInitialBlock = (parentId = null) => {
     const blockId = getId("b");
@@ -35197,12 +35390,12 @@ const Topbar = ({ store }) => {
             });
         });
     };
-    const handleSelectNone = () => {
-        store.dispach({
-            name: ACTION_NAMES.app_selectBlock,
-            payload: null
-        });
-    };
+    // const handleSelectNone = () => {
+    //   store.dispach({
+    //     name: ACTION_NAMES.app_selectBlock,
+    //     payload: null
+    //   });
+    // };
     const handleCopy = () => {
         const selectedBlock = store.state.templates[0].blocks.find(block => block.uuid === store.state.selectedBlock);
         if (!selectedBlock) {
@@ -35222,7 +35415,7 @@ const Topbar = ({ store }) => {
             store.showToast(store.t("uiBlockCopiedToClipboard"), "info");
         }
     };
-    const handlePaste = () => {
+    const handlePaste = (isPasteBefore) => {
         store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
             const { result, block, children } = decodeBlock(text);
             const selectedBlock = store.state.selectedBlock || null;
@@ -35230,30 +35423,47 @@ const Topbar = ({ store }) => {
                 store.showToast(store.t("uiBlockDecodingProblem"), "alert");
             }
             else {
-                store.dispach({
-                    name: ACTION_NAMES.template_addBlockInside,
-                    payload: {
-                        block: block,
-                        children: children || [],
-                        parentId: selectedBlock
+                if (!isPasteBefore) {
+                    store.dispach({
+                        name: ACTION_NAMES.template_addBlockInside,
+                        payload: {
+                            block: block,
+                            children: children || [],
+                            parentId: selectedBlock
+                        }
+                    });
+                }
+                else {
+                    if (selectedBlock) {
+                        store.dispach({
+                            name: ACTION_NAMES.template_addBlockBefore,
+                            payload: {
+                                block: block,
+                                children: children || [],
+                                successorId: selectedBlock
+                            }
+                        });
                     }
-                });
+                    else {
+                        store.showToast(store.t("uiNoBlockSelected"));
+                    }
+                }
             }
         });
     };
     return React.createElement(TopbarStyle, null,
         React.createElement("div", { className: "templateTools" },
-            React.createElement(TopbarButton, { iconType: "newBlock", onClick: handleNewBlock }),
-            React.createElement(TopbarButton, { iconType: "removeBlock", onClick: handleRemoveBlock, disabled: !store.state.selectedBlock }),
-            React.createElement(TopbarButton, { iconType: "minus", onClick: handleSelectNone, disabled: !store.state.selectedBlock }),
-            React.createElement(TopbarButton, { iconType: "export", onClick: handleCopy, disabled: !store.state.selectedBlock }),
-            React.createElement(TopbarButton, { iconType: "import", onClick: handlePaste })),
+            React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock }),
+            React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: handleRemoveBlock, disabled: !store.state.selectedBlock }),
+            React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: handleCopy, disabled: !store.state.selectedBlock }),
+            React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false) }),
+            React.createElement(TopbarButton, { title: store.t("topBarPasteBefore"), iconType: "pasteBefore", onClick: () => handlePaste(true), disabled: !store.state.selectedBlock })),
         React.createElement("div", { className: "appTools" },
-            React.createElement(TopbarButton, { iconType: "import", onClick: () => { }, disabled: true }),
-            React.createElement(TopbarButton, { iconType: "export", onClick: () => { }, disabled: true }),
-            React.createElement(TopbarButton, { iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
-            React.createElement(TopbarButton, { iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: handleTheme }),
-            React.createElement(TopbarButton, { iconType: "setting", onClick: handleLanguage })));
+            React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => { }, disabled: true }),
+            React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: () => { }, disabled: true }),
+            React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
+            React.createElement(TopbarButton, { title: store.t("topBarChangeTheme"), iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: handleTheme }),
+            React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: "setting", onClick: handleLanguage })));
 };
 
 const TabListStyle = qe.div `
@@ -35494,7 +35704,9 @@ const SelectWrapperStyle = qe.div `
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  :hover{
+  &.disabled{
+    cursor: default;
+    opacity: 0.6;
   }
   &:focus-within ${SelectListStyle}{
     transform: translate(-1em, calc(50% + 1em));
@@ -35506,7 +35718,7 @@ const SelectWrapperStyle = qe.div `
   }
 
 `;
-const Select = ({ value, onChange, options, classes, style }) => {
+const Select = ({ value, onChange, options, classes, style, disabled }) => {
     const selectedValue = options.filter(option => {
         if (["string", "number"].includes(typeof value)) {
             if (option.value === value) {
@@ -35530,7 +35742,7 @@ const Select = ({ value, onChange, options, classes, style }) => {
     const handleOptionSelecting = (item) => {
         onChange(item);
     };
-    return React.createElement(SelectWrapperStyle, { className: classes, style: style, tabIndex: parseInt(FOCUS_ORDER.select) },
+    return React.createElement(SelectWrapperStyle, { className: `${classes} ${disabled ? "disabled" : ""}`, style: style, tabIndex: disabled ? undefined : parseInt(FOCUS_ORDER.select) },
         React.createElement(SelectListStyle, { className: "optionsList" }, options.map(item => {
             return React.createElement(SelectListItemStyle, { key: item.value, vocab: item.value + "", className: `${selectedValue.map(selectedItem => selectedItem.value).includes(item.value) ? "selected" : ""}`, onClick: () => {
                     handleOptionSelecting(item);
@@ -35579,14 +35791,14 @@ const Textarea = ({ value, onChange, onKeyUp, classes, style }) => {
     return React.createElement(TextareaStyle, { onChange: (e) => { onChange(e); }, onKeyUp: onKeyUp, className: classes, style: style, value: value });
 };
 
-const MISelect = ({ value, t, options, onChange, classes, style }) => {
+const MISelect = ({ value, t, options, onChange, classes, style, disabled }) => {
     const translatedOptions = options.map(option => {
         return {
             ...option,
             label: t(option.label)
         };
     });
-    return React.createElement(Select, { value: value, options: translatedOptions, onChange: (option) => onChange(option.value), classes: classes, style: style });
+    return React.createElement(Select, { value: value, options: translatedOptions, onChange: (option) => onChange(option.value), classes: classes, style: style, disabled: disabled });
 };
 const MIText = ({ value, onChange, classes, style }) => {
     return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style });
@@ -35605,21 +35817,24 @@ const MenuItemStyle$1 = qe.div `
   & .label{
     padding-bottom: 0.5em;
   }
+  &.disabled .label{
+    opacity: 0.6;
+  }
 `;
-const MenuItemBlock = ({ mi, store }) => {
+const MenuItemBlock = ({ mi, store, disabled }) => {
     const listItemData = BlockMIs.find(listMI => listMI.name === mi.miListItemName);
     if (!listItemData) {
         return React.createElement(React.Fragment, null);
     }
-    return React.createElement(MenuItemStyle$1, null,
+    return React.createElement(MenuItemStyle$1, { className: disabled ? "disabled" : undefined },
         React.createElement("div", { className: "label" }, store.t(listItemData.label)),
         React.createElement("br", null),
         listItemData.miType === MI_LISTITEM_TYPE.blockParam &&
-            React.createElement(MIBlockParam, { listItemData: listItemData, store: store }),
+            React.createElement(MIBlockParam, { listItemData: listItemData, store: store, disabled: disabled }),
         listItemData.miType === MI_LISTITEM_TYPE.blockCSS &&
-            React.createElement(MIBlockCSS, { listItemData: listItemData, mi: mi, store: store }));
+            React.createElement(MIBlockCSS, { listItemData: listItemData, mi: mi, store: store, disabled: disabled }));
 };
-const MIBlockParam = ({ store, listItemData }) => {
+const MIBlockParam = ({ store, listItemData, disabled }) => {
     const handleChange = (value) => {
         if (listItemData.miType === MI_LISTITEM_TYPE.blockParam && !listItemData.isReadonly) {
             store.dispach({
@@ -35643,13 +35858,13 @@ const MIBlockParam = ({ store, listItemData }) => {
         return "";
     };
     return React.createElement(React.Fragment, null, (listItemData.inputType === INPUT_TYPES.options &&
-        React.createElement(MISelect, { value: getValue(selectedBlock, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange })) ||
+        React.createElement(MISelect, { value: getValue(selectedBlock, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled })) ||
         (listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: getValue(selectedBlock, listItemData), onChange: handleChange })) ||
+            React.createElement(MIText, { value: getValue(selectedBlock, listItemData), onChange: handleChange, disabled: disabled })) ||
         (listItemData.inputType === INPUT_TYPES.textarea &&
-            React.createElement(MITextarea, { value: getValue(selectedBlock, listItemData), onChange: handleChange, style: { "width": "100%" } })));
+            React.createElement(MITextarea, { value: getValue(selectedBlock, listItemData), onChange: handleChange, style: { "width": "100%" }, disabled: disabled })));
 };
-const MIBlockCSS = ({ store, listItemData, mi }) => {
+const MIBlockCSS = ({ store, listItemData, mi, disabled }) => {
     const handleChange = (value) => {
         store.dispach({
             name: ACTION_NAMES.block_setCSS,
@@ -35668,11 +35883,11 @@ const MIBlockCSS = ({ store, listItemData, mi }) => {
     };
     return React.createElement(React.Fragment, null,
         listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: getValue(mi, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange }),
+            React.createElement(MISelect, { value: getValue(mi, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled }),
         listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: getValue(mi, listItemData), onChange: handleChange }),
+            React.createElement(MIText, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
         listItemData.inputType === INPUT_TYPES.size &&
-            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange }));
+            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }));
 };
 
 const MenuItemStyle = qe.div `
@@ -35682,21 +35897,24 @@ const MenuItemStyle = qe.div `
   & .label{
     padding-bottom: 0.5em;
   }
+  &.disabled .label{
+    opacity: 0.6;
+  }
 `;
-const MenuItemTemplate = ({ mi, store }) => {
+const MenuItemTemplate = ({ mi, store, disabled }) => {
     const listItemData = TemplateMIs.find(listMI => listMI.name === mi.miListItemName);
     if (!listItemData) {
         return React.createElement(React.Fragment, null);
     }
-    return React.createElement(MenuItemStyle, null,
+    return React.createElement(MenuItemStyle, { className: disabled ? "disabled" : undefined },
         React.createElement("div", { className: "label" }, store.t(listItemData.label)),
         React.createElement("br", null),
         listItemData.miType === MI_LISTITEM_TYPE.templateParam &&
-            React.createElement(MITemplateParam, { listItemData: listItemData, store: store }),
+            React.createElement(MITemplateParam, { listItemData: listItemData, store: store, disabled: disabled }),
         listItemData.miType === MI_LISTITEM_TYPE.templateCSS &&
-            React.createElement(MITemplateCSS, { listItemData: listItemData, mi: mi, store: store }));
+            React.createElement(MITemplateCSS, { listItemData: listItemData, mi: mi, store: store, disabled: disabled }));
 };
-const MITemplateParam = ({ store, listItemData }) => {
+const MITemplateParam = ({ store, listItemData, disabled }) => {
     const handleChange = (value) => {
         if (listItemData.miType === MI_LISTITEM_TYPE.templateParam && !listItemData.isReadonly) {
             store.dispach({
@@ -35710,13 +35928,13 @@ const MITemplateParam = ({ store, listItemData }) => {
     };
     return React.createElement(React.Fragment, null, listItemData.miType === MI_LISTITEM_TYPE.templateParam &&
         ((listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: String(store.state.templates[0][listItemData.paramName]), t: store.t, options: listItemData.inputOptions, onChange: handleChange })) ||
+            React.createElement(MISelect, { value: String(store.state.templates[0][listItemData.paramName]), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled })) ||
             (listItemData.inputType === INPUT_TYPES.text &&
-                React.createElement(MIText, { value: String(store.state.templates[0][listItemData.paramName]), onChange: handleChange })) ||
+                React.createElement(MIText, { value: String(store.state.templates[0][listItemData.paramName]), onChange: handleChange, disabled: disabled })) ||
             (listItemData.inputType === INPUT_TYPES.textarea &&
-                React.createElement(MITextarea, { style: { "width": "100%" }, value: String(store.state.templates[0][listItemData.paramName]), onChange: handleChange }))));
+                React.createElement(MITextarea, { style: { "width": "100%" }, value: String(store.state.templates[0][listItemData.paramName]), onChange: handleChange, disabled: disabled }))));
 };
-const MITemplateCSS = ({ store, listItemData, mi }) => {
+const MITemplateCSS = ({ store, listItemData, mi, disabled }) => {
     const handleChange = (value) => {
         store.dispach({
             name: ACTION_NAMES.template_setCSS,
@@ -35729,34 +35947,117 @@ const MITemplateCSS = ({ store, listItemData, mi }) => {
     return React.createElement(React.Fragment, null,
         listItemData.miType === MI_LISTITEM_TYPE.templateCSS &&
             listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), t: store.t, options: listItemData.inputOptions, onChange: handleChange }),
+            React.createElement(MISelect, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled }),
         listItemData.miType === MI_LISTITEM_TYPE.templateCSS &&
             listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange }));
+            React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange, disabled: disabled }));
 };
 
 const MIs = ({ store, targetType, addableType }) => {
     const isAddable = addableType === "addable";
     const isBlock = targetType === MI_TARGET.block;
-    const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });
+    const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems; //.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });  
     if (!targetMIs) {
         return React.createElement(React.Fragment, null);
     }
     if (isBlock) {
+        const targetBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
         return React.createElement(React.Fragment, null, targetMIs.map(mi => {
+            const checkIfDisabled = (listMI) => {
+                if (!listMI) {
+                    return false;
+                }
+                if (listMI.conditions && targetBlock) {
+                    //true is possitive
+                    return listMI.conditions.map(condition => {
+                        switch (condition.type) {
+                            case "prop":
+                                const blackListResult = condition.blackList.includes(String(targetBlock[condition.propName]));
+                                const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName])) && condition.whiteList.length;
+                                return blackListResult || whiteListResult;
+                            case "css":
+                                const CSSValue = targetBlock.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;
+                                if (!CSSValue) {
+                                    return false;
+                                }
+                                const CSSblackListResult = condition.blackList.includes(CSSValue);
+                                const CSSwhiteListResult = !condition.whiteList.includes(CSSValue) && condition.whiteList.length;
+                                return CSSblackListResult || CSSwhiteListResult;
+                            default:
+                                console.warn("MI conditions checking: unknown condition type:", condition);
+                        }
+                        return false;
+                    }).filter(r => !!r).length > ZERO;
+                }
+                else {
+                    return false;
+                }
+            };
+            const listMI = BlockMIs.find(listMI => listMI.name === mi.miListItemName);
             return {
                 mi: mi,
-                listMI: BlockMIs.find(listMI => listMI.name === mi.miListItemName)
+                listMI: listMI,
+                isDisabled: checkIfDisabled(listMI)
             };
-        }).filter(mi => mi.listMI ? mi.listMI.isAddable === isAddable : false).map(({ mi, listMI }) => listMI && React.createElement(MenuItemBlock, { key: mi.uuid, store: store, mi: mi })));
+        }).filter(mi => {
+            if (!mi.listMI) {
+                return false;
+            }
+            if (mi.listMI.isAddable !== isAddable) {
+                return false;
+            }
+            return true;
+        }).map(({ mi, listMI, isDisabled }) => listMI && React.createElement(MenuItemBlock, { key: mi.uuid, store: store, mi: mi, disabled: isDisabled })));
     }
     else {
+        const targetTemplate = store.state.templates[0];
         return React.createElement(React.Fragment, null, targetMIs.map(mi => {
+            const checkIfDisabled = (listMI) => {
+                if (!listMI) {
+                    return false;
+                }
+                if (listMI.conditions && targetTemplate) {
+                    //true is possitive
+                    return listMI.conditions.map(condition => {
+                        switch (condition.type) {
+                            case "prop":
+                                const blackListResult = condition.blackList.includes(String(targetTemplate[condition.propName]));
+                                const whiteListResult = !condition.whiteList.includes(String(targetTemplate[condition.propName])) && condition.whiteList.length;
+                                return blackListResult || whiteListResult;
+                            case "css":
+                                const CSSValue = targetTemplate.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;
+                                if (!CSSValue) {
+                                    return false;
+                                }
+                                const CSSblackListResult = condition.blackList.includes(CSSValue);
+                                const CSSwhiteListResult = !condition.whiteList.includes(CSSValue) && condition.whiteList.length;
+                                return CSSblackListResult || CSSwhiteListResult;
+                            default:
+                                console.warn("MI conditions checking: unknown condition type:", condition);
+                        }
+                        return false;
+                    }).filter(r => !!r).length > ZERO;
+                }
+                else {
+                    return false;
+                }
+            };
+            const listMI = TemplateMIs.find(listMI => listMI.name === mi.miListItemName);
             return {
                 mi: mi,
-                listMI: TemplateMIs.find(listMI => listMI.name === mi.miListItemName)
+                listMI: listMI,
+                isDisabled: checkIfDisabled(listMI)
             };
-        }).filter(mi => mi.listMI ? mi.listMI.isAddable === isAddable : false).map(({ mi, listMI }) => listMI && React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi })));
+        }).filter(mi => {
+            if (!mi.listMI) {
+                return false;
+            }
+            if (mi.listMI.isAddable !== isAddable) {
+                return false;
+            }
+            //TODO CONDITIONS
+            return true;
+        }).map(({ mi, listMI, isDisabled }) => listMI && React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi, disabled: isDisabled })));
     }
 };
 const PickerListStyle = qe.div `
@@ -35767,6 +36068,7 @@ const PickerListStyle = qe.div `
   transition: all var(--transition);
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
   --row-height: 2.5em;
   overflow-y: auto;
   & div{
@@ -35779,7 +36081,7 @@ const PickerStyle = qe.div `
   :focus-within ${PickerListStyle}{
     visibility: visible;
     opacity: 1;
-    height: calc( var(--row-height) * 4.5);
+    min-height: calc( var(--row-height) * 4.5);
   }
 
 `;
@@ -35828,11 +36130,16 @@ const MIPicker = ({ store, target }) => {
             }
         }
         else {
-            return [];
+            return TemplateMIs.filter(listMI => listMI.isAddable).map(listMI => {
+                return {
+                    data: listMI,
+                    isActive: !!store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMI.name)
+                };
+            });
         }
     };
     const miList = getMiList(isBlockTarget, selectedBlock);
-    const handleBlockChangeMI = (name, isBlock) => {
+    const handleChangeMI = (name, isBlock) => {
         if (isBlock) {
             store.dispach({
                 name: ACTION_NAMES.block_toggleMI,
@@ -35855,8 +36162,8 @@ const MIPicker = ({ store, target }) => {
     return React.createElement(PickerStyle, null,
         React.createElement(PickerLabelStyle, { tabIndex: 12 },
             React.createElement(Icon, { iconType: "plus" }),
-            "Choose your pokemon"),
-        React.createElement(PickerListStyle, null, miList.map(mi => React.createElement(PickerListItemStyle, { key: mi.data.name, className: mi.isActive ? "active" : "", tabIndex: 12, onClick: () => { handleBlockChangeMI(mi.data.name, isBlockTarget); } },
+            store.t("miEditMiList")),
+        React.createElement(PickerListStyle, null, miList.map(mi => React.createElement(PickerListItemStyle, { key: mi.data.name, className: mi.isActive ? "active" : "", tabIndex: 12, onClick: () => { handleChangeMI(mi.data.name, isBlockTarget); } },
             React.createElement(Icon, { iconType: mi.isActive ? "minus" : "plus" }),
             store.t(mi.data.label)))));
 };
@@ -35881,7 +36188,9 @@ const SplitStyle = qe.div `
 const TreeBrunchStyle = qe.div `
   display: flex;
   min-width: 100%;
+  min-height: 2em;
   transition: all var(--transition);
+  align-items: center;
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
@@ -35926,7 +36235,7 @@ const TreeBrunchStyle = qe.div `
   }
   & .label{
     cursor: pointer;
-    width: auto;
+    width: 100%;
     min-width: 4em;
     height: 100%;
     padding: 0.4em;
@@ -35956,9 +36265,10 @@ const Sidebar = ({ store }) => {
             brunchChildren[block.uuid] = bList.filter(bCh => bCh.parentId === block.uuid).map(b => b.uuid);
         });
         return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
+            const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
             return React.createElement("div", { key: block.uuid },
                 React.createElement(TreeBrunch, { block: block, level: level, brunchChildren: brunchChildren, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBlockSelect(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
-                !block.treeViewCollapseState && renderChildren(block.uuid, level + (TWO / TWO)));
+                !block.treeViewCollapseState && !isHideen && renderChildren(block.uuid, level + (TWO / TWO)));
         });
     };
     const nonBlock = store.state.selectedBlock === null;
@@ -35994,7 +36304,11 @@ const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollaps
     const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
     const hasChildren = !!brunchChildren[block.uuid].length;
     return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""} ${isHideen ? "hidden" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
-        React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } }),
+        !isHideen && (React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } })),
+        isHideen && (React.createElement(Icon, { style: {
+                "marginLeft": ".2em",
+                "minWidth": "1em"
+            }, iconType: "hidden" })),
         React.createElement("span", { className: "label", onClick: onClick }, label));
 };
 
@@ -36360,7 +36674,6 @@ const getContent = (block) => {
     };
     // const handleContentEditableChange:(e:React.FormEvent) => void = (e) => {
     //   e;
-    //   console.log(e);
     //   return;
     // };
     //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
@@ -36379,13 +36692,11 @@ const Block = ({ store, block, classes }) => {
             if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.blockCSS) {
                 return;
             }
-            listMI.CSSParam;
             ret = {
                 ...ret,
                 ...{ [String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue)) }
             };
         });
-        console.log(ret);
         return ret;
     };
     return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
@@ -36496,7 +36807,7 @@ const Stack = ({ store }) => {
     };
     const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
     const pageSize = store.state.templates[0].pageSizeMM.split(" ");
-    const isHorizontal = store.state.templates[0].pageOrientation === "horizontal";
+    const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
     const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
     const rootBlocks = (blocks) => {
         //v.3
@@ -36923,16 +37234,43 @@ const templateReducer = (state, action) => {
             };
             //adding right before successor block
             state.templates[0].blocks.splice(successorIndex, ZERO, newNieigborBlock);
+            //adding all pasted block's children
             if (action.payload.children) {
-                action.payload.children.map(child => {
-                    const clearedChild = {
-                        ...cleanUpBlock(child),
-                        parentId: newNieigborBlock.uuid
-                    };
-                    state.templates[0].blocks.push(clearedChild);
+                const getAndCleanUpChildren = (list, fromParent, toParent) => {
+                    let ret = [];
+                    list.filter(block => block.parentId === fromParent).map(block => {
+                        const clearedBlock = {
+                            ...cleanUpBlock(block),
+                            parentId: toParent
+                        };
+                        ret = [
+                            ...ret,
+                            clearedBlock,
+                            ...getAndCleanUpChildren(list, block.uuid, clearedBlock.uuid)
+                        ];
+                    });
+                    return ret;
+                };
+                const reparentedAndClearedChildren = getAndCleanUpChildren(action.payload.children, action.payload.block.uuid, newNieigborBlock.uuid);
+                reparentedAndClearedChildren.map(child => {
+                    state.templates[0].blocks.push(child);
                 });
             }
             stateUpdated = true;
+            break;
+        case ACTION_NAMES.template_toggleMI:
+            const templateToggleMI = state.templates[0];
+            const miToChange = templateToggleMI.menuItems.find(mi => mi.miListItemName === action.payload.miName);
+            if (miToChange) { //remove mi from list if exists 
+                templateToggleMI.menuItems = templateToggleMI.menuItems.filter(mi => mi.miListItemName !== action.payload.miName);
+                stateUpdated = true;
+            }
+            else { //add mi to mist id not exists 
+                if (TemplateMIs.find(mi => mi.name === action.payload.miName)) {
+                    templateToggleMI.menuItems = [...templateToggleMI.menuItems, ...[initialTemplateMIFactory(action.payload.miName)]];
+                    stateUpdated = true;
+                }
+            }
             break;
         default:
             console.error("unknown template reducer action", action);
@@ -37010,7 +37348,6 @@ const blockReducer = (state, action) => {
             }
             else { //add mi to mist id not exists 
                 if (BlockMIs.find(mi => mi.name === action.payload.miName)) {
-                    console.log(initialBlockMIFactory(action.payload.miName));
                     blockToggleMI.menuItems = [...blockToggleMI.menuItems, ...[initialBlockMIFactory(action.payload.miName)]];
                     stateUpdated = true;
                 }

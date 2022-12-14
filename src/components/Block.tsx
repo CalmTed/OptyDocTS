@@ -70,7 +70,6 @@ const getContent: (block: BlockModel) => React.ReactNode = (block) => {
   };
   // const handleContentEditableChange:(e:React.FormEvent) => void = (e) => {
   //   e;
-  //   console.log(e);
   //   return;
   // };
   //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
@@ -93,13 +92,11 @@ export const Block: FC<BlockComponentModel> = ({store, block, classes}) => {
       if(!listMI || listMI.miType !== MI_LISTITEM_TYPE.blockCSS) {
         return;
       }
-      listMI.CSSParam;
       ret = {
         ...ret,
         ...{[String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue))}
       };
     });
-    console.log(ret);
     return ret;
   };
   return <BlockStyle style={getStyles(block.menuItems)} className={`block uuid-${block.uuid} ${selected} ${classes}`}  onClick={(e) => { handleSelectBlock(store, block.uuid, e); }}>

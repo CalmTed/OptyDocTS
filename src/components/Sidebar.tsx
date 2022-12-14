@@ -6,6 +6,7 @@ import Split from "./ui/Split";
 import { ACTION_NAMES, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import { BLOCK_MI_NAMES } from "src/models/blockMIs";
 import { MIPicker, MIs } from "./ui/Mis";
+import Icon from "./ui/Icon";
 
 interface SidebarModel {
   store: StoreModel
@@ -33,7 +34,9 @@ const SplitStyle = styled.div`
 const TreeBrunchStyle = styled.div`
   display: flex;
   min-width: 100%;
+  min-height: 2em;
   transition: all var(--transition);
+  align-items: center;
   &.selected{
     background: var(--section-color);
     color: var(--main-color);
@@ -78,7 +81,7 @@ const TreeBrunchStyle = styled.div`
   }
   & .label{
     cursor: pointer;
-    width: auto;
+    width: 100%;
     min-width: 4em;
     height: 100%;
     padding: 0.4em;
@@ -113,6 +116,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
       brunchChildren[block.uuid] = bList.filter(bCh => bCh.parentId === block.uuid).map(b => b.uuid);
     });
     return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
+      const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
       return <div key={block.uuid} >
         <TreeBrunch
           block={block}
@@ -122,7 +126,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
           onClick={ () => { handeBlockSelect(block.uuid); }}
           onCollapsedChange={() => { handeBlockBrunchCollapce(block); }}
         ></TreeBrunch>
-        {!block.treeViewCollapseState && renderChildren(block.uuid, level + (TWO / TWO))}
+        {!block.treeViewCollapseState && !isHideen && renderChildren(block.uuid, level + (TWO / TWO))}  
       </div>;
     });
   };
@@ -183,10 +187,18 @@ const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level
     onMouseEnter={() => { handleMouseEnter(block.uuid); }}
     onMouseLeave={() => { handleMouseLeave(block.uuid); }}
   >
-    <span
-      className={`triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`}
-      onClick={() => { hasChildren ? onCollapsedChange() : null; }}
-    ></span>
+    {!isHideen && (
+      <span
+        className={`triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`}
+        onClick={() => { hasChildren ? onCollapsedChange() : null; }}
+      ></span>
+    )}
+    {isHideen && (
+      <Icon style={{
+        "marginLeft": ".2em",
+        "minWidth":"1em"
+      }} iconType="hidden"/>
+    )}
     <span className="label" onClick={onClick}>{label}</span>
   </TreeBrunchStyle>;
 };
