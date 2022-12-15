@@ -12,6 +12,8 @@ const wordsEB = {
   topBarNewTemplate: "New template",
   topBarChangeTheme: "Change color mode",
   topBarChangeLanguage: "Change language",
+  topBarCutBlock: "Cut block",
+  topBarDuplicateBlock: "Duplicate block",
   //sideBar
   sideBarEdit: "Edit",
   sideBarCopy: "Copy",
@@ -63,6 +65,8 @@ const wordsEB = {
   miSelect: "Select",
   miCopyFrom: "CopyFrom",
   miBackground: "Background",
+  miBackgroundImage: "Background image",
+  miBackgroundSize: "Background size",
   miEditMiList: "Edit styles list",
   miTextColor: "Text color",
   miFontFamily: "Font",

@@ -13,6 +13,8 @@ export enum BLOCK_MI_NAMES{
   flexWrap = "flexWrap",
   contentType = "contentType",
   background = "background",
+  backgroundImage = "backgroundImage",
+  backgroundSizeOptions = "backgroundSizeOptions",
   textColor = "textColor"
 
 }
@@ -226,7 +228,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     CSSDefaultValue: "#0000",
     isCopylinkable: true,
     isAddable: true,
-    inputType: INPUT_TYPES.text,
+    inputType: INPUT_TYPES.color,
     inputOptions: []
   },
   {
@@ -237,7 +239,36 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     CSSDefaultValue: "#0000",
     isCopylinkable: true,
     isAddable: true,
-    inputType: INPUT_TYPES.text,
+    inputType: INPUT_TYPES.color,
     inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.backgroundImage,
+    label: "miBackgroundImage",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "backgroundImage",
+    CSSDefaultValue: "",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.file,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.backgroundSizeOptions,
+    label: "miBackgroundSize",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "backgroundSize",
+    CSSDefaultValue: "",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [{
+      label: "contain",
+      value: "contain"
+    }, {
+      label: "cover",
+      value: "cover"
+    }
+    ]
   }
 ];

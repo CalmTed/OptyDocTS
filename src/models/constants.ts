@@ -69,7 +69,8 @@ export enum INPUT_TYPES{
   options = "options",
   color = "color",
   margin = "margin",
-  border = "border"
+  border = "border",
+  file = "file"
 }
 
 export enum FOCUS_ORDER{
@@ -94,4 +95,22 @@ export const A5 = "148mm 209.9mm";
 export enum PAGE_ORIENTATION{
   vertical = "vertical",
   horizontal = "horizontal" 
+}
+export const numberMask = /(-|)([\d]{1,}(.|)[\d]{1,})/g;
+export enum SIZE_UNITS{
+  "%" = "%",
+  mm = "mm",
+  cm = "cm",
+  px = "px",
+  pt = "pt",
+  rem = "rem"
+}
+//we filter % character insize considerZooming component
+export const sizeMask = new RegExp(
+  "("
+   + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+   + ")"
+);
+export enum DEFAULT_VALUES{
+  inherit = "inherit",
 }

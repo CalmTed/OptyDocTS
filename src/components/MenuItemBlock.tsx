@@ -3,7 +3,7 @@ import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
 import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel, BlockModel } from "src/models/types";
 import styled from "styled-components";
-import { MISelect, MISize, MIText, MITextarea } from "./ui/MiTypes";
+import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea } from "./ui/MiTypes";
 
 interface MenuItemBlockComponentModel{
   store: StoreModel
@@ -124,6 +124,14 @@ const MIBlockCSS: FC<MIBlockCSS> = ({store, listItemData, mi, disabled}) => {
     {
       listItemData.inputType === INPUT_TYPES.size && 
       <MISize value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MISize>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.color && 
+      <MIColor value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MIColor>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.file &&
+      <MIFile value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MIFile>
     }
   </>;
 };

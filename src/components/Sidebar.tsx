@@ -204,6 +204,12 @@ const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level
         "minWidth":"1em"
       }} iconType="hidden"/>
     )}
+    {isVariable && (
+      <Icon style={{
+        "marginLeft": ".2em",
+        "minWidth":"1em"
+      }} iconType="variable"/>
+    )}
     <span className="label" onClick={onClick}>{label}</span>
   </TreeBrunchStyle>;
 };

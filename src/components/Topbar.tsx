@@ -62,13 +62,6 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       });
     });
   };
-  // const handleSelectNone = () => {
-  //   store.dispach({
-  //     name: ACTION_NAMES.app_selectBlock,
-  //     payload: null
-  //   });
-  // };
-
   const handleCopy = () => {
     const selectedBlock = store.state.templates[0].blocks.find(block => block.uuid === store.state.selectedBlock);
     if(!selectedBlock) {
@@ -120,15 +113,45 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       }
     });
   };
+  const handleCut = () => {
+    handleCopy();
+    store.dispach({
+      name: ACTION_NAMES.template_removeBlock
+    });
+  };
+  const handleDuplicate = () => {
+    const block = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
+    if(!block) {
+      return;
+    }
+    const getChildren: (parentId:string | null) => BlockModel[] = (parentId) => {
+      let ret:BlockModel[] = [];
+      store.state.templates[0].blocks.filter(block => block.parentId === parentId).map(block => {
+        ret = [...ret, block, ...getChildren(block.uuid)];
+      });
+      return ret;
+    };
+    store.dispach({
+      name:ACTION_NAMES.template_addBlockInside,
+      payload: {
+        block: block,
+        children: getChildren(block.uuid) || [],
+        parentId: block?.parentId
+      }
+    });
+  };
   const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
   return <TopbarStyle>
     <div className="templateTools">
       <TopbarButton title={store.t("topBarAddBlock")} iconType="newBlock" onClick={handleNewBlock} disabled={!isSelectedBlockFixed && !!store.state.selectedBlock}></TopbarButton>
-      <TopbarButton title={store.t("topBarRemoveBlock")} iconType="removeBlock" onClick={handleRemoveBlock} disabled={!store.state.selectedBlock}></TopbarButton>
-      {/* <TopbarButton iconType="minus" onClick={handleSelectNone} disabled={!store.state.selectedBlock}></TopbarButton> */}
-      <TopbarButton title={store.t("topBarCopyBlock")} iconType="copy" onClick={handleCopy} disabled={!store.state.selectedBlock}></TopbarButton>
-      <TopbarButton title={store.t("topBarPasteInside")} iconType="paste" onClick={() => handlePaste(false)} ></TopbarButton>
-      <TopbarButton title={store.t("topBarPasteBefore")} iconType="pasteBefore" onClick={() => handlePaste(true)} disabled={!store.state.selectedBlock} ></TopbarButton>
+      <TopbarButton title={store.t("topBarPasteInside")} iconType="paste" onClick={() => handlePaste(false)} disabled={!isSelectedBlockFixed && !!store.state.selectedBlock}></TopbarButton>
+      {store.state.selectedBlock && <>
+        <TopbarButton title={store.t("topBarPasteBefore")} iconType="pasteBefore" onClick={() => handlePaste(true)}></TopbarButton>
+        <TopbarButton title={store.t("topBarRemoveBlock")} iconType="removeBlock" onClick={handleRemoveBlock}></TopbarButton>
+        <TopbarButton title={store.t("topBarCopyBlock")} iconType="copy" onClick={handleCopy}></TopbarButton>
+        <TopbarButton title={store.t("topBarCutBlock")} iconType="cut" onClick={handleCut}></TopbarButton>
+        <TopbarButton title={store.t("topBarDuplicateBlock")} iconType="duplicate" onClick={handleDuplicate}></TopbarButton>
+      </>}
     </div>
     <div className="appTools">
       <TopbarButton title={store.t("topBarImportTemplate")} iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>

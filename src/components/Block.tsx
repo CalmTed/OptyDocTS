@@ -13,10 +13,10 @@ interface BlockComponentModel{
 
 const BlockStyle = styled.div`
   transition: all var(--transition);
-  font-size: calc(var(--zoom) * 100%);
+  font-size: calc(var(--zoom) * 1rem);
   cursor: pointer;
   outline: 1px dashed transparent;
-  ooverflow: hidden;
+  notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
   &.selected{

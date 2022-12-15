@@ -34619,6 +34619,7 @@ var INPUT_TYPES;
     INPUT_TYPES["color"] = "color";
     INPUT_TYPES["margin"] = "margin";
     INPUT_TYPES["border"] = "border";
+    INPUT_TYPES["file"] = "file";
 })(INPUT_TYPES || (INPUT_TYPES = {}));
 var FOCUS_ORDER;
 (function (FOCUS_ORDER) {
@@ -34642,6 +34643,23 @@ var PAGE_ORIENTATION;
     PAGE_ORIENTATION["vertical"] = "vertical";
     PAGE_ORIENTATION["horizontal"] = "horizontal";
 })(PAGE_ORIENTATION || (PAGE_ORIENTATION = {}));
+var SIZE_UNITS;
+(function (SIZE_UNITS) {
+    SIZE_UNITS["%"] = "%";
+    SIZE_UNITS["mm"] = "mm";
+    SIZE_UNITS["cm"] = "cm";
+    SIZE_UNITS["px"] = "px";
+    SIZE_UNITS["pt"] = "pt";
+    SIZE_UNITS["rem"] = "rem";
+})(SIZE_UNITS || (SIZE_UNITS = {}));
+//we filter % character insize considerZooming component
+const sizeMask = new RegExp("("
+    + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+    + ")");
+var DEFAULT_VALUES;
+(function (DEFAULT_VALUES) {
+    DEFAULT_VALUES["inherit"] = "inherit";
+})(DEFAULT_VALUES || (DEFAULT_VALUES = {}));
 
 const wordsEB = {
     name: "OptyDoc",
@@ -34656,6 +34674,8 @@ const wordsEB = {
     topBarNewTemplate: "New template",
     topBarChangeTheme: "Change color mode",
     topBarChangeLanguage: "Change language",
+    topBarCutBlock: "Cut block",
+    topBarDuplicateBlock: "Duplicate block",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
@@ -34706,6 +34726,8 @@ const wordsEB = {
     miSelect: "Select",
     miCopyFrom: "CopyFrom",
     miBackground: "Background",
+    miBackgroundImage: "Background image",
+    miBackgroundSize: "Background size",
     miEditMiList: "Edit styles list",
     miTextColor: "Text color",
     miFontFamily: "Font",
@@ -34722,12 +34744,14 @@ const wordsUA = {
     topBarRemoveBlock: "Vydalyty blok",
     topBarCopyBlock: "Kopiyuvaty",
     topBarPasteInside: "Vstavity vseredinu",
-    topBarPasteBefore: "Vstavity poperedu",
+    topBarPasteBefore: "Vstavity pered vydilenym",
     topBarImportTemplate: "Importuvaty maket",
     topBarExportTemplate: "Eksportuvaty maket",
     topBarNewTemplate: "Novy maket",
     topBarChangeTheme: "Zminyty temu",
     topBarChangeLanguage: "Zminyty movu",
+    topBarCutBlock: "Virevaty blok",
+    topBarDuplicateBlock: "Dublyuvaty blok",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34779,6 +34803,8 @@ const wordsUA = {
     miSelect: "Vibir",
     miCopyFrom: "Kopiyuvaty z",
     miBackground: "Fon",
+    miBackgroundImage: "Zobrazhennya fonu",
+    miBackgroundSize: "Rozmir fonu",
     miEditMiList: "Zminyty spisok styliv",
     miTextColor: "Kolir tekstu",
     miFontFamily: "Shrift",
@@ -34817,6 +34843,8 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
     BLOCK_MI_NAMES["contentType"] = "contentType";
     BLOCK_MI_NAMES["background"] = "background";
+    BLOCK_MI_NAMES["backgroundImage"] = "backgroundImage";
+    BLOCK_MI_NAMES["backgroundSizeOptions"] = "backgroundSizeOptions";
     BLOCK_MI_NAMES["textColor"] = "textColor";
 })(BLOCK_MI_NAMES || (BLOCK_MI_NAMES = {}));
 const BlockMIs = [
@@ -35028,7 +35056,7 @@ const BlockMIs = [
         CSSDefaultValue: "#0000",
         isCopylinkable: true,
         isAddable: true,
-        inputType: INPUT_TYPES.text,
+        inputType: INPUT_TYPES.color,
         inputOptions: []
     },
     {
@@ -35039,8 +35067,37 @@ const BlockMIs = [
         CSSDefaultValue: "#0000",
         isCopylinkable: true,
         isAddable: true,
-        inputType: INPUT_TYPES.text,
+        inputType: INPUT_TYPES.color,
         inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.backgroundImage,
+        label: "miBackgroundImage",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "backgroundImage",
+        CSSDefaultValue: "",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.file,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.backgroundSizeOptions,
+        label: "miBackgroundSize",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "backgroundSize",
+        CSSDefaultValue: "",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [{
+                label: "contain",
+                value: "contain"
+            }, {
+                label: "cover",
+                value: "cover"
+            }
+        ]
     }
 ];
 
@@ -35410,12 +35467,6 @@ const Topbar = ({ store }) => {
             });
         });
     };
-    // const handleSelectNone = () => {
-    //   store.dispach({
-    //     name: ACTION_NAMES.app_selectBlock,
-    //     payload: null
-    //   });
-    // };
     const handleCopy = () => {
         const selectedBlock = store.state.templates[0].blocks.find(block => block.uuid === store.state.selectedBlock);
         if (!selectedBlock) {
@@ -35471,14 +35522,44 @@ const Topbar = ({ store }) => {
             }
         });
     };
+    const handleCut = () => {
+        handleCopy();
+        store.dispach({
+            name: ACTION_NAMES.template_removeBlock
+        });
+    };
+    const handleDuplicate = () => {
+        const block = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
+        if (!block) {
+            return;
+        }
+        const getChildren = (parentId) => {
+            let ret = [];
+            store.state.templates[0].blocks.filter(block => block.parentId === parentId).map(block => {
+                ret = [...ret, block, ...getChildren(block.uuid)];
+            });
+            return ret;
+        };
+        store.dispach({
+            name: ACTION_NAMES.template_addBlockInside,
+            payload: {
+                block: block,
+                children: getChildren(block.uuid) || [],
+                parentId: block?.parentId
+            }
+        });
+    };
     const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
     return React.createElement(TopbarStyle, null,
         React.createElement("div", { className: "templateTools" },
             React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock, disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
-            React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: handleRemoveBlock, disabled: !store.state.selectedBlock }),
-            React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: handleCopy, disabled: !store.state.selectedBlock }),
-            React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false) }),
-            React.createElement(TopbarButton, { title: store.t("topBarPasteBefore"), iconType: "pasteBefore", onClick: () => handlePaste(true), disabled: !store.state.selectedBlock })),
+            React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false), disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
+            store.state.selectedBlock && React.createElement(React.Fragment, null,
+                React.createElement(TopbarButton, { title: store.t("topBarPasteBefore"), iconType: "pasteBefore", onClick: () => handlePaste(true) }),
+                React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: handleRemoveBlock }),
+                React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: handleCopy }),
+                React.createElement(TopbarButton, { title: store.t("topBarCutBlock"), iconType: "cut", onClick: handleCut }),
+                React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: handleDuplicate }))),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => { }, disabled: true }),
             React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: () => { }, disabled: true }),
@@ -35828,7 +35909,127 @@ const MITextarea = ({ value, onChange, classes, style }) => {
     return React.createElement(Textarea, { style: style, value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes });
 };
 const MISize = ({ value, onChange, classes, style }) => {
-    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style });
+    //propose units
+    const randomId = Math.round(Math.random() * THOUSAND);
+    const getDataList = (value) => {
+        const onlyNumber = value.replace(/[^0-9.0-9]/g, "");
+        const list = [
+            ...Object.values(SIZE_UNITS).map(unit => `${onlyNumber}${unit}`),
+            ...Object.values(DEFAULT_VALUES)
+        ];
+        return list.map(el => {
+            return React.createElement("option", { key: el, value: el });
+        });
+    };
+    //increment, dicrement
+    const handleKeyDown = (e) => {
+        const crement = (value, amount) => {
+            //getNumber
+            const number = Number.parseFloat(value.replace(/[^0-9.-]{1,}/g, ""));
+            const sum = String((number + amount).toFixed(ONE)).replace(".0", "");
+            //increment
+            //replace old value with new
+            return value.replace(String(number), sum);
+        };
+        const target = e.target;
+        const CTRL = 1;
+        const SHIFT = 10;
+        const ALT = 0.1;
+        const special = e.ctrlKey ? CTRL : e.shiftKey ? SHIFT : e.altKey ? ALT : ZERO;
+        const amount = ONE * special;
+        if (e.key === "ArrowRight" && special !== ZERO) {
+            target.value = crement(fromT(target.value), amount);
+        }
+        if (e.key === "ArrowLeft" && special !== ZERO) {
+            target.value = crement(fromT(target.value), -amount);
+        }
+        onChange(target.value);
+    };
+    const tMap = {
+        "mm": "мм",
+        "cm": "см"
+    };
+    const toT = (string) => {
+        let newString = string;
+        Object.entries(tMap).map(([value, key]) => { newString = newString.replace(RegExp(value, "g"), key); });
+        return newString;
+    };
+    const fromT = (string) => {
+        let newString = string;
+        Object.entries(tMap).map(([value, key]) => { newString = newString.replace(RegExp(key, "g"), value); });
+        return newString;
+    };
+    //TODO: convert mm to cyricic and back
+    return React.createElement(React.Fragment, null,
+        React.createElement(Input, { value: toT(value), onChange: (e) => { onChange(fromT(e.target.value)); }, onKeyDown: handleKeyDown, classes: classes, style: style, list: `datalist-${randomId}` }),
+        React.createElement("datalist", { id: `datalist-${randomId}` }, getDataList(value)));
+};
+const MIColorLabel = qe.label `
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  cursor: pointer;
+  border: 0.1em solid var(--app-bg);
+  border-radius: var(--border-radius);
+  margin-left: .5em;
+`;
+const MIColor = ({ value, onChange, classes, style, disabled }) => {
+    return React.createElement(React.Fragment, null,
+        React.createElement(MIColorLabel, { style: { "backgroundColor": value } },
+            React.createElement("input", { type: "color", style: { "display": "none" }, onChange: (e) => onChange(e.target.value) })),
+        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style }));
+};
+const MIFileLabel = qe.label `
+  width: 2em;
+  height: 1.5em;
+  display: inline-block;
+  cursor: pointer;
+  border: 0.1em solid var(--app-bg);
+  border-radius: var(--border-radius);
+  margin: 0 0 .5em .5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+`;
+const MIFilePreview = qe.span `
+width: 2em;
+height: 1.5em;
+display: inline-block;
+margin: 0 0 .5em .5em;
+display: flex;
+background-size: contain;
+background-position: center;
+background-repeat: no-repeat;
+&:before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--section-bg);
+  opacity: 0.4;
+}
+`;
+const MIFile = ({ value, onChange, classes, style, disabled }) => {
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const result = reader.result;
+            onChange(`url(${result})`);
+        };
+        reader.readAsDataURL(file);
+    };
+    return React.createElement(React.Fragment, null,
+        value &&
+            React.createElement(MIFilePreview, { style: { "backgroundImage": value } }),
+        value &&
+            React.createElement(MIFileLabel, { onClick: () => { onChange(""); } },
+                React.createElement(Icon, { iconType: "minus" })),
+        React.createElement(MIFileLabel, null,
+            React.createElement(Icon, { iconType: "import" }),
+            React.createElement("input", { type: "file", style: { "display": "none" }, onChange: handleFileSelect })),
+        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style }));
 };
 
 const MenuItemStyle$1 = qe.div `
@@ -35908,7 +36109,11 @@ const MIBlockCSS = ({ store, listItemData, mi, disabled }) => {
         listItemData.inputType === INPUT_TYPES.text &&
             React.createElement(MIText, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
         listItemData.inputType === INPUT_TYPES.size &&
-            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }));
+            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.color &&
+            React.createElement(MIColor, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.file &&
+            React.createElement(MIFile, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }));
 };
 
 const MenuItemStyle = qe.div `
@@ -36358,6 +36563,10 @@ const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollaps
                 "marginLeft": ".2em",
                 "minWidth": "1em"
             }, iconType: "hidden" })),
+        isVariable && (React.createElement(Icon, { style: {
+                "marginLeft": ".2em",
+                "minWidth": "1em"
+            }, iconType: "variable" })),
         React.createElement("span", { className: "label", onClick: onClick }, label));
 };
 
@@ -36661,8 +36870,10 @@ const useUI = () => {
 
 const considerZooming = (value) => {
     //does not replaces %, b.c % are scalable on it own
-    const mask = /\d{1,}(mm|cm|in|pt|px)/g;
-    const newValue = value.replace(mask, (str) => {
+    const newValue = value.replace(sizeMask, (str) => {
+        if (str.includes("%")) {
+            return str;
+        }
         return `calc( var(--zoom) * ${str})`;
     });
     return newValue;
@@ -36670,10 +36881,10 @@ const considerZooming = (value) => {
 
 const BlockStyle = qe.div `
   transition: all var(--transition);
-  font-size: calc(var(--zoom) * 100%);
+  font-size: calc(var(--zoom) * 1rem);
   cursor: pointer;
   outline: 1px dashed transparent;
-  ooverflow: hidden;
+  notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
   &.selected{
