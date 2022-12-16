@@ -87,8 +87,11 @@ export enum CSS_DISPLAY_TYPE{
 }
 
 export const AFTER_ANIMATION = 300;
-
-export const A4 = "210mm 297.1mm";
+//A4
+// firefox 210mm 297.04mm
+// chrome 210mm 297.13mm
+export const A4Chrome = "210mm 297.13mm";
+export const A4Firefox = "210mm 297.04mm";
 export const A3 = "297mm 419.9mm";
 export const A5 = "148mm 209.9mm";
 
@@ -103,12 +106,13 @@ export enum SIZE_UNITS{
   cm = "cm",
   px = "px",
   pt = "pt",
-  rem = "rem"
+  rem = "rem",
+  em = "em"
 }
 //we filter % character insize considerZooming component
 export const sizeMask = new RegExp(
   "("
-   + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+   + Object.values(SIZE_UNITS).map(unit => `^(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}$`).join("|")
    + ")"
 );
 export enum DEFAULT_VALUES{

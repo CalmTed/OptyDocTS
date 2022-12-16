@@ -131,7 +131,7 @@ const MIBlockCSS: FC<MIBlockCSS> = ({store, listItemData, mi, disabled}) => {
     }
     {
       listItemData.inputType === INPUT_TYPES.file &&
-      <MIFile value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MIFile>
+      <MIFile value={getValue(mi, listItemData)} onChange={handleChange} store={store} disabled={disabled}></MIFile>
     }
   </>;
 };

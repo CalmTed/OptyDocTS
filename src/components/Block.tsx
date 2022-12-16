@@ -15,7 +15,6 @@ const BlockStyle = styled.div`
   transition: all var(--transition);
   font-size: calc(var(--zoom) * 1rem);
   cursor: pointer;
-  outline: 1px dashed transparent;
   notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;

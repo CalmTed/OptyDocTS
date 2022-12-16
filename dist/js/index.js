@@ -34635,7 +34635,11 @@ var CSS_DISPLAY_TYPE;
     CSS_DISPLAY_TYPE["inherit"] = "inherit";
 })(CSS_DISPLAY_TYPE || (CSS_DISPLAY_TYPE = {}));
 const AFTER_ANIMATION = 300;
-const A4 = "210mm 297.1mm";
+//A4
+// firefox 210mm 297.04mm
+// chrome 210mm 297.13mm
+const A4Chrome = "210mm 297.13mm";
+const A4Firefox = "210mm 297.04mm";
 const A3 = "297mm 419.9mm";
 const A5 = "148mm 209.9mm";
 var PAGE_ORIENTATION;
@@ -34651,10 +34655,11 @@ var SIZE_UNITS;
     SIZE_UNITS["px"] = "px";
     SIZE_UNITS["pt"] = "pt";
     SIZE_UNITS["rem"] = "rem";
+    SIZE_UNITS["em"] = "em";
 })(SIZE_UNITS || (SIZE_UNITS = {}));
 //we filter % character insize considerZooming component
 const sizeMask = new RegExp("("
-    + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+    + Object.values(SIZE_UNITS).map(unit => `^(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}$`).join("|")
     + ")");
 var DEFAULT_VALUES;
 (function (DEFAULT_VALUES) {
@@ -34676,6 +34681,7 @@ const wordsEB = {
     topBarChangeLanguage: "Change language",
     topBarCutBlock: "Cut block",
     topBarDuplicateBlock: "Duplicate block",
+    topBarPrint: "Print",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
@@ -34684,15 +34690,16 @@ const wordsEB = {
     uiConfirmNewTemplateText: "Are you sure you want to overwrite current template",
     uiPasteHeader: "Paste block text here",
     uiPasteText: "Sorry there is no better way to do it for now",
+    uiOk: "Ok",
+    uiCancel: "Cancel",
+    uiConfirm: "Confirm",
+    uiProseed: "Proseed",
     //toasts
     uiNewTemplateCreated: "New template created",
     uiNoBlockSelected: "No block selected",
     uiBlockCopiedToClipboard: "Block copied to clipboard",
     uiBlockDecodingProblem: "Block decoding problem",
-    uiOk: "Ok",
-    uiCancel: "Cancel",
-    uiConfirm: "Confirm",
-    uiProseed: "Proseed",
+    uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
     //mi
     miPageSize: "Page size",
     A4: "A4",
@@ -34715,22 +34722,25 @@ const wordsEB = {
     miHeight: "Height",
     miFlexAlignHorizontal: "Flex align horizontal",
     miFlexAlignVertical: "Flex align vertical",
-    miAlignTop: "Top",
-    miAlignBottom: "Bottom",
-    miAlignCenter: "Center",
-    miAlignRight: "Right",
-    miAlignLeft: "Left",
+    miTop: "Top",
+    miBottom: "Bottom",
+    miCenter: "Center",
+    miRight: "Right",
+    miLeft: "Left",
     miContentType: "Content type",
     miFixed: "Fixed",
     miVariable: "Variable",
     miSelect: "Select",
     miCopyFrom: "CopyFrom",
-    miBackground: "Background",
+    miBackgroundColor: "Background color",
     miBackgroundImage: "Background image",
     miBackgroundSize: "Background size",
+    miBackgroundRepeat: "Background repeat",
+    miBackgroundPosition: "Background position",
     miEditMiList: "Edit styles list",
-    miTextColor: "Text color",
     miFontFamily: "Font",
+    miFontSize: "Font size",
+    miFontColor: "Font color",
     miFlexWrap: "Flex wrap",
     miWrap: "Wrap",
     miNoWrap: "No wrap",
@@ -34752,6 +34762,7 @@ const wordsUA = {
     topBarChangeLanguage: "Zminyty movu",
     topBarCutBlock: "Virevaty blok",
     topBarDuplicateBlock: "Dublyuvaty blok",
+    topBarPrint: "Print",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34761,15 +34772,16 @@ const wordsUA = {
     uiConfirmNewTemplateText: "Впевнені що хочете перезаписати цей макет?",
     uiPasteHeader: "Vsavte tekst sudy",
     uiPasteText: "No znaishov krashogo vohodu",
+    uiOk: "Ок",
+    uiCancel: "Відминити",
+    uiConfirm: "Підтвердити",
+    uiProseed: "Продовжити",
     //toasts
     uiNewTemplateCreated: "Новий мекет створено",
     uiNoBlockSelected: "Niyakogo bloku ne vidileno",
     uiBlockCopiedToClipboard: "Blok skopiyovano",
     uiBlockDecodingProblem: "Pomilka shifruvaniya bloku",
-    uiOk: "Ок",
-    uiCancel: "Відминити",
-    uiConfirm: "Підтвердити",
-    uiProseed: "Продовжити",
+    uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
@@ -34792,22 +34804,25 @@ const wordsUA = {
     miHeight: "Vysota",
     miFlexAlignHorizontal: "Fleks align horizontal",
     miFlexAlignVertical: "Fleks align vertical",
-    miAlignTop: "Zverhu",
-    miAlignBottom: "Znizu",
-    miAlignCenter: "Po centru",
-    miAlignRight: "Zprava",
-    miAlignLeft: "Zliva",
+    miTop: "Zverhu",
+    miBottom: "Znizu",
+    miCenter: "Po centru",
+    miRight: "Zprava",
+    miLeft: "Zliva",
     miContentType: "Tip kontentu",
     miFixed: "Statychny",
     miVariable: "Zminna",
     miSelect: "Vibir",
     miCopyFrom: "Kopiyuvaty z",
-    miBackground: "Fon",
+    miBackgroundColor: "Kolir fonu",
     miBackgroundImage: "Zobrazhennya fonu",
     miBackgroundSize: "Rozmir fonu",
+    miBackgroundRepeat: "Povtorennya fonu",
+    miBackgroundPosition: "Polozhennya fonu",
     miEditMiList: "Zminyty spisok styliv",
-    miTextColor: "Kolir tekstu",
     miFontFamily: "Shrift",
+    miFontColor: "Kolir shrifta",
+    miFontSize: "Rozmir shrifta",
     miFlexWrap: "Fleks perenos blokov",
     miWrap: "Perenosit'",
     miNoWrap: "Ne perenosit'",
@@ -34842,10 +34857,13 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
     BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
     BLOCK_MI_NAMES["contentType"] = "contentType";
-    BLOCK_MI_NAMES["background"] = "background";
+    BLOCK_MI_NAMES["backgroundColor"] = "backgroundColor";
     BLOCK_MI_NAMES["backgroundImage"] = "backgroundImage";
     BLOCK_MI_NAMES["backgroundSizeOptions"] = "backgroundSizeOptions";
-    BLOCK_MI_NAMES["textColor"] = "textColor";
+    BLOCK_MI_NAMES["backgroundRepeat"] = "backgroundRepeat";
+    BLOCK_MI_NAMES["backgroundPosition"] = "backgroundPosition";
+    BLOCK_MI_NAMES["fontColor"] = "fontColor";
+    BLOCK_MI_NAMES["fontSize"] = "fontSize";
 })(BLOCK_MI_NAMES || (BLOCK_MI_NAMES = {}));
 const BlockMIs = [
     {
@@ -34963,15 +34981,15 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "miAlignLeft",
+                label: "miLeft",
                 value: "flex-start"
             },
             {
-                label: "miAlignCenter",
+                label: "miCenter",
                 value: "center"
             },
             {
-                label: "miAlignRight",
+                label: "miRight",
                 value: "flex-end"
             },
             {
@@ -34999,15 +35017,15 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "miAlignTop",
+                label: "miTop",
                 value: "flex-start"
             },
             {
-                label: "miAlignCenter",
+                label: "miCenter",
                 value: "center"
             },
             {
-                label: "miAlignBottom",
+                label: "miBottom",
                 value: "flex-end"
             },
             {
@@ -35049,22 +35067,33 @@ const BlockMIs = [
         ]
     },
     {
-        name: BLOCK_MI_NAMES.textColor,
-        label: "miTextColor",
+        name: BLOCK_MI_NAMES.fontColor,
+        label: "miFontColor",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "color",
-        CSSDefaultValue: "#0000",
+        CSSDefaultValue: "#000",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.color,
         inputOptions: []
     },
     {
-        name: BLOCK_MI_NAMES.background,
-        label: "miBackground",
+        name: BLOCK_MI_NAMES.fontSize,
+        label: "miFontSize",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "fontSize",
+        CSSDefaultValue: "initial",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.size,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.backgroundColor,
+        label: "miBackgroundColor",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "background",
-        CSSDefaultValue: "#0000",
+        CSSDefaultValue: "#000",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.color,
@@ -35086,16 +35115,82 @@ const BlockMIs = [
         label: "miBackgroundSize",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "backgroundSize",
-        CSSDefaultValue: "",
+        CSSDefaultValue: "inherit",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.options,
-        inputOptions: [{
+        inputOptions: [
+            {
                 label: "contain",
                 value: "contain"
-            }, {
+            },
+            {
                 label: "cover",
                 value: "cover"
+            },
+            {
+                label: "inherit",
+                value: "inherit"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.backgroundRepeat,
+        label: "miBackgroundRepeat",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "backgroundRepeat",
+        CSSDefaultValue: "no-repeat",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "no-repeat",
+                value: "no-repeat"
+            },
+            {
+                label: "repeat",
+                value: "repeat"
+            },
+            {
+                label: "inherit",
+                value: "inherit"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.backgroundPosition,
+        label: "miBackgroundPosition",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "backgroundPosition",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "inherit",
+                value: "inherit"
+            },
+            {
+                label: "miCenter",
+                value: "center"
+            },
+            {
+                label: "miTop",
+                value: "top"
+            },
+            {
+                label: "miBottom",
+                value: "bottom"
+            },
+            {
+                label: "miLeft",
+                value: "left"
+            },
+            {
+                label: "miRight",
+                value: "right"
             }
         ]
     }
@@ -35108,9 +35203,11 @@ var TEMPLATE_MI_NAMES;
     TEMPLATE_MI_NAMES["orientation"] = "orientation";
     TEMPLATE_MI_NAMES["dateEdited"] = "dateEdited";
     TEMPLATE_MI_NAMES["pageMargin"] = "pageMargin";
-    TEMPLATE_MI_NAMES["background"] = "background";
+    TEMPLATE_MI_NAMES["backgroundColor"] = "backgroundColor";
+    TEMPLATE_MI_NAMES["backgroundImage"] = "backgroundImage";
     TEMPLATE_MI_NAMES["textColor"] = "textColor";
     TEMPLATE_MI_NAMES["fontFamily"] = "fontFamily";
+    TEMPLATE_MI_NAMES["fontSize"] = "fontSize";
 })(TEMPLATE_MI_NAMES || (TEMPLATE_MI_NAMES = {}));
 const TemplateMIs = [
     {
@@ -35118,14 +35215,18 @@ const TemplateMIs = [
         label: "miPageSize",
         miType: MI_LISTITEM_TYPE.templateParam,
         paramName: "pageSizeMM",
-        defaultValue: A4,
+        defaultValue: A4Chrome,
         isReadonly: false,
         isAddable: false,
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "A4",
-                value: A4
+                label: "A4Chrome",
+                value: A4Chrome
+            },
+            {
+                label: "A4Firefox",
+                value: A4Firefox
             },
             {
                 label: "A3",
@@ -35191,23 +35292,33 @@ const TemplateMIs = [
         inputOptions: []
     },
     {
-        name: TEMPLATE_MI_NAMES.background,
-        label: "miBackground",
+        name: TEMPLATE_MI_NAMES.backgroundColor,
+        label: "miBackgroundColor",
         miType: MI_LISTITEM_TYPE.templateCSS,
         CSSParam: "background",
         CSSDefaultValue: "#fff",
         isAddable: true,
-        inputType: INPUT_TYPES.text,
+        inputType: INPUT_TYPES.color,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundImage,
+        label: "miBackgroundImage",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "background",
+        CSSDefaultValue: "#fff",
+        isAddable: true,
+        inputType: INPUT_TYPES.file,
         inputOptions: []
     },
     {
         name: TEMPLATE_MI_NAMES.textColor,
-        label: "miTextColor",
+        label: "miFontColor",
         miType: MI_LISTITEM_TYPE.templateCSS,
         CSSParam: "color",
         CSSDefaultValue: "#000",
         isAddable: true,
-        inputType: INPUT_TYPES.text,
+        inputType: INPUT_TYPES.color,
         inputOptions: []
     },
     {
@@ -35232,6 +35343,16 @@ const TemplateMIs = [
                 value: "monospace"
             }
         ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.fontSize,
+        label: "miFontSize",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "fontSize",
+        CSSDefaultValue: "inherit",
+        isAddable: true,
+        inputType: INPUT_TYPES.size,
+        inputOptions: []
     }
 ];
 
@@ -35261,7 +35382,7 @@ const getInitialTamplate = () => {
         dateCreated: new Date().getTime(),
         dateEdited: 0,
         name: "",
-        pageSizeMM: A4,
+        pageSizeMM: A4Chrome,
         pageOrientation: PAGE_ORIENTATION.vertical,
         pageMargin: "0mm 0mm 0mm 0mm",
         copyColumns: [],
@@ -35549,8 +35670,11 @@ const Topbar = ({ store }) => {
             }
         });
     };
+    const handlePrint = () => {
+        window.print();
+    };
     const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
-    return React.createElement(TopbarStyle, null,
+    return React.createElement(TopbarStyle, { className: "topbar" },
         React.createElement("div", { className: "templateTools" },
             React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock, disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
             React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false), disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
@@ -35561,6 +35685,7 @@ const Topbar = ({ store }) => {
                 React.createElement(TopbarButton, { title: store.t("topBarCutBlock"), iconType: "cut", onClick: handleCut }),
                 React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: handleDuplicate }))),
         React.createElement("div", { className: "appTools" },
+            React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
             React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => { }, disabled: true }),
             React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: () => { }, disabled: true }),
             React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
@@ -35723,8 +35848,11 @@ const InputStyle = qe.input `
     outline: 0;
   }
 `;
-const Input = ({ value, onChange, onKeyUp, classes, style, ...rest }) => {
-    return React.createElement(InputStyle, { onChange: (e) => { onChange(e); }, onKeyUp: onKeyUp, className: classes, style: style, value: value, ...rest });
+const Input = ({ value, onChange, onKeyUp, classes, style, disabled, ...rest }) => {
+    return React.createElement(InputStyle, { onChange: (e) => { onChange(e); }, onKeyUp: onKeyUp, className: classes, style: {
+            "opacity": disabled ? "0.6" : undefined,
+            ...style
+        }, value: value, disabled: disabled, ...rest });
 };
 
 const SelectValueStyle = qe.div `
@@ -35889,8 +36017,11 @@ const TextareaStyle = qe.textarea `
     outline: 0;
   }
 `;
-const Textarea = ({ value, onChange, onKeyUp, classes, style }) => {
-    return React.createElement(TextareaStyle, { onChange: (e) => { onChange(e); }, onKeyUp: onKeyUp, className: classes, style: style, value: value });
+const Textarea = ({ value, onChange, onKeyUp, classes, style, disabled }) => {
+    return React.createElement(TextareaStyle, { onChange: (e) => { onChange(e); }, onKeyUp: onKeyUp, className: classes, style: {
+            "opacity": disabled ? "0.6" : undefined,
+            ...style
+        }, value: value, disabled: disabled });
 };
 
 const MISelect = ({ value, t, options, onChange, classes, style, disabled }) => {
@@ -35902,13 +36033,13 @@ const MISelect = ({ value, t, options, onChange, classes, style, disabled }) => 
     });
     return React.createElement(Select, { value: value, options: translatedOptions, onChange: (option) => onChange(option.value), classes: classes, style: style, disabled: disabled });
 };
-const MIText = ({ value, onChange, classes, style }) => {
-    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style });
+const MIText = ({ value, onChange, classes, style, disabled }) => {
+    return React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style, disabled: disabled });
 };
-const MITextarea = ({ value, onChange, classes, style }) => {
-    return React.createElement(Textarea, { style: style, value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes });
+const MITextarea = ({ value, onChange, classes, style, disabled }) => {
+    return React.createElement(Textarea, { style: style, value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, disabled: disabled });
 };
-const MISize = ({ value, onChange, classes, style }) => {
+const MISize = ({ value, onChange, classes, style, disabled }) => {
     //propose units
     const randomId = Math.round(Math.random() * THOUSAND);
     const getDataList = (value) => {
@@ -35961,7 +36092,7 @@ const MISize = ({ value, onChange, classes, style }) => {
     };
     //TODO: convert mm to cyricic and back
     return React.createElement(React.Fragment, null,
-        React.createElement(Input, { value: toT(value), onChange: (e) => { onChange(fromT(e.target.value)); }, onKeyDown: handleKeyDown, classes: classes, style: style, list: `datalist-${randomId}` }),
+        React.createElement(Input, { value: toT(value), onChange: (e) => { onChange(fromT(e.target.value)); }, onKeyDown: handleKeyDown, classes: classes, style: style, disabled: disabled, list: `datalist-${randomId}` }),
         React.createElement("datalist", { id: `datalist-${randomId}` }, getDataList(value)));
 };
 const MIColorLabel = qe.label `
@@ -35975,9 +36106,12 @@ const MIColorLabel = qe.label `
 `;
 const MIColor = ({ value, onChange, classes, style, disabled }) => {
     return React.createElement(React.Fragment, null,
-        React.createElement(MIColorLabel, { style: { "backgroundColor": value } },
-            React.createElement("input", { type: "color", style: { "display": "none" }, onChange: (e) => onChange(e.target.value) })),
-        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style }));
+        React.createElement(MIColorLabel, { style: {
+                "backgroundColor": value,
+                "cursor": disabled ? "default" : undefined
+            }, onClick: (e) => { disabled ? e.preventDefault() : null; } },
+            React.createElement("input", { type: "color", value: value, style: { "display": "none" }, onChange: (e) => onChange(e.target.value) })),
+        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style, disabled: disabled }));
 };
 const MIFileLabel = qe.label `
   width: 2em;
@@ -35990,6 +36124,10 @@ const MIFileLabel = qe.label `
   display: flex;
   align-items: center;
   justify-content: center;
+  &.disabled{
+    opacity: 0.6;
+    cursor: default;
+  }
 }
 `;
 const MIFilePreview = qe.span `
@@ -36010,9 +36148,15 @@ background-repeat: no-repeat;
   opacity: 0.4;
 }
 `;
-const MIFile = ({ value, onChange, classes, style, disabled }) => {
+const MIFile = ({ value, onChange, classes, style, store, disabled }) => {
     const handleFileSelect = (e) => {
-        const file = e.target.files[0];
+        const target = e.target;
+        const file = target.files?.[0];
+        const maxSize = 3000000;
+        if (file.size > maxSize) {
+            store.showToast(store.t("uiImageHasToBeLessThenMB"), "alert");
+            return;
+        }
         const reader = new FileReader();
         reader.onloadend = () => {
             const result = reader.result;
@@ -36021,15 +36165,15 @@ const MIFile = ({ value, onChange, classes, style, disabled }) => {
         reader.readAsDataURL(file);
     };
     return React.createElement(React.Fragment, null,
-        value &&
+        value && !disabled &&
             React.createElement(MIFilePreview, { style: { "backgroundImage": value } }),
         value &&
-            React.createElement(MIFileLabel, { onClick: () => { onChange(""); } },
+            React.createElement(MIFileLabel, { className: disabled ? "disabled" : "", onClick: () => disabled ? null : onChange("") },
                 React.createElement(Icon, { iconType: "minus" })),
-        React.createElement(MIFileLabel, null,
+        React.createElement(MIFileLabel, { className: disabled ? "disabled" : "" },
             React.createElement(Icon, { iconType: "import" }),
-            React.createElement("input", { type: "file", style: { "display": "none" }, onChange: handleFileSelect })),
-        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style }));
+            React.createElement("input", { type: "file", style: { "display": "none" }, onClick: e => disabled ? e.preventDefault() : null, onChange: e => disabled ? null : handleFileSelect(e) })),
+        React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style, disabled: disabled }));
 };
 
 const MenuItemStyle$1 = qe.div `
@@ -36113,7 +36257,7 @@ const MIBlockCSS = ({ store, listItemData, mi, disabled }) => {
         listItemData.inputType === INPUT_TYPES.color &&
             React.createElement(MIColor, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
         listItemData.inputType === INPUT_TYPES.file &&
-            React.createElement(MIFile, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }));
+            React.createElement(MIFile, { value: getValue(mi, listItemData), onChange: handleChange, store: store, disabled: disabled }));
 };
 
 const MenuItemStyle = qe.div `
@@ -36307,10 +36451,11 @@ const PickerListStyle = qe.div `
 `;
 const PickerStyle = qe.div `
   padding: 0;
+  z-index: var(--z-mi-picker);
   :focus-within ${PickerListStyle}{
     visibility: visible;
     opacity: 1;
-    min-height: calc( var(--row-height) * 4.5);
+    min-height: calc( var(--row-height) * 9);
   }
 
 `;
@@ -36526,7 +36671,7 @@ const Sidebar = ({ store }) => {
     };
     const nonBlock = store.state.selectedBlock === null;
     const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
-    return React.createElement(SidebarStyle$1, null,
+    return React.createElement(SidebarStyle$1, { className: "sidebar" },
         React.createElement(Tabs, { store: store }),
         store.state.selectedTab === TAB_TYPE.Edit &&
             React.createElement(Split, { store: store },
@@ -36599,7 +36744,7 @@ const ToastStyle = qe.div `
   }
 `;
 const Toast = ({ toast }) => {
-    return React.createElement(ToastStyle, { className: toast.isShown ? "shown" : "hidden" },
+    return React.createElement(ToastStyle, { className: `toast ${toast.isShown ? "shown" : "hidden"}` },
         toast.icon && React.createElement(Icon, { iconType: toast.icon }),
         toast.text);
 };
@@ -36874,7 +37019,7 @@ const considerZooming = (value) => {
         if (str.includes("%")) {
             return str;
         }
-        return `calc( var(--zoom) * ${str})`;
+        return ` calc( var(--zoom) * ${str}) `;
     });
     return newValue;
 };
@@ -36883,7 +37028,6 @@ const BlockStyle = qe.div `
   transition: all var(--transition);
   font-size: calc(var(--zoom) * 1rem);
   cursor: pointer;
-  outline: 1px dashed transparent;
   notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
@@ -37218,10 +37362,11 @@ const PageStyle = qe.div `
   --border-radius: 8px;
   --box-shadow: 0 0 .8em 0 var(--shadow-color);
 
-  --z-select-list: 2000;
   --z-prompt-backdrop: 1000;
   --z-prompt-block: 1500;
   --z-toast: 1600;
+  --z-select-list: 2000;
+  --z-mi-picker: 2200;
 
   font-family: Roboto, Arial, Sans-serif;
   font-size: 13pt;
@@ -37246,6 +37391,47 @@ const PageStyle = qe.div `
     border: 2px solid var(--section-bg);
     cursor: pointer;
   }
+  
+  @media print{
+    & {
+      --app-bg: #d9d9d9;
+      --section-bg: #eeeeee;
+      --text-color: #222222;
+      --main-color: transparent;
+      --second-color: transparent;
+      --main-button-bg: transparent;
+      color: var(--text-color);
+      background: var(--app-bg);
+    }
+    // & *{
+    //   --zoom: 1;
+    //   outline: 0;
+    // }
+    body{
+      background: #fff;
+    }
+    
+    .sidebar, .topbar, .toast, .prompt{
+        display: none;
+    }
+    .stack{
+      --zoom:1;
+      width: var(--page-wrapper-width);
+      top:0;
+      left:0;
+      position: absolute;
+      display: flex;
+      flex-wrap: wrap;
+      height: auto;
+      --stack-padding: 0px;
+      gap: 0;
+      .page {
+        size: auto;
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+}
 `;
 const Page = ({ state, dispach }) => {
     const { toast, prompt, showToast, showAlert, showConfirm, showPrompt } = useUI();
@@ -37299,7 +37485,7 @@ const Page = ({ state, dispach }) => {
             document.removeEventListener("keydown", handleKeyUp);
         };
     });
-    return React.createElement(PageStyle, { className: state.theme },
+    return React.createElement(PageStyle, { className: `webpage ${state.theme}` },
         React.createElement(Topbar, { store: store }),
         React.createElement(Sidebar, { store: store }),
         React.createElement(Stack, { store: store }),

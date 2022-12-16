@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { BlockModel, StoreModel } from "src/models/types";
 import TopbarButton from "./TopbarButton";
-import { ACTION_NAMES, CONTENT_TYPE, THEME_TYPE } from "src/models/constants";
+import { ACTION_NAMES, CONTENT_TYPE, THEME_TYPE, ZERO } from "src/models/constants";
 import { LANG_CODES } from "src/store/translation";
 import { getInitialTamplate } from "src/models/intials";
 import { copyTextToClipboard, decodeBlock, encodeBlock } from "src/store/copyPaste";
@@ -140,8 +140,11 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       }
     });
   };
+  const handlePrint = () => {
+    window.print();
+  };
   const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
-  return <TopbarStyle>
+  return <TopbarStyle className="topbar">
     <div className="templateTools">
       <TopbarButton title={store.t("topBarAddBlock")} iconType="newBlock" onClick={handleNewBlock} disabled={!isSelectedBlockFixed && !!store.state.selectedBlock}></TopbarButton>
       <TopbarButton title={store.t("topBarPasteInside")} iconType="paste" onClick={() => handlePaste(false)} disabled={!isSelectedBlockFixed && !!store.state.selectedBlock}></TopbarButton>
@@ -154,6 +157,7 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       </>}
     </div>
     <div className="appTools">
+      <TopbarButton title={store.t("topBarPrint")} iconType="print" onClick={handlePrint} disabled={ store.state.templates[0].blocks.length === ZERO }></TopbarButton>
       <TopbarButton title={store.t("topBarImportTemplate")} iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>
       <TopbarButton title={store.t("topBarExportTemplate")} iconType="export" onClick={() => { null; }} disabled={true}></TopbarButton>
       <TopbarButton title={store.t("topBarNewTemplate")} iconType="newTemplate" onClick={handleNewTemplate} disabled={ store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false}></TopbarButton>

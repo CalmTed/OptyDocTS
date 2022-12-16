@@ -12,11 +12,13 @@ export enum BLOCK_MI_NAMES{
   flexAlignVertical = "flexAlignVertical",
   flexWrap = "flexWrap",
   contentType = "contentType",
-  background = "background",
+  backgroundColor = "backgroundColor",
   backgroundImage = "backgroundImage",
   backgroundSizeOptions = "backgroundSizeOptions",
-  textColor = "textColor"
-
+  backgroundRepeat = "backgroundRepeat",
+  backgroundPosition = "backgroundPosition",
+  fontColor = "fontColor",
+  fontSize = "fontSize"
 }
 
 export const BlockMIs:(MenuItemBlockListItemModel)[] = [
@@ -135,15 +137,15 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "miAlignLeft",
+        label: "miLeft",
         value: "flex-start"
       },
       {
-        label: "miAlignCenter",
+        label: "miCenter",
         value: "center"
       },
       {
-        label: "miAlignRight",
+        label: "miRight",
         value: "flex-end"
       },
       {
@@ -171,15 +173,15 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "miAlignTop",
+        label: "miTop",
         value: "flex-start"
       },
       {
-        label: "miAlignCenter",
+        label: "miCenter",
         value: "center"
       },
       {
-        label: "miAlignBottom",
+        label: "miBottom",
         value: "flex-end"
       },
       {
@@ -221,22 +223,33 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     ]
   },
   {
-    name: BLOCK_MI_NAMES.textColor,
-    label: "miTextColor",
+    name: BLOCK_MI_NAMES.fontColor,
+    label: "miFontColor",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "color",
-    CSSDefaultValue: "#0000",
+    CSSDefaultValue: "#000",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.color,
     inputOptions: []
   },
   {
-    name: BLOCK_MI_NAMES.background,
-    label: "miBackground",
+    name: BLOCK_MI_NAMES.fontSize,
+    label: "miFontSize",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "fontSize",
+    CSSDefaultValue: "initial",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.size,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.backgroundColor,
+    label: "miBackgroundColor",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "background",
-    CSSDefaultValue: "#0000",
+    CSSDefaultValue: "#000",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.color,
@@ -258,17 +271,83 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     label: "miBackgroundSize",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "backgroundSize",
-    CSSDefaultValue: "",
+    CSSDefaultValue: "inherit",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.options,
-    inputOptions: [{
-      label: "contain",
-      value: "contain"
-    }, {
-      label: "cover",
-      value: "cover"
-    }
+    inputOptions: [
+      {
+        label: "contain",
+        value: "contain"
+      },
+      {
+        label: "cover",
+        value: "cover"
+      },
+      {
+        label: "inherit",
+        value: "inherit"
+      }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.backgroundRepeat,
+    label: "miBackgroundRepeat",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "backgroundRepeat",
+    CSSDefaultValue: "no-repeat",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "no-repeat",
+        value: "no-repeat"
+      },
+      {
+        label: "repeat",
+        value: "repeat"
+      },
+      {
+        label: "inherit",
+        value: "inherit"
+      }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.backgroundPosition,
+    label: "miBackgroundPosition",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "backgroundPosition",
+    CSSDefaultValue: "inherit",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "inherit",
+        value: "inherit"
+      },
+      {
+        label: "miCenter",
+        value: "center"
+      },
+      {
+        label: "miTop",
+        value: "top"
+      },
+      {
+        label: "miBottom",
+        value: "bottom"
+      },
+      {
+        label: "miLeft",
+        value: "left"
+      },
+      {
+        label: "miRight",
+        value: "right"
+      }
     ]
   }
 ];

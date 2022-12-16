@@ -7,6 +7,7 @@ interface TextareaModel{
   onKeyUp?: (arg: React.KeyboardEvent) => void
   classes?: string
   style?: React.CSSProperties
+  disabled?: boolean
 }
 
 const TextareaStyle = styled.textarea`
@@ -27,13 +28,19 @@ const TextareaStyle = styled.textarea`
   }
 `;
 
-const Textarea: FC<TextareaModel> = ({value, onChange, onKeyUp, classes, style}) => {
+const Textarea: FC<TextareaModel> = ({value, onChange, onKeyUp, classes, style, disabled}) => {
   return <TextareaStyle
     onChange={(e) => { onChange(e); }}
     onKeyUp={onKeyUp}
     className={classes}
-    style={style}
+    style={
+      {
+        "opacity": disabled ? "0.6" : undefined,
+        ...style
+      }
+    }
     value={value}
+    disabled={disabled}
   />;
 };
 export default Textarea;

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { DEFAULT_VALUES, ONE, SIZE_UNITS, THOUSAND, ZERO } from "src/models/constants";
-import { SelectOption } from "src/models/types";
+import { SelectOption, StoreModel } from "src/models/types";
 import { WordType } from "src/store/translation";
 import styled from "styled-components";
 import Icon from "./Icon";
@@ -36,8 +36,8 @@ interface MIText{
   onChange: (newVal: string) => void
 }
 
-export const MIText: FC<MI & MIText> = ({value, onChange, classes, style}) => {
-  return <Input value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes} style={style} ></Input>;
+export const MIText: FC<MI & MIText> = ({value, onChange, classes, style, disabled}) => {
+  return <Input value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes} style={style} disabled={disabled}></Input>;
 };
 
 
@@ -46,8 +46,8 @@ interface MITextarea{
   onChange: (newVal: string) => void
 }
 
-export const MITextarea: FC<MI & MITextarea> = ({value, onChange, classes, style}) => {
-  return <Textarea style={style} value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes}></Textarea>;
+export const MITextarea: FC<MI & MITextarea> = ({value, onChange, classes, style, disabled}) => {
+  return <Textarea style={style} value={value} onChange={(e) => { onChange((e.target as HTMLInputElement).value); }} classes={classes} disabled={disabled}></Textarea>;
 };
 
 interface MISize{
@@ -55,7 +55,7 @@ interface MISize{
   onChange: (newVal: string) => void
 }
 
-export const MISize: FC<MI & MISize> = ({value, onChange, classes, style}) => {
+export const MISize: FC<MI & MISize> = ({value, onChange, classes, style, disabled}) => {
   //propose units
   const randomId = Math.round(Math.random() * THOUSAND);
   const getDataList = (value: string) => {
@@ -114,6 +114,7 @@ export const MISize: FC<MI & MISize> = ({value, onChange, classes, style}) => {
       onKeyDown={handleKeyDown}
       classes={classes}
       style={style}
+      disabled={disabled}
       list={`datalist-${randomId}`}
     ></Input>
     <datalist id={`datalist-${randomId}`}>{
@@ -137,14 +138,21 @@ const MIColorLabel = styled.label`
 `;
 export const MIColor: FC<MI & MIColorModel> = ({value, onChange, classes, style, disabled}) => {
   return <>
-    <MIColorLabel style={{"backgroundColor":value}}>
-      <input type="color" style={{"display": "none"}} onChange={(e) => onChange((e.target as HTMLInputElement).value)} />
+    <MIColorLabel 
+      style={{
+        "backgroundColor":value,
+        "cursor": disabled ? "default" : undefined
+      }}
+      onClick={(e) => { disabled ? e.preventDefault() : null; }}
+    >
+      <input type="color" value={value} style={{"display": "none"}} onChange={(e) => onChange((e.target as HTMLInputElement).value)} />
     </MIColorLabel>
     <Input
       value={value} 
       onChange={(e) => { onChange((e.target as HTMLInputElement).value); }}
       classes={classes}
       style={style}
+      disabled={disabled}
     ></Input>
   </>;
 };
@@ -152,6 +160,7 @@ export const MIColor: FC<MI & MIColorModel> = ({value, onChange, classes, style,
 interface MIFileModel{
   value: string
   onChange: (newVal: string) => void
+  store: StoreModel
 }
 const MIFileLabel = styled.label`
   width: 2em;
@@ -164,6 +173,10 @@ const MIFileLabel = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
+  &.disabled{
+    opacity: 0.6;
+    cursor: default;
+  }
 }
 `;
 const MIFilePreview = styled.span`
@@ -184,9 +197,15 @@ background-repeat: no-repeat;
   opacity: 0.4;
 }
 `;
-export const MIFile: FC<MI & MIFileModel> = ({value, onChange, classes, style, disabled}) => {
-  const handleFileSelect = (e: any) => {
-    const file = e.target.files[0];
+export const MIFile: FC<MI & MIFileModel> = ({value, onChange, classes, style, store, disabled}) => {
+  const handleFileSelect = (e: React.ChangeEvent) => {
+    const target = (e.target as HTMLInputElement);
+    const file = target.files?.[0] as Blob;
+    const maxSize = 3000000;
+    if(file.size > maxSize) {
+      store.showToast(store.t("uiImageHasToBeLessThenMB"), "alert");
+      return;
+    }
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result as string;
@@ -196,24 +215,32 @@ export const MIFile: FC<MI & MIFileModel> = ({value, onChange, classes, style, d
     null;
   };
   return <>
-    {value && 
+    {value && !disabled && 
       <MIFilePreview  style={{"backgroundImage":value}}>
       </MIFilePreview>
     }
     {value && 
-      <MIFileLabel onClick={() => { onChange(""); }}>
+      <MIFileLabel
+        className={disabled ? "disabled" : ""}
+        onClick={() => disabled ? null : onChange("") }>
         <Icon iconType="minus" />
       </MIFileLabel>
     }
-    <MIFileLabel>
+    <MIFileLabel className={disabled ? "disabled" : ""}>
       <Icon iconType="import"/>
-      <input type="file" style={{"display": "none"}} onChange={handleFileSelect} />
+      <input
+        type="file"
+        style={{"display": "none"}}
+        onClick={e => disabled ? e.preventDefault() : null }
+        onChange={e => disabled ? null : handleFileSelect(e) }
+      />
     </MIFileLabel>
     <Input
       value={value} 
       onChange={(e) => { onChange((e.target as HTMLInputElement).value); }}
       classes={classes}
       style={style}
+      disabled={disabled}
     ></Input>
   </>;
 };

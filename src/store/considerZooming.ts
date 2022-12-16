@@ -6,7 +6,7 @@ const considerZooming: (str: string) => string = (value) => {
     if(str.includes("%")) {
       return str;
     }
-    return `calc( var(--zoom) * ${str})`;
+    return ` calc( var(--zoom) * ${str}) `;
   });
   return newValue;
 };

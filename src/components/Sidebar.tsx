@@ -137,7 +137,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
 
   const nonBlock = store.state.selectedBlock === null;
   const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
-  return <SidebarStyle> 
+  return <SidebarStyle className="sidebar"> 
     <Tabs store={store}></Tabs>
     { store.state.selectedTab === TAB_TYPE.Edit &&
       <Split store={store}>

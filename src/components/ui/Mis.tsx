@@ -152,10 +152,11 @@ const PickerListStyle = styled.div`
 `;
 const PickerStyle = styled.div`
   padding: 0;
+  z-index: var(--z-mi-picker);
   :focus-within ${PickerListStyle}{
     visibility: visible;
     opacity: 1;
-    min-height: calc( var(--row-height) * 4.5);
+    min-height: calc( var(--row-height) * 9);
   }
 
 `;

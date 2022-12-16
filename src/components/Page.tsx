@@ -51,10 +51,11 @@ const PageStyle = styled.div`
   --border-radius: 8px;
   --box-shadow: 0 0 .8em 0 var(--shadow-color);
 
-  --z-select-list: 2000;
   --z-prompt-backdrop: 1000;
   --z-prompt-block: 1500;
   --z-toast: 1600;
+  --z-select-list: 2000;
+  --z-mi-picker: 2200;
 
   font-family: Roboto, Arial, Sans-serif;
   font-size: 13pt;
@@ -79,6 +80,47 @@ const PageStyle = styled.div`
     border: 2px solid var(--section-bg);
     cursor: pointer;
   }
+  
+  @media print{
+    & {
+      --app-bg: #d9d9d9;
+      --section-bg: #eeeeee;
+      --text-color: #222222;
+      --main-color: transparent;
+      --second-color: transparent;
+      --main-button-bg: transparent;
+      color: var(--text-color);
+      background: var(--app-bg);
+    }
+    // & *{
+    //   --zoom: 1;
+    //   outline: 0;
+    // }
+    body{
+      background: #fff;
+    }
+    
+    .sidebar, .topbar, .toast, .prompt{
+        display: none;
+    }
+    .stack{
+      --zoom:1;
+      width: var(--page-wrapper-width);
+      top:0;
+      left:0;
+      position: absolute;
+      display: flex;
+      flex-wrap: wrap;
+      height: auto;
+      --stack-padding: 0px;
+      gap: 0;
+      .page {
+        size: auto;
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+}
 `;
 
 
@@ -138,7 +180,7 @@ const Page: FC<PageModel> = ({state, dispach}) => {
     };
   });
 
-  return <PageStyle className={state.theme}>
+  return <PageStyle className={`webpage ${state.theme}`}>
     <Topbar store={store}></Topbar>
     <Sidebar store={store}></Sidebar>
     <Stack store={store}></Stack>

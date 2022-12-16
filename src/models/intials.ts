@@ -1,6 +1,6 @@
 import { LANG_CODES } from "src/store/translation";
 import { BlockMIs, BLOCK_MI_NAMES } from "./blockMIs";
-import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4, CONTENT_TYPE, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
+import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4Chrome, CONTENT_TYPE, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
 import { TemplateMIs, TEMPLATE_MI_NAMES } from "./templateMIs";
 import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
@@ -33,7 +33,7 @@ export const getInitialTamplate: ()=>TemplateModel = () => {
     dateCreated: new Date().getTime(),
     dateEdited: 0,
     name: "",
-    pageSizeMM: A4,
+    pageSizeMM: A4Chrome,
     pageOrientation: PAGE_ORIENTATION.vertical,
     pageMargin: "0mm 0mm 0mm 0mm",
     copyColumns: [],

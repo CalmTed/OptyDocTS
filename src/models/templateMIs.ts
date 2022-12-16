@@ -1,4 +1,4 @@
-import { A3, A4, A5, INPUT_TYPES, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
+import { A3, A4Chrome, A4Firefox, A5, INPUT_TYPES, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
 import { MenuItemTemplateListItemModel } from "./types";
 
 export enum TEMPLATE_MI_NAMES{
@@ -7,9 +7,11 @@ export enum TEMPLATE_MI_NAMES{
   orientation = "orientation",
   dateEdited = "dateEdited",
   pageMargin = "pageMargin",
-  background = "background",
+  backgroundColor = "backgroundColor",
+  backgroundImage = "backgroundImage",
   textColor = "textColor",
-  fontFamily = "fontFamily"
+  fontFamily = "fontFamily",
+  fontSize = "fontSize"
 }
 
 export type TemplateMINames = "mi0001" | "mi0002" | "mi0003" | "mi0004" | "mi0005"
@@ -20,14 +22,18 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     label: "miPageSize",
     miType: MI_LISTITEM_TYPE.templateParam,
     paramName: "pageSizeMM",
-    defaultValue: A4,
+    defaultValue: A4Chrome,
     isReadonly: false,
     isAddable: false,
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "A4",
-        value: A4
+        label: "A4Chrome",
+        value: A4Chrome
+      },
+      {
+        label: "A4Firefox",
+        value: A4Firefox
       },
       {
         label: "A3",
@@ -93,23 +99,33 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     inputOptions: []
   },
   {
-    name: TEMPLATE_MI_NAMES.background,
-    label: "miBackground",
+    name: TEMPLATE_MI_NAMES.backgroundColor,
+    label: "miBackgroundColor",
     miType: MI_LISTITEM_TYPE.templateCSS,
     CSSParam: "background",
     CSSDefaultValue: "#fff",
     isAddable: true,
-    inputType: INPUT_TYPES.text,
+    inputType: INPUT_TYPES.color,
+    inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundImage,
+    label: "miBackgroundImage",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "background",
+    CSSDefaultValue: "#fff",
+    isAddable: true,
+    inputType: INPUT_TYPES.file,
     inputOptions: []
   },
   {
     name: TEMPLATE_MI_NAMES.textColor,
-    label: "miTextColor",
+    label: "miFontColor",
     miType: MI_LISTITEM_TYPE.templateCSS,
     CSSParam: "color",
     CSSDefaultValue: "#000",
     isAddable: true,
-    inputType: INPUT_TYPES.text,
+    inputType: INPUT_TYPES.color,
     inputOptions: []
   },
   {
@@ -134,5 +150,15 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
         value:"monospace"
       } 
     ]
+  },
+  {
+    name: TEMPLATE_MI_NAMES.fontSize,
+    label: "miFontSize",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "fontSize",
+    CSSDefaultValue: "inherit",
+    isAddable: true,
+    inputType: INPUT_TYPES.size,
+    inputOptions: []
   }
 ];

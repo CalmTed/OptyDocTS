@@ -42,7 +42,7 @@ interface ToastInterface{
 }
 
 const Toast: FC<ToastInterface> = ({toast}) => {
-  return <ToastStyle className={toast.isShown ? "shown" : "hidden"}>
+  return <ToastStyle className={`toast ${toast.isShown ? "shown" : "hidden"}`}>
     {toast.icon && <Icon iconType={toast.icon}/>}
     {toast.text}
   </ToastStyle>;
