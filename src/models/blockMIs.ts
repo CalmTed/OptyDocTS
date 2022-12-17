@@ -1,5 +1,5 @@
 
-import { CONTENT_TYPE, CSS_DISPLAY_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE } from "./constants";
+import { CONTENT_TYPE, CSS_DISPLAY_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE, ZERO } from "./constants";
 import { MenuItemBlockListItemModel} from "./types";
 
 export enum BLOCK_MI_NAMES{
@@ -42,7 +42,22 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     isReadonly: false,
     isAddable: false,
     inputType: INPUT_TYPES.textarea,
-    inputOptions: []
+    inputOptions: [],
+    conditions:[{
+      type: "prop",
+      propName: "contentType",
+      blackList: [CONTENT_TYPE.copyFrom],
+      whiteList: []
+    },
+    {
+      type: "prop",
+      propName: "blocks",
+      propProp: "length",
+      blackList: [],
+      whiteList: [ZERO]
+    }
+    ]
+    
   },
   {
     name: BLOCK_MI_NAMES.display,

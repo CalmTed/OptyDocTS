@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import styled from "styled-components";
-import { BlockModel, StoreModel } from "src/models/types";
+import { BlockModel, StoreModel, TemplateModel } from "src/models/types";
 import TopbarButton from "./TopbarButton";
 import { ACTION_NAMES, CONTENT_TYPE, THEME_TYPE, ZERO } from "src/models/constants";
 import { LANG_CODES } from "src/store/translation";
 import { getInitialTamplate } from "src/models/intials";
 import { copyTextToClipboard, decodeBlock, encodeBlock } from "src/store/copyPaste";
+import { exportTemplate, importTemplate } from "src/store/importExport";
 
 interface TopbarModel {
   store: StoreModel
@@ -55,7 +56,7 @@ const Topbar: FC<TopbarModel> = ({store}) => {
   };
   const handleNewTemplate = () => {
     store.showConfirm(store.t("uiConfirmNewTemplateHeader"), store.t("uiConfirmNewTemplateText"), () => {
-      store.showToast(store.t("uiNewTemplateCreated"));
+      store.showToast(store.t("uiNewTemplateCreated"), "newTemplate");
       store.dispach({
         name: ACTION_NAMES.app_setTemplate,
         payload: getInitialTamplate()
@@ -142,6 +143,31 @@ const Topbar: FC<TopbarModel> = ({store}) => {
   };
   const handlePrint = () => {
     window.print();
+    store.showToast(store.t("uiPrinted"), "print");
+  };
+  const handleExport = () => {
+    store.showToast(store.t("uiTemplateExporting"), "export");
+    exportTemplate(store.state.templates[0], () => {
+      store.showToast(store.t("uiTemplateExportred"), "export");
+    });
+  };
+  const handleImport = (e: React.ChangeEvent) => {
+    const file = (e.target as HTMLInputElement).files?.[0] as Blob;
+    if(!file) {
+      return;
+    }
+    importTemplate(file, (result: TemplateModel | null) => {
+      if(!result) {
+        store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
+        return;
+      }
+      store.dispach({
+        name: ACTION_NAMES.app_setTemplate,
+        payload: result
+      });
+      store.showToast(store.t("uiTemplateImported"), "import");
+    });
+    store.showToast(store.t("uiTemplateImporting"), "import");
   };
   const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
   return <TopbarStyle className="topbar">
@@ -158,8 +184,11 @@ const Topbar: FC<TopbarModel> = ({store}) => {
     </div>
     <div className="appTools">
       <TopbarButton title={store.t("topBarPrint")} iconType="print" onClick={handlePrint} disabled={ store.state.templates[0].blocks.length === ZERO }></TopbarButton>
-      <TopbarButton title={store.t("topBarImportTemplate")} iconType="import" onClick={() => { null; }} disabled={true}></TopbarButton>
-      <TopbarButton title={store.t("topBarExportTemplate")} iconType="export" onClick={() => { null; }} disabled={true}></TopbarButton>
+      <label>
+        <TopbarButton title={store.t("topBarImportTemplate")} iconType="import" onClick={() => null}></TopbarButton>
+        <input style={{"display":"none"}} type="file" onChange={handleImport}></input>
+      </label>
+      <TopbarButton title={store.t("topBarExportTemplate")} iconType="export" onClick={handleExport} disabled={store.state.lastChange === ZERO}></TopbarButton>
       <TopbarButton title={store.t("topBarNewTemplate")} iconType="newTemplate" onClick={handleNewTemplate} disabled={ store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false}></TopbarButton>
       <TopbarButton
         title={store.t("topBarChangeTheme")}

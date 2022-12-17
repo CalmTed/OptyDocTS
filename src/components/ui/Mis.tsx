@@ -34,7 +34,22 @@ export const MIs: FC<MIsInterface> = ({store, targetType, addableType}) => {
             return listMI.conditions.map(condition => {
               switch(condition.type) {
               case "prop":
-                const blackListResult = condition.blackList.includes(String(targetBlock[condition.propName as keyof BlockModel]));
+                const propProp = condition.propProp;
+                const getValue = (target: BlockModel, propProp: string | undefined) => {
+                  const value = target[condition.propName as keyof BlockModel];
+                  if(!propProp) {
+                    return value;
+                  } else {
+                    console.log(propProp, value);
+                    if(propProp === "length" && Array.isArray(value)) {
+                      return value.length;
+                    }else{
+                      return value;
+                    }
+                  }
+                };
+                const value = getValue(targetBlock, propProp) as string;//propProp ? String(?.[propProp]) : String(targetBlock[condition.propName as keyof BlockModel]);
+                const blackListResult = condition.blackList.includes(value);
                 const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName as keyof BlockModel])) && condition.whiteList.length;
                 return blackListResult || whiteListResult;
               case "css":

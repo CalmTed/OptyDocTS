@@ -72,11 +72,9 @@ const appReducer: ReducerModel = (state, action) => {
       state.selectedBlock = null;
       stateUpdated = true;
     }
-    if(action.payload.uuid !== state.templates[0].uuid) {
-      state.templates[0] = action.payload;
-      state.selectedBlock = null;
-      stateUpdated = true;
-    }
+    state.templates[0] = action.payload;
+    state.selectedBlock = null;
+    stateUpdated = true;
     break;
   case ACTION_NAMES.app_selectBlock:
     if(action.payload !== state.selectedBlock) {

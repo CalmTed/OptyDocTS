@@ -18,6 +18,9 @@ const BlockStyle = styled.div`
   notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
+  display: inline !important;
+  width: auto;
+  height: auto;
   &.selected{
     outline-color: var(--main-color);
   }

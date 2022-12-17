@@ -13,6 +13,45 @@
       height: 100vh;
       background: #000;
     }
+    @media print{
+    body .webpage{
+      color: #000;
+      background: #fff;
+    }
+    body .block{
+      outline: 0;
+      --zoom: 1;
+    }
+    body .sidebar, body .topbar, body .toast, body .prompt{
+      display: none;
+    }
+    body .stack{
+      --zoom:1;
+      width: var(--page-wrapper-width);
+      top:0;
+      left:0;
+      position: absolute;
+      display: flex;
+      flex-wrap: wrap;
+      height: auto;
+      --stack-padding: 0px;
+      gap: 0;
+      background: #fff;
+    }
+    body .page{
+      --zoom: 1;
+      --app-bg: #d9d9d9;
+      --section-bg: #eeeeee;
+      --text-color: #222222;
+      --main-color: transparent;
+      --second-color: transparent;
+      --main-button-bg: transparent;
+      size: auto;
+      margin: 0;
+      box-shadow: none;
+      background: #fff;
+    }
+  }
   </style>
 </head>
 <body>

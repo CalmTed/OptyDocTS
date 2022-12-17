@@ -34631,7 +34631,7 @@ var CSS_DISPLAY_TYPE;
     CSS_DISPLAY_TYPE["none"] = "none";
     CSS_DISPLAY_TYPE["block"] = "block";
     CSS_DISPLAY_TYPE["flex"] = "flex";
-    CSS_DISPLAY_TYPE["inline"] = "inline";
+    CSS_DISPLAY_TYPE["inline"] = "inline-block";
     CSS_DISPLAY_TYPE["inherit"] = "inherit";
 })(CSS_DISPLAY_TYPE || (CSS_DISPLAY_TYPE = {}));
 const AFTER_ANIMATION = 300;
@@ -34694,6 +34694,12 @@ const wordsEB = {
     uiCancel: "Cancel",
     uiConfirm: "Confirm",
     uiProseed: "Proseed",
+    uiPrinted: "Printed",
+    uiTemplateExportred: "Template exported",
+    uiTemplateDecodingProblem: "Template decoding error",
+    uiTemplateImported: "Template imported",
+    uiTemplateImporting: "Template importing...",
+    uiTemplateExporting: "Template exporting...",
     //toasts
     uiNewTemplateCreated: "New template created",
     uiNoBlockSelected: "No block selected",
@@ -34703,6 +34709,8 @@ const wordsEB = {
     //mi
     miPageSize: "Page size",
     A4: "A4",
+    A4Chrome: "A4 for Chrome",
+    A4Firefox: "A4 for Firefox",
     A5: "A5",
     A3: "A3",
     miPageOrientation: "Page orientation",
@@ -34744,25 +34752,29 @@ const wordsEB = {
     miFlexWrap: "Flex wrap",
     miWrap: "Wrap",
     miNoWrap: "No wrap",
+    miContain: "Contain",
+    miCover: "Cover",
+    miNoRepeat: "No repeat",
+    miRepeat: "Repeat",
     undefined: ""
 };
 
 const wordsUA = {
-    name: "OptyDoc",
+    name: "ОптіДок",
     //topBar
-    topBarAddBlock: "Dodaty blok",
-    topBarRemoveBlock: "Vydalyty blok",
-    topBarCopyBlock: "Kopiyuvaty",
-    topBarPasteInside: "Vstavity vseredinu",
-    topBarPasteBefore: "Vstavity pered vydilenym",
-    topBarImportTemplate: "Importuvaty maket",
-    topBarExportTemplate: "Eksportuvaty maket",
-    topBarNewTemplate: "Novy maket",
-    topBarChangeTheme: "Zminyty temu",
-    topBarChangeLanguage: "Zminyty movu",
-    topBarCutBlock: "Virevaty blok",
-    topBarDuplicateBlock: "Dublyuvaty blok",
-    topBarPrint: "Print",
+    topBarAddBlock: "Додати блок",
+    topBarRemoveBlock: "Видалити блок",
+    topBarCopyBlock: "Копіювати",
+    topBarPasteInside: "Вставити",
+    topBarPasteBefore: "Вставити попереду",
+    topBarImportTemplate: "Імпортувати макет",
+    topBarExportTemplate: "Експортувати макет",
+    topBarNewTemplate: "Новий макет",
+    topBarChangeTheme: "Змінити тему",
+    topBarChangeLanguage: "Змінити мову",
+    topBarCutBlock: "Вирізати блок",
+    topBarDuplicateBlock: "Дублювати блок",
+    topBarPrint: "Друкувати",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34770,21 +34782,29 @@ const wordsUA = {
     //confirms, prompts
     uiConfirmNewTemplateHeader: "Підтрердіть дію",
     uiConfirmNewTemplateText: "Впевнені що хочете перезаписати цей макет?",
-    uiPasteHeader: "Vsavte tekst sudy",
-    uiPasteText: "No znaishov krashogo vohodu",
+    uiPasteHeader: "Вставте текст сюди",
+    uiPasteText: "Не знайшов надійнішого шляху",
     uiOk: "Ок",
     uiCancel: "Відминити",
     uiConfirm: "Підтвердити",
     uiProseed: "Продовжити",
+    uiPrinted: "Nadrukovano",
+    uiTemplateExportred: "Maket eksportovano",
+    uiTemplateDecodingProblem: "Pomylka shyfruvannya maketu",
+    uiTemplateImported: "Maket importovano",
+    uiTemplateImporting: "Importuvannya maketu...",
+    uiTemplateExporting: "Eksportuvannya maketu...",
     //toasts
-    uiNewTemplateCreated: "Новий мекет створено",
-    uiNoBlockSelected: "Niyakogo bloku ne vidileno",
-    uiBlockCopiedToClipboard: "Blok skopiyovano",
-    uiBlockDecodingProblem: "Pomilka shifruvaniya bloku",
-    uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
+    uiNewTemplateCreated: "Новий мaкет створено",
+    uiNoBlockSelected: "Жодного блоку не виділено",
+    uiBlockCopiedToClipboard: "Блок скопійовано",
+    uiBlockDecodingProblem: "Помилка шифрування",
+    uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
+    A4Chrome: "A4 для Chrome",
+    A4Firefox: "A4 для Firefox",
     A5: "A5",
     A3: "A3",
     miPageOrientation: "Орієнтація сторінки",
@@ -34793,39 +34813,43 @@ const wordsUA = {
     miPadding: "Відступи",
     miLastChangeTime: "Час останьої зміни",
     miName: "Назва",
-    miContent: "Kontent",
-    miDisplay: "Vidobrajannya",
-    miDisplayInline: "Strokoy",
-    miDisplayBlock: "Blokom",
-    miDisplayFlex: "Fleks",
-    miDisplayNone: "Pryhovano",
-    miInherit: "Nasliduye",
-    miWidth: "Shirota",
-    miHeight: "Vysota",
-    miFlexAlignHorizontal: "Fleks align horizontal",
-    miFlexAlignVertical: "Fleks align vertical",
-    miTop: "Zverhu",
-    miBottom: "Znizu",
-    miCenter: "Po centru",
-    miRight: "Zprava",
-    miLeft: "Zliva",
-    miContentType: "Tip kontentu",
-    miFixed: "Statychny",
-    miVariable: "Zminna",
-    miSelect: "Vibir",
-    miCopyFrom: "Kopiyuvaty z",
-    miBackgroundColor: "Kolir fonu",
-    miBackgroundImage: "Zobrazhennya fonu",
-    miBackgroundSize: "Rozmir fonu",
-    miBackgroundRepeat: "Povtorennya fonu",
-    miBackgroundPosition: "Polozhennya fonu",
-    miEditMiList: "Zminyty spisok styliv",
-    miFontFamily: "Shrift",
-    miFontColor: "Kolir shrifta",
-    miFontSize: "Rozmir shrifta",
-    miFlexWrap: "Fleks perenos blokov",
-    miWrap: "Perenosit'",
-    miNoWrap: "Ne perenosit'",
+    miContent: "Контент",
+    miDisplay: "Відображення",
+    miDisplayInline: "Стокою",
+    miDisplayBlock: "Блоком",
+    miDisplayFlex: "Флекс блоком",
+    miDisplayNone: "Приховати",
+    miInherit: "Наслідує",
+    miWidth: "Широта",
+    miHeight: "Висота",
+    miFlexAlignHorizontal: "Флекс горизонтальне рівняння",
+    miFlexAlignVertical: "Флекс вертикальне рівняння",
+    miTop: "Зверху",
+    miBottom: "Знизу",
+    miCenter: "Поцентру",
+    miRight: "Зправа",
+    miLeft: "Зліва",
+    miContentType: "Тип контенту",
+    miFixed: "Статичний",
+    miVariable: "Змінна",
+    miSelect: "Вибір",
+    miCopyFrom: "Копіювати з",
+    miBackgroundColor: "Колір фону",
+    miBackgroundImage: "Зображення фону",
+    miBackgroundSize: "Розмір фону",
+    miBackgroundRepeat: "Повторення фону",
+    miBackgroundPosition: "Положення фону",
+    miEditMiList: "Змінити список стилів",
+    miFontFamily: "Шрифт",
+    miFontColor: "Колір фришту",
+    miFontSize: "Розмір фрифту",
+    miFlexWrap: "Флекс перенос блоків",
+    miWrap: "Переносити",
+    miNoWrap: "Не переносити",
+    miContain: "По меншій стороні",
+    miCover: "По більшій стороні",
+    miNoRepeat: "Не повторювати",
+    miRepeat: "Повторювати",
     undefined: ""
 };
 
@@ -34886,7 +34910,21 @@ const BlockMIs = [
         isReadonly: false,
         isAddable: false,
         inputType: INPUT_TYPES.textarea,
-        inputOptions: []
+        inputOptions: [],
+        conditions: [{
+                type: "prop",
+                propName: "contentType",
+                blackList: [CONTENT_TYPE.copyFrom],
+                whiteList: []
+            },
+            {
+                type: "prop",
+                propName: "blocks",
+                propProp: "length",
+                blackList: [],
+                whiteList: [ZERO]
+            }
+        ]
     },
     {
         name: BLOCK_MI_NAMES.display,
@@ -35082,7 +35120,7 @@ const BlockMIs = [
         label: "miFontSize",
         miType: MI_LISTITEM_TYPE.blockCSS,
         CSSParam: "fontSize",
-        CSSDefaultValue: "initial",
+        CSSDefaultValue: "inherit",
         isCopylinkable: true,
         isAddable: true,
         inputType: INPUT_TYPES.size,
@@ -35121,15 +35159,15 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "contain",
+                label: "miContain",
                 value: "contain"
             },
             {
-                label: "cover",
+                label: "miCover",
                 value: "cover"
             },
             {
-                label: "inherit",
+                label: "miInherit",
                 value: "inherit"
             }
         ]
@@ -35145,15 +35183,15 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "no-repeat",
+                label: "miNoRepeat",
                 value: "no-repeat"
             },
             {
-                label: "repeat",
+                label: "miRepeat",
                 value: "repeat"
             },
             {
-                label: "inherit",
+                label: "miInherit",
                 value: "inherit"
             }
         ]
@@ -35169,7 +35207,7 @@ const BlockMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "inherit",
+                label: "miInherit",
                 value: "inherit"
             },
             {
@@ -35464,9 +35502,7 @@ const getInitialBlockMis = () => {
     const initialMINames = [
         BLOCK_MI_NAMES.name,
         BLOCK_MI_NAMES.content,
-        BLOCK_MI_NAMES.display,
-        BLOCK_MI_NAMES.height,
-        BLOCK_MI_NAMES.width
+        BLOCK_MI_NAMES.display
     ];
     return initialMINames.map(name => initialBlockMIFactory(name));
 };
@@ -35538,6 +35574,70 @@ const decodeBlock = (string) => {
     }
 };
 
+const encodeTemplate = (template) => {
+    const payload = {
+        version: Version,
+        uuid: template.uuid,
+        template
+    };
+    const encodedString = JSON.stringify(payload);
+    return `${btoa(encodedString).replace(/i/g, "_").replace(/ab/g, "i").replace(/_/g, "ab")}`;
+};
+const decodeTemplate = (string) => {
+    const ret = {
+        result: false,
+        template: null
+    };
+    try {
+        const decodedString = atob(string.replace(/ab/g, "_").replace(/i/g, "ab").replace(/_/g, "i"));
+        const posibleTemplate = JSON.parse(decodedString);
+        if (JSON.stringify(Object.keys(posibleTemplate)) !== "[\"version\",\"uuid\",\"template\"]") {
+            console.error("DECODING: payload keys are wrong", JSON.stringify(Object.keys(posibleTemplate)));
+            return ret;
+        }
+        if (posibleTemplate.version !== Version) {
+            console.error("DECODING: version is wrong");
+            return ret;
+        }
+        return {
+            result: true,
+            template: posibleTemplate.template
+        };
+    }
+    catch (e) {
+        console.error(e);
+        return ret;
+    }
+};
+const exportTemplate = (template, callBack) => {
+    //saving file as template [name][version].optydoc
+    const encodedTemplate = encodeTemplate(template);
+    const saveFile = (textToSave, fileName, callBack) => {
+        const link = document.createElement("a");
+        document.body.appendChild(link);
+        link.setAttribute("style", "display: none");
+        const url = "data:application/json;charset=utf-8,%EF%BB%BF" + encodeURI(textToSave);
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        window.URL.revokeObjectURL(url);
+        callBack();
+    };
+    saveFile(encodedTemplate, `${template.name} ${Version}.optydoc`, () => {
+        callBack();
+    });
+    return;
+};
+const importTemplate = (file, callBack) => {
+    const fr = new FileReader();
+    fr.onloadend = () => {
+        const fileText = fr.result;
+        const decodedTemplate = decodeTemplate(fileText);
+        callBack(decodedTemplate.template);
+    };
+    fr.readAsText(file);
+};
+
 const TopbarStyle = qe.div `
   background: var(--section-bg);
   position: fixed;
@@ -35581,7 +35681,7 @@ const Topbar = ({ store }) => {
     };
     const handleNewTemplate = () => {
         store.showConfirm(store.t("uiConfirmNewTemplateHeader"), store.t("uiConfirmNewTemplateText"), () => {
-            store.showToast(store.t("uiNewTemplateCreated"));
+            store.showToast(store.t("uiNewTemplateCreated"), "newTemplate");
             store.dispach({
                 name: ACTION_NAMES.app_setTemplate,
                 payload: getInitialTamplate()
@@ -35672,6 +35772,31 @@ const Topbar = ({ store }) => {
     };
     const handlePrint = () => {
         window.print();
+        store.showToast(store.t("uiPrinted"), "print");
+    };
+    const handleExport = () => {
+        store.showToast(store.t("uiTemplateExporting"), "export");
+        exportTemplate(store.state.templates[0], () => {
+            store.showToast(store.t("uiTemplateExportred"), "export");
+        });
+    };
+    const handleImport = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) {
+            return;
+        }
+        importTemplate(file, (result) => {
+            if (!result) {
+                store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
+                return;
+            }
+            store.dispach({
+                name: ACTION_NAMES.app_setTemplate,
+                payload: result
+            });
+            store.showToast(store.t("uiTemplateImported"), "import");
+        });
+        store.showToast(store.t("uiTemplateImporting"), "import");
     };
     const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
     return React.createElement(TopbarStyle, { className: "topbar" },
@@ -35686,8 +35811,10 @@ const Topbar = ({ store }) => {
                 React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: handleDuplicate }))),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
-            React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => { }, disabled: true }),
-            React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: () => { }, disabled: true }),
+            React.createElement("label", null,
+                React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => null }),
+                React.createElement("input", { style: { "display": "none" }, type: "file", onChange: handleImport })),
+            React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: handleExport, disabled: store.state.lastChange === ZERO }),
             React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
             React.createElement(TopbarButton, { title: store.t("topBarChangeTheme"), iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: handleTheme }),
             React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: "setting", onClick: handleLanguage })));
@@ -36342,7 +36469,24 @@ const MIs = ({ store, targetType, addableType }) => {
                     return listMI.conditions.map(condition => {
                         switch (condition.type) {
                             case "prop":
-                                const blackListResult = condition.blackList.includes(String(targetBlock[condition.propName]));
+                                const propProp = condition.propProp;
+                                const getValue = (target, propProp) => {
+                                    const value = target[condition.propName];
+                                    if (!propProp) {
+                                        return value;
+                                    }
+                                    else {
+                                        console.log(propProp, value);
+                                        if (propProp === "length" && Array.isArray(value)) {
+                                            return value.length;
+                                        }
+                                        else {
+                                            return value;
+                                        }
+                                    }
+                                };
+                                const value = getValue(targetBlock, propProp); //propProp ? String(?.[propProp]) : String(targetBlock[condition.propName as keyof BlockModel]);
+                                const blackListResult = condition.blackList.includes(value);
                                 const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName])) && condition.whiteList.length;
                                 return blackListResult || whiteListResult;
                             case "css":
@@ -37031,6 +37175,9 @@ const BlockStyle = qe.div `
   notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
+  display: inline !important;
+  width: auto;
+  height: auto;
   &.selected{
     outline-color: var(--main-color);
   }
@@ -37560,11 +37707,9 @@ const appReducer = (state, action) => {
                 state.selectedBlock = null;
                 stateUpdated = true;
             }
-            if (action.payload.uuid !== state.templates[0].uuid) {
-                state.templates[0] = action.payload;
-                state.selectedBlock = null;
-                stateUpdated = true;
-            }
+            state.templates[0] = action.payload;
+            state.selectedBlock = null;
+            stateUpdated = true;
             break;
         case ACTION_NAMES.app_selectBlock:
             if (action.payload !== state.selectedBlock) {

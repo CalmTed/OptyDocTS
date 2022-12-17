@@ -246,6 +246,7 @@ export type MenuItemBlockListItemModel = {
 export type MICondition = {
   type: "prop"
   propName: keyof TemplateModel | keyof BlockModel
+  propProp?: string
   whiteList: (string | number)[]
   blackList: (string | number)[] 
 } | {

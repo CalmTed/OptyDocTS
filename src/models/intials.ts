@@ -122,9 +122,7 @@ const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
   const initialMINames = [
     BLOCK_MI_NAMES.name,
     BLOCK_MI_NAMES.content,
-    BLOCK_MI_NAMES.display,
-    BLOCK_MI_NAMES.height,
-    BLOCK_MI_NAMES.width
+    BLOCK_MI_NAMES.display
   ];
   return initialMINames.map(name => initialBlockMIFactory(name));
 };

@@ -27,6 +27,12 @@ const wordsEB = {
   uiCancel: "Cancel",
   uiConfirm: "Confirm",
   uiProseed: "Proseed",
+  uiPrinted: "Printed",
+  uiTemplateExportred: "Template exported",
+  uiTemplateDecodingProblem: "Template decoding error",
+  uiTemplateImported: "Template imported",
+  uiTemplateImporting: "Template importing...",
+  uiTemplateExporting: "Template exporting...",
   //toasts
   uiNewTemplateCreated: "New template created",
   uiNoBlockSelected: "No block selected",

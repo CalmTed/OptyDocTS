@@ -82,7 +82,7 @@ export enum CSS_DISPLAY_TYPE{
   none = "none",
   block = "block",
   flex = "flex",
-  inline = "inline",
+  inline = "inline-block",
   inherit = "inherit"
 }
 
