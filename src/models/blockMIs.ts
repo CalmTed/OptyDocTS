@@ -238,7 +238,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     label: "miFontSize",
     miType: MI_LISTITEM_TYPE.blockCSS,
     CSSParam: "fontSize",
-    CSSDefaultValue: "initial",
+    CSSDefaultValue: "inherit",
     isCopylinkable: true,
     isAddable: true,
     inputType: INPUT_TYPES.size,
@@ -277,15 +277,15 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "contain",
+        label: "miContain",
         value: "contain"
       },
       {
-        label: "cover",
+        label: "miCover",
         value: "cover"
       },
       {
-        label: "inherit",
+        label: "miInherit",
         value: "inherit"
       }
     ]
@@ -301,15 +301,15 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "no-repeat",
+        label: "miNoRepeat",
         value: "no-repeat"
       },
       {
-        label: "repeat",
+        label: "miRepeat",
         value: "repeat"
       },
       {
-        label: "inherit",
+        label: "miInherit",
         value: "inherit"
       }
     ]
@@ -325,7 +325,7 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label: "inherit",
+        label: "miInherit",
         value: "inherit"
       },
       {

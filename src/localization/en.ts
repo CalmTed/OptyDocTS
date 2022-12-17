@@ -38,6 +38,8 @@ const wordsEB = {
   //mi
   miPageSize: "Page size",
   A4: "A4",
+  A4Chrome: "A4 for Chrome",
+  A4Firefox: "A4 for Firefox",
   A5: "A5",
   A3: "A3",
   miPageOrientation: "Page orientation",
@@ -79,6 +81,10 @@ const wordsEB = {
   miFlexWrap: "Flex wrap",
   miWrap: "Wrap",
   miNoWrap: "No wrap",
+  miContain: "Contain",
+  miCover: "Cover",
+  miNoRepeat: "No repeat",
+  miRepeat: "Repeat",
   undefined: ""
 };
 
