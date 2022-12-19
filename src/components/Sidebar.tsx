@@ -43,7 +43,10 @@ const TreeBrunchStyle = styled.div`
     font-weight: bold; 
   }
   &.variable{
-    color: var(--second-color);
+    color: var(--variable-color);
+  }
+  &.copies{
+    color: var(--copiedFrom-color);
   }
   &.hidden{
     opacity: 0.5;
@@ -96,11 +99,22 @@ const TreeBrunchStyle = styled.div`
 
 const Sidebar: FC<SidebarModel> = ({store}) => {
 
-  const handeBlockSelect = (uuid: string) => {
-    store.dispach({
-      name: ACTION_NAMES.app_selectBlock,
-      payload: uuid
-    });
+  const handeBrunchClick = (uuid: string) => {
+    if(store.state.focusedBlockSelectorID) {
+      store.dispach({
+        name: ACTION_NAMES.block_setParam,
+        payload: {
+          paramName: "referenceId",
+          value: uuid,
+          blockUUID: store.state.focusedBlockSelectorID
+        }
+      });
+    }else{
+      store.dispach({
+        name: ACTION_NAMES.app_selectBlock,
+        payload: uuid
+      });
+    }
   };
 
   const handeBlockBrunchCollapce = (block: BlockModel) => {
@@ -127,10 +141,10 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
           level={level}
           brunchChildren={brunchChildren}
           selected={store.state.selectedBlock === block.uuid}
-          onClick={ () => { handeBlockSelect(block.uuid); }}
+          onClick={ () => { handeBrunchClick(block.uuid); }}
           onCollapsedChange={() => { handeBlockBrunchCollapce(block); }}
         ></TreeBrunch>
-        {!block.treeViewCollapseState && !isHideen && renderChildren(block.uuid, level + (TWO / TWO))}  
+        {!block.treeViewCollapseState && !isHideen && block.contentType === CONTENT_TYPE.fixed && renderChildren(block.uuid, level + (TWO / TWO))}  
       </div>;
     });
   };
@@ -184,32 +198,32 @@ const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level
   const label = block.label.length ? block.label : block.uuid;
   const colapsedState = block.treeViewCollapseState;
   const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
-  const isVariable = block.contentType === CONTENT_TYPE.variable;
+  const isVariable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType);
+  const isCopylinked = block.contentType === CONTENT_TYPE.copyFrom;
+  const getIcon = () => {
+    if(!isHideen && !isVariable && !isCopylinked) {
+      return <></>;
+    }
+    const iconType = isHideen ? "hidden" : block.contentType === CONTENT_TYPE.variable ? "variable" : block.contentType === CONTENT_TYPE.select ? "select" : isCopylinked ? "link" : "plus";
+    return <Icon style={{
+      "marginLeft": ".2em",
+      "minWidth":"1em"
+    }} iconType={iconType}/>;
+  };
   const hasChildren = !!brunchChildren[block.uuid].length;
   return <TreeBrunchStyle
-    className={`${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""}`}
+    className={`tree-brunch ${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""} ${isCopylinked ? "copies" : ""}`}
     style={{"paddingLeft":`${ (TWO / TWO) * level }em`}}
     onMouseEnter={() => { handleMouseEnter(block.uuid); }}
     onMouseLeave={() => { handleMouseLeave(block.uuid); }}
   >
-    {!isHideen && (
+    {!isHideen && !isVariable && !isCopylinked && (
       <span
         className={`triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`}
         onClick={() => { hasChildren ? onCollapsedChange() : null; }}
       ></span>
     )}
-    {isHideen && (
-      <Icon style={{
-        "marginLeft": ".2em",
-        "minWidth":"1em"
-      }} iconType="hidden"/>
-    )}
-    {isVariable && (
-      <Icon style={{
-        "marginLeft": ".2em",
-        "minWidth":"1em"
-      }} iconType="variable"/>
-    )}
+    {getIcon()}
     <span className="label" onClick={onClick}>{label}</span>
   </TreeBrunchStyle>;
 };

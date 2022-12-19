@@ -23,7 +23,8 @@ export const getInitialAppState: ()=>AppStateModel = () => {
     zoomByTab: {
       [TAB_TYPE.Edit]: 1,
       [TAB_TYPE.Copy]: 1
-    }
+    },
+    focusedBlockSelectorID: null
   };
 };
 

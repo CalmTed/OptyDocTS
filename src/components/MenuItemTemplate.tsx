@@ -3,7 +3,7 @@ import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constant
 import { TemplateMIs } from "src/models/templateMIs";
 import { MenuItemTemplateListItemModel, MenuItemTemplateModel, StoreModel } from "src/models/types";
 import styled from "styled-components";
-import { MISelect, MIText, MITextarea } from "./ui/MiTypes";
+import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea } from "./ui/MiTypes";
 
 interface MenuItemTemplateComponentModel{
   store: StoreModel
@@ -97,16 +97,32 @@ const MITemplateCSS: FC<MITemplateCSS> = ({store, listItemData, mi, disabled}) =
       }
     });
   };
+  const getValue:(mi: MenuItemTemplateModel, listItemData: MenuItemTemplateListItemModel)=>string = (mi, listItemData) => {
+    if(listItemData.miType === MI_LISTITEM_TYPE.templateCSS) {
+      return String(mi.miListItemValue || listItemData.CSSDefaultValue);
+    }
+    return "";
+  };
   return <>
     {
-      listItemData.miType === MI_LISTITEM_TYPE.templateCSS && 
       listItemData.inputType === INPUT_TYPES.options && 
-      <MISelect value={String(mi.miListItemValue || listItemData.CSSDefaultValue)} t={store.t} options={listItemData.inputOptions} onChange={handleChange} disabled={disabled}></MISelect>
+      <MISelect value={getValue(mi, listItemData)} t={store.t} options={listItemData.inputOptions} onChange={handleChange} disabled={disabled}></MISelect>
     }
     {
-      listItemData.miType === MI_LISTITEM_TYPE.templateCSS && 
       listItemData.inputType === INPUT_TYPES.text && 
-      <MIText value={String(mi.miListItemValue || listItemData.CSSDefaultValue)} onChange={handleChange} disabled={disabled}></MIText>
+      <MIText value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MIText>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.color && 
+      <MIColor value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MIColor>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.file && 
+      <MIFile value={getValue(mi, listItemData)} store={store} onChange={handleChange} disabled={disabled}></MIFile>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.size && 
+      <MISize value={getValue(mi, listItemData)} onChange={handleChange} disabled={disabled}></MISize>
     }
   </>;
 };

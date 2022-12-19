@@ -40,9 +40,9 @@ export const MIs: FC<MIsInterface> = ({store, targetType, addableType}) => {
                   if(!propProp) {
                     return value;
                   } else {
-                    console.log(propProp, value);
-                    if(propProp === "length" && Array.isArray(value)) {
-                      return value.length;
+                    //I know that its bad practiec to to that, i know :)
+                    if(propProp === "hasChildren") {
+                      return store.state.templates[0].blocks.filter(b => b.parentId === value).length;
                     }else{
                       return value;
                     }
@@ -50,7 +50,7 @@ export const MIs: FC<MIsInterface> = ({store, targetType, addableType}) => {
                 };
                 const value = getValue(targetBlock, propProp) as string;//propProp ? String(?.[propProp]) : String(targetBlock[condition.propName as keyof BlockModel]);
                 const blackListResult = condition.blackList.includes(value);
-                const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName as keyof BlockModel])) && condition.whiteList.length;
+                const whiteListResult = !condition.whiteList.includes(value) && condition.whiteList.length !== ZERO;
                 return blackListResult || whiteListResult;
               case "css":
                 const CSSValue = targetBlock.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;

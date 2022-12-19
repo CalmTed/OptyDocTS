@@ -34574,6 +34574,7 @@ var ACTION_NAMES;
     ACTION_NAMES["app_setTemplate"] = "app_setTemplate";
     ACTION_NAMES["app_selectBlock"] = "app_selectBlock";
     ACTION_NAMES["app_setZoom"] = "app_setZoom";
+    ACTION_NAMES["app_setFocusedBlockSelector"] = "app_setFocusedBlockSelector";
     ACTION_NAMES["template_setParam"] = "template_setParam";
     ACTION_NAMES["template_setCSS"] = "template_setCSS";
     ACTION_NAMES["template_addBlock"] = "template_addBlock";
@@ -34620,6 +34621,7 @@ var INPUT_TYPES;
     INPUT_TYPES["margin"] = "margin";
     INPUT_TYPES["border"] = "border";
     INPUT_TYPES["file"] = "file";
+    INPUT_TYPES["blockSelect"] = "blockSelect";
 })(INPUT_TYPES || (INPUT_TYPES = {}));
 var FOCUS_ORDER;
 (function (FOCUS_ORDER) {
@@ -34706,6 +34708,7 @@ const wordsEB = {
     uiBlockCopiedToClipboard: "Block copied to clipboard",
     uiBlockDecodingProblem: "Block decoding problem",
     uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
+    uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
     //mi
     miPageSize: "Page size",
     A4: "A4",
@@ -34736,6 +34739,7 @@ const wordsEB = {
     miRight: "Right",
     miLeft: "Left",
     miContentType: "Content type",
+    miReferenceId: "Reference Id",
     miFixed: "Fixed",
     miVariable: "Variable",
     miSelect: "Select",
@@ -34800,6 +34804,7 @@ const wordsUA = {
     uiBlockCopiedToClipboard: "Блок скопійовано",
     uiBlockDecodingProblem: "Помилка шифрування",
     uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
+    uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
@@ -34830,6 +34835,7 @@ const wordsUA = {
     miRight: "Зправа",
     miLeft: "Зліва",
     miContentType: "Тип контенту",
+    miReferenceId: "ID referenta(?)",
     miFixed: "Статичний",
     miVariable: "Змінна",
     miSelect: "Вибір",
@@ -34881,6 +34887,7 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
     BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
     BLOCK_MI_NAMES["contentType"] = "contentType";
+    BLOCK_MI_NAMES["referenceId"] = "referenceId";
     BLOCK_MI_NAMES["backgroundColor"] = "backgroundColor";
     BLOCK_MI_NAMES["backgroundImage"] = "backgroundImage";
     BLOCK_MI_NAMES["backgroundSizeOptions"] = "backgroundSizeOptions";
@@ -34919,8 +34926,8 @@ const BlockMIs = [
             },
             {
                 type: "prop",
-                propName: "blocks",
-                propProp: "length",
+                propName: "uuid",
+                propProp: "hasChildren",
                 blackList: [],
                 whiteList: [ZERO]
             }
@@ -34985,6 +34992,23 @@ const BlockMIs = [
                 value: CONTENT_TYPE.copyFrom
             }
         ]
+    },
+    {
+        name: BLOCK_MI_NAMES.referenceId,
+        label: "miReferenceId",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "referenceId",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: true,
+        inputType: INPUT_TYPES.blockSelect,
+        inputOptions: [],
+        conditions: [{
+                type: "prop",
+                propName: "contentType",
+                blackList: [],
+                whiteList: [CONTENT_TYPE.copyFrom]
+            }]
     },
     {
         name: BLOCK_MI_NAMES.width,
@@ -35246,6 +35270,9 @@ var TEMPLATE_MI_NAMES;
     TEMPLATE_MI_NAMES["textColor"] = "textColor";
     TEMPLATE_MI_NAMES["fontFamily"] = "fontFamily";
     TEMPLATE_MI_NAMES["fontSize"] = "fontSize";
+    TEMPLATE_MI_NAMES["backgroundSizeOptions"] = "backgroundSizeOptions";
+    TEMPLATE_MI_NAMES["backgroundRepeat"] = "backgroundRepeat";
+    TEMPLATE_MI_NAMES["backgroundPosition"] = "backgroundPosition";
 })(TEMPLATE_MI_NAMES || (TEMPLATE_MI_NAMES = {}));
 const TemplateMIs = [
     {
@@ -35333,7 +35360,7 @@ const TemplateMIs = [
         name: TEMPLATE_MI_NAMES.backgroundColor,
         label: "miBackgroundColor",
         miType: MI_LISTITEM_TYPE.templateCSS,
-        CSSParam: "background",
+        CSSParam: "backgroundColor",
         CSSDefaultValue: "#fff",
         isAddable: true,
         inputType: INPUT_TYPES.color,
@@ -35343,8 +35370,8 @@ const TemplateMIs = [
         name: TEMPLATE_MI_NAMES.backgroundImage,
         label: "miBackgroundImage",
         miType: MI_LISTITEM_TYPE.templateCSS,
-        CSSParam: "background",
-        CSSDefaultValue: "#fff",
+        CSSParam: "backgroundImage",
+        CSSDefaultValue: "",
         isAddable: true,
         inputType: INPUT_TYPES.file,
         inputOptions: []
@@ -35369,15 +35396,15 @@ const TemplateMIs = [
         inputType: INPUT_TYPES.options,
         inputOptions: [
             {
-                label: "Serif",
+                label: "miSerif",
                 value: "serif"
             },
             {
-                label: "Sans-serif",
+                label: "miSansSerif",
                 value: "sans-serif"
             },
             {
-                label: "Monospace",
+                label: "miMonospace",
                 value: "monospace"
             }
         ]
@@ -35391,6 +35418,87 @@ const TemplateMIs = [
         isAddable: true,
         inputType: INPUT_TYPES.size,
         inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundSizeOptions,
+        label: "miBackgroundSize",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "backgroundSize",
+        CSSDefaultValue: "inherit",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miContain",
+                value: "contain"
+            },
+            {
+                label: "miCover",
+                value: "cover"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
+            }
+        ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundRepeat,
+        label: "miBackgroundRepeat",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "backgroundRepeat",
+        CSSDefaultValue: "no-repeat",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miNoRepeat",
+                value: "no-repeat"
+            },
+            {
+                label: "miRepeat",
+                value: "repeat"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
+            }
+        ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundPosition,
+        label: "miBackgroundPosition",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "backgroundPosition",
+        CSSDefaultValue: "inherit",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miInherit",
+                value: "inherit"
+            },
+            {
+                label: "miCenter",
+                value: "center"
+            },
+            {
+                label: "miTop",
+                value: "top"
+            },
+            {
+                label: "miBottom",
+                value: "bottom"
+            },
+            {
+                label: "miLeft",
+                value: "left"
+            },
+            {
+                label: "miRight",
+                value: "right"
+            }
+        ]
     }
 ];
 
@@ -35411,7 +35519,8 @@ const getInitialAppState = () => {
         zoomByTab: {
             [TAB_TYPE.Edit]: 1,
             [TAB_TYPE.Copy]: 1
-        }
+        },
+        focusedBlockSelectorID: null
     };
 };
 const getInitialTamplate = () => {
@@ -35772,7 +35881,7 @@ const Topbar = ({ store }) => {
     };
     const handlePrint = () => {
         window.print();
-        store.showToast(store.t("uiPrinted"), "print");
+        // store.showToast(store.t("uiPrinted"), "print");
     };
     const handleExport = () => {
         store.showToast(store.t("uiTemplateExporting"), "export");
@@ -36302,6 +36411,44 @@ const MIFile = ({ value, onChange, classes, style, store, disabled }) => {
             React.createElement("input", { type: "file", style: { "display": "none" }, onClick: e => disabled ? e.preventDefault() : null, onChange: e => disabled ? null : handleFileSelect(e) })),
         React.createElement(Input, { value: value, onChange: (e) => { onChange(e.target.value); }, classes: classes, style: style, disabled: disabled }));
 };
+const MIblockSelect = ({ value, onChange, classes, style, store, disabled }) => {
+    const randomId = Math.round(Math.random() * THOUSAND);
+    const getDataList = () => {
+        let ret = [];
+        store.state.templates[0].blocks.map(b => {
+            if (b.label) {
+                ret = [
+                    ...ret,
+                    React.createElement("option", { key: `${b.uuid}-label`, value: b.uuid }, b.label),
+                    React.createElement("option", { key: b.uuid, value: b.uuid }, b.uuid)
+                ];
+            }
+            else {
+                ret = [
+                    ...ret,
+                    React.createElement("option", { key: b.uuid, value: b.uuid }, b.uuid)
+                ];
+            }
+        });
+        return ret;
+    };
+    const setFocusedSelecorId = (value) => {
+        store.dispach({
+            name: ACTION_NAMES.app_setFocusedBlockSelector,
+            payload: value
+        });
+        store.showToast(store.t("uiClickOnBlockToSelectAsReference"), "link");
+    };
+    const UUIDtoLabel = (uuid) => {
+        return store.state.templates[0].blocks.find(b => b.uuid === uuid)?.label || uuid;
+    };
+    const LabeltoUUID = (label) => {
+        return store.state.templates[0].blocks.find(b => b.label === label)?.uuid || label;
+    };
+    return React.createElement(React.Fragment, null,
+        React.createElement(Input, { value: UUIDtoLabel(value), onChange: (e) => { onChange(LabeltoUUID(e.target.value)); }, onFocus: () => setFocusedSelecorId(store.state.selectedBlock), classes: classes, style: style, disabled: disabled, list: `datalist-${randomId}` }),
+        React.createElement("datalist", { id: `datalist-${randomId}` }, getDataList()));
+};
 
 const MenuItemStyle$1 = qe.div `
   display: flex;
@@ -36350,12 +36497,15 @@ const MIBlockParam = ({ store, listItemData, disabled }) => {
         }
         return "";
     };
-    return React.createElement(React.Fragment, null, (listItemData.inputType === INPUT_TYPES.options &&
-        React.createElement(MISelect, { value: getValue(selectedBlock, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled })) ||
-        (listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: getValue(selectedBlock, listItemData), onChange: handleChange, disabled: disabled })) ||
-        (listItemData.inputType === INPUT_TYPES.textarea &&
-            React.createElement(MITextarea, { value: getValue(selectedBlock, listItemData), onChange: handleChange, style: { "width": "100%" }, disabled: disabled })));
+    return React.createElement(React.Fragment, null,
+        listItemData.inputType === INPUT_TYPES.options &&
+            React.createElement(MISelect, { value: getValue(selectedBlock, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.text &&
+            React.createElement(MIText, { value: getValue(selectedBlock, listItemData), onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.textarea &&
+            React.createElement(MITextarea, { value: getValue(selectedBlock, listItemData), onChange: handleChange, style: { "width": "100%" }, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.blockSelect &&
+            React.createElement(MIblockSelect, { value: getValue(selectedBlock, listItemData), onChange: handleChange, store: store, style: { "width": "100%" }, disabled: disabled }));
 };
 const MIBlockCSS = ({ store, listItemData, mi, disabled }) => {
     const handleChange = (value) => {
@@ -36441,13 +36591,23 @@ const MITemplateCSS = ({ store, listItemData, mi, disabled }) => {
             }
         });
     };
+    const getValue = (mi, listItemData) => {
+        if (listItemData.miType === MI_LISTITEM_TYPE.templateCSS) {
+            return String(mi.miListItemValue || listItemData.CSSDefaultValue);
+        }
+        return "";
+    };
     return React.createElement(React.Fragment, null,
-        listItemData.miType === MI_LISTITEM_TYPE.templateCSS &&
-            listItemData.inputType === INPUT_TYPES.options &&
-            React.createElement(MISelect, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled }),
-        listItemData.miType === MI_LISTITEM_TYPE.templateCSS &&
-            listItemData.inputType === INPUT_TYPES.text &&
-            React.createElement(MIText, { value: String(mi.miListItemValue || listItemData.CSSDefaultValue), onChange: handleChange, disabled: disabled }));
+        listItemData.inputType === INPUT_TYPES.options &&
+            React.createElement(MISelect, { value: getValue(mi, listItemData), t: store.t, options: listItemData.inputOptions, onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.text &&
+            React.createElement(MIText, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.color &&
+            React.createElement(MIColor, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.file &&
+            React.createElement(MIFile, { value: getValue(mi, listItemData), store: store, onChange: handleChange, disabled: disabled }),
+        listItemData.inputType === INPUT_TYPES.size &&
+            React.createElement(MISize, { value: getValue(mi, listItemData), onChange: handleChange, disabled: disabled }));
 };
 
 const MIs = ({ store, targetType, addableType }) => {
@@ -36476,9 +36636,9 @@ const MIs = ({ store, targetType, addableType }) => {
                                         return value;
                                     }
                                     else {
-                                        console.log(propProp, value);
-                                        if (propProp === "length" && Array.isArray(value)) {
-                                            return value.length;
+                                        //I know that its bad practiec to to that, i know :)
+                                        if (propProp === "hasChildren") {
+                                            return store.state.templates[0].blocks.filter(b => b.parentId === value).length;
                                         }
                                         else {
                                             return value;
@@ -36487,7 +36647,7 @@ const MIs = ({ store, targetType, addableType }) => {
                                 };
                                 const value = getValue(targetBlock, propProp); //propProp ? String(?.[propProp]) : String(targetBlock[condition.propName as keyof BlockModel]);
                                 const blackListResult = condition.blackList.includes(value);
-                                const whiteListResult = !condition.whiteList.includes(String(targetBlock[condition.propName])) && condition.whiteList.length;
+                                const whiteListResult = !condition.whiteList.includes(value) && condition.whiteList.length !== ZERO;
                                 return blackListResult || whiteListResult;
                             case "css":
                                 const CSSValue = targetBlock.menuItems.find(bmi => bmi.miListItemName === condition.cssPropName)?.miListItemValue;
@@ -36735,7 +36895,10 @@ const TreeBrunchStyle = qe.div `
     font-weight: bold; 
   }
   &.variable{
-    color: var(--second-color);
+    color: var(--variable-color);
+  }
+  &.copies{
+    color: var(--copiedFrom-color);
   }
   &.hidden{
     opacity: 0.5;
@@ -36785,11 +36948,23 @@ const TreeBrunchStyle = qe.div `
   }
 `;
 const Sidebar = ({ store }) => {
-    const handeBlockSelect = (uuid) => {
-        store.dispach({
-            name: ACTION_NAMES.app_selectBlock,
-            payload: uuid
-        });
+    const handeBrunchClick = (uuid) => {
+        if (store.state.focusedBlockSelectorID) {
+            store.dispach({
+                name: ACTION_NAMES.block_setParam,
+                payload: {
+                    paramName: "referenceId",
+                    value: uuid,
+                    blockUUID: store.state.focusedBlockSelectorID
+                }
+            });
+        }
+        else {
+            store.dispach({
+                name: ACTION_NAMES.app_selectBlock,
+                payload: uuid
+            });
+        }
     };
     const handeBlockBrunchCollapce = (block) => {
         store.dispach({
@@ -36809,8 +36984,8 @@ const Sidebar = ({ store }) => {
         return store.state.templates?.[0].blocks.filter(b => b.parentId === parrentId).map(block => {
             const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
             return React.createElement("div", { key: block.uuid },
-                React.createElement(TreeBrunch, { block: block, level: level, brunchChildren: brunchChildren, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBlockSelect(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
-                !block.treeViewCollapseState && !isHideen && renderChildren(block.uuid, level + (TWO / TWO)));
+                React.createElement(TreeBrunch, { block: block, level: level, brunchChildren: brunchChildren, selected: store.state.selectedBlock === block.uuid, onClick: () => { handeBrunchClick(block.uuid); }, onCollapsedChange: () => { handeBlockBrunchCollapce(block); } }),
+                !block.treeViewCollapseState && !isHideen && block.contentType === CONTENT_TYPE.fixed && renderChildren(block.uuid, level + (TWO / TWO)));
         });
     };
     const nonBlock = store.state.selectedBlock === null;
@@ -36844,18 +37019,22 @@ const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollaps
     const label = block.label.length ? block.label : block.uuid;
     const colapsedState = block.treeViewCollapseState;
     const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
-    const isVariable = block.contentType === CONTENT_TYPE.variable;
+    const isVariable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType);
+    const isCopylinked = block.contentType === CONTENT_TYPE.copyFrom;
+    const getIcon = () => {
+        if (!isHideen && !isVariable && !isCopylinked) {
+            return React.createElement(React.Fragment, null);
+        }
+        const iconType = isHideen ? "hidden" : block.contentType === CONTENT_TYPE.variable ? "variable" : block.contentType === CONTENT_TYPE.select ? "select" : isCopylinked ? "link" : "plus";
+        return React.createElement(Icon, { style: {
+                "marginLeft": ".2em",
+                "minWidth": "1em"
+            }, iconType: iconType });
+    };
     const hasChildren = !!brunchChildren[block.uuid].length;
-    return React.createElement(TreeBrunchStyle, { className: `${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
-        !isHideen && (React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } })),
-        isHideen && (React.createElement(Icon, { style: {
-                "marginLeft": ".2em",
-                "minWidth": "1em"
-            }, iconType: "hidden" })),
-        isVariable && (React.createElement(Icon, { style: {
-                "marginLeft": ".2em",
-                "minWidth": "1em"
-            }, iconType: "variable" })),
+    return React.createElement(TreeBrunchStyle, { className: `tree-brunch ${selected ? "selected" : ""} ${isHideen ? "hidden" : ""} ${isVariable ? "variable" : ""} ${isCopylinked ? "copies" : ""}`, style: { "paddingLeft": `${(TWO / TWO) * level}em` }, onMouseEnter: () => { handleMouseEnter(block.uuid); }, onMouseLeave: () => { handleMouseLeave(block.uuid); } },
+        !isHideen && !isVariable && !isCopylinked && (React.createElement("span", { className: `triangle ${colapsedState ? "collapsed" : ""} ${!hasChildren ? "hidden" : ""}`, onClick: () => { hasChildren ? onCollapsedChange() : null; } })),
+        getIcon(),
         React.createElement("span", { className: "label", onClick: onClick }, label));
 };
 
@@ -37170,12 +37349,12 @@ const considerZooming = (value) => {
 
 const BlockStyle = qe.div `
   transition: all var(--transition);
-  font-size: calc(var(--zoom) * 1rem);
+  font-size: calc(var(--zoom) * 100%);
   cursor: pointer;
   notoverflow: hidden;
   line-break: anywhere;
   outline: 1px dashed transparent;
-  display: inline !important;
+  display: inline;
   width: auto;
   height: auto;
   &.selected{
@@ -37185,18 +37364,21 @@ const BlockStyle = qe.div `
     outline-color: var(--app-bg);
   }
   &.variable{
-    outline-color: var(--second-color);
+    outline-color: var(--variable-color);
+  }
+  &.copying{
+    outline-color: var(--copiedFrom-color);
   }
   p{
     margin: 0;
   }
 `;
-const handleSelectBlock = (store, uuid, e) => {
-    const getUUID = (s) => {
+const isTarget = (store, uuid, e) => {
+    const clearUUID = (s) => {
         return s.split(" ").find(classItem => /(uuid-b)\d{1,}/g.test(classItem))?.replace("uuid-", "");
     };
     const target = e.target;
-    const targetUUID = getUUID(target.className);
+    const targetUUID = clearUUID(target.className);
     if (targetUUID) {
         store.dispach({
             name: ACTION_NAMES.app_selectBlock,
@@ -37208,25 +37390,55 @@ const handleSelectBlock = (store, uuid, e) => {
     if (!parent) {
         return;
     }
-    const parentUUID = getUUID(parent.className);
+    const parentUUID = clearUUID(parent.className);
     if (!parentUUID || parentUUID !== uuid) {
         return;
     }
-    store.dispach({
-        name: ACTION_NAMES.app_selectBlock,
-        payload: uuid
-    });
+    return true;
+};
+const handleClick = (e, store, uuid) => {
+    if (!isTarget(store, uuid, e)) {
+        return;
+    }
+    if (store.state.focusedBlockSelectorID) {
+        store.dispach({
+            name: ACTION_NAMES.block_setParam,
+            payload: {
+                paramName: "referenceId",
+                value: uuid,
+                blockUUID: store.state.focusedBlockSelectorID
+            }
+        });
+    }
+    else {
+        store.dispach({
+            name: ACTION_NAMES.app_selectBlock,
+            payload: uuid
+        });
+    }
 };
 const getChildren = (children, store) => {
     return children.map(child => {
         return React.createElement(Block, { key: child.uuid, block: child, store: store });
     });
 };
-const getContent = (block) => {
+const getContent = (block, store) => {
     const formatText = (text) => {
         return text.split("\n").map((line, i) => {
             return React.createElement("p", { key: line.substring(ZERO, TWO * TWO * TWO) + i }, line.replace(/ /g, "\u00a0"));
         });
+    };
+    const getReference = (block) => {
+        const referenceBlock = store.state.templates[0].blocks.find(b => b.uuid === block.referenceId);
+        if (!referenceBlock) {
+            return "";
+        }
+        if (referenceBlock?.contentType === CONTENT_TYPE.select) {
+            return referenceBlock.contentValue.split("\n")[0];
+        }
+        else {
+            return referenceBlock.contentValue;
+        }
     };
     // const handleContentEditableChange:(e:React.FormEvent) => void = (e) => {
     //   e;
@@ -37235,15 +37447,15 @@ const getContent = (block) => {
     //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
     return React.createElement(React.Fragment, null,
         block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue),
-        block.contentType === CONTENT_TYPE.variable && formatText(block.contentValue));
-    // if(blockData.contentType === CONTENT_TYPE.copyFrom) {
-    //   return blockData.contentValue;
-    // }
+        block.contentType === CONTENT_TYPE.variable && formatText(block.contentValue),
+        block.contentType === CONTENT_TYPE.select && formatText(block.contentValue.split("\n")[0]),
+        block.contentType === CONTENT_TYPE.copyFrom && formatText(getReference(block)));
 };
 const Block = ({ store, block, classes }) => {
     const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
     const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
-    const variable = block.contentType === CONTENT_TYPE.variable ? "variable" : "";
+    const variable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType) ? "variable" : "";
+    const coping = block.contentType === CONTENT_TYPE.copyFrom ? "copying" : "";
     const getStyles = (mis) => {
         let ret = {};
         mis.map(mi => {
@@ -37258,8 +37470,7 @@ const Block = ({ store, block, classes }) => {
         });
         return ret;
     };
-    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes} ${variable}`, onClick: (e) => { handleSelectBlock(store, block.uuid, e); } }, (!!children.length && getChildren(children, store)) ||
-        (!children.length && getContent(block)));
+    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes} ${variable} ${coping}`, onClick: (e) => handleClick(e, store, block.uuid) }, !!children.length && block.contentType === CONTENT_TYPE.fixed ? getChildren(children, store) : getContent(block, store));
 };
 
 const SidebarStyle = qe.div `
@@ -37482,6 +37693,8 @@ const PageStyle = qe.div `
   --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #ECCF03 0%, #14ABF3 100%);
   --main-button-text: #222222;
   --shadow-color: #222;
+  --variable-color: #11B7AF;
+  --copiedFrom-color: #AD14F3;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -37625,11 +37838,29 @@ const Page = ({ state, dispach }) => {
                 setZoom(zoomDelta, e.key === "0");
             }
         };
+        const handleMouseDown = (e) => {
+            if (e.target.classList.contains("block")
+                || e.target.classList.contains("tree-brunch")
+                || e.target.parentElement.classList.contains("tree-brunch")
+                || e.target.parentElement.classList.contains("block")) {
+                return;
+            }
+            if (!store.state.focusedBlockSelectorID) {
+                return;
+            }
+            console.log("ref blur");
+            store.dispach({
+                name: ACTION_NAMES.app_setFocusedBlockSelector,
+                payload: null
+            });
+        };
         document.addEventListener("wheel", handleWheel, { passive: false });
         document.addEventListener("keydown", handleKeyUp, { passive: false });
+        document.addEventListener("mousedown", handleMouseDown, { passive: false });
         return () => {
             document.removeEventListener("wheel", handleWheel);
             document.removeEventListener("keydown", handleKeyUp);
+            document.removeEventListener("mousedown", handleMouseDown);
         };
     });
     return React.createElement(PageStyle, { className: `webpage ${state.theme}` },
@@ -37733,6 +37964,12 @@ const appReducer = (state, action) => {
         case ACTION_NAMES.app_setZoom:
             if (action.payload !== state.zoomByTab[state.selectedTab]) {
                 state.zoomByTab[state.selectedTab] = action.payload;
+                stateUpdated = true;
+            }
+            break;
+        case ACTION_NAMES.app_setFocusedBlockSelector:
+            if (action.payload !== state.focusedBlockSelectorID) {
+                state.focusedBlockSelectorID = action.payload;
                 stateUpdated = true;
             }
             break;

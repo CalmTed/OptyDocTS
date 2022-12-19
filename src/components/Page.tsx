@@ -24,6 +24,8 @@ const PageStyle = styled.div`
   --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #ECCF03 0%, #14ABF3 100%);
   --main-button-text: #222222;
   --shadow-color: #222;
+  --variable-color: #11B7AF;
+  --copiedFrom-color: #AD14F3;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -172,11 +174,31 @@ const Page: FC<PageModel> = ({state, dispach}) => {
         setZoom(zoomDelta, e.key === "0");
       }
     };
+    const handleMouseDown = (e: MouseEvent) => {
+      if(
+        (e.target as HTMLElement).classList.contains("block")
+        || (e.target as HTMLElement).classList.contains("tree-brunch")
+        || ((e.target as HTMLElement).parentElement as HTMLElement).classList.contains("tree-brunch")
+        || ((e.target as HTMLElement).parentElement as HTMLElement).classList.contains("block")
+      ) {
+        return;
+      }
+      if(!store.state.focusedBlockSelectorID) {
+        return;
+      }
+      console.log("ref blur");
+      store.dispach({
+        name: ACTION_NAMES.app_setFocusedBlockSelector,
+        payload: null
+      });
+    };
     document.addEventListener("wheel", handleWheel, {passive: false});
     document.addEventListener("keydown", handleKeyUp, {passive: false});
+    document.addEventListener("mousedown", handleMouseDown, {passive: false});
     return () => {
       document.removeEventListener("wheel", handleWheel);
       document.removeEventListener("keydown", handleKeyUp);
+      document.removeEventListener("mousedown", handleMouseDown);
     };
   });
 

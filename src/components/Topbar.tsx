@@ -143,7 +143,7 @@ const Topbar: FC<TopbarModel> = ({store}) => {
   };
   const handlePrint = () => {
     window.print();
-    store.showToast(store.t("uiPrinted"), "print");
+    // store.showToast(store.t("uiPrinted"), "print");
   };
   const handleExport = () => {
     store.showToast(store.t("uiTemplateExporting"), "export");

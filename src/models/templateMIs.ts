@@ -11,7 +11,10 @@ export enum TEMPLATE_MI_NAMES{
   backgroundImage = "backgroundImage",
   textColor = "textColor",
   fontFamily = "fontFamily",
-  fontSize = "fontSize"
+  fontSize = "fontSize",
+  backgroundSizeOptions = "backgroundSizeOptions",
+  backgroundRepeat = "backgroundRepeat",
+  backgroundPosition = "backgroundPosition"
 }
 
 export type TemplateMINames = "mi0001" | "mi0002" | "mi0003" | "mi0004" | "mi0005"
@@ -102,7 +105,7 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     name: TEMPLATE_MI_NAMES.backgroundColor,
     label: "miBackgroundColor",
     miType: MI_LISTITEM_TYPE.templateCSS,
-    CSSParam: "background",
+    CSSParam: "backgroundColor",
     CSSDefaultValue: "#fff",
     isAddable: true,
     inputType: INPUT_TYPES.color,
@@ -112,8 +115,8 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     name: TEMPLATE_MI_NAMES.backgroundImage,
     label: "miBackgroundImage",
     miType: MI_LISTITEM_TYPE.templateCSS,
-    CSSParam: "background",
-    CSSDefaultValue: "#fff",
+    CSSParam: "backgroundImage",
+    CSSDefaultValue: "",
     isAddable: true,
     inputType: INPUT_TYPES.file,
     inputOptions: []
@@ -138,15 +141,15 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     inputType: INPUT_TYPES.options,
     inputOptions: [
       {
-        label:"Serif",
+        label:"miSerif",
         value:"serif"
       },
       {
-        label:"Sans-serif",
+        label:"miSansSerif",
         value:"sans-serif"
       },
       {
-        label:"Monospace",
+        label:"miMonospace",
         value:"monospace"
       } 
     ]
@@ -160,5 +163,86 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     isAddable: true,
     inputType: INPUT_TYPES.size,
     inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundSizeOptions,
+    label: "miBackgroundSize",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "backgroundSize",
+    CSSDefaultValue: "inherit",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miContain",
+        value: "contain"
+      },
+      {
+        label: "miCover",
+        value: "cover"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
+      }
+    ]
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundRepeat,
+    label: "miBackgroundRepeat",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "backgroundRepeat",
+    CSSDefaultValue: "no-repeat",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miNoRepeat",
+        value: "no-repeat"
+      },
+      {
+        label: "miRepeat",
+        value: "repeat"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
+      }
+    ]
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundPosition,
+    label: "miBackgroundPosition",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "backgroundPosition",
+    CSSDefaultValue: "inherit",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miInherit",
+        value: "inherit"
+      },
+      {
+        label: "miCenter",
+        value: "center"
+      },
+      {
+        label: "miTop",
+        value: "top"
+      },
+      {
+        label: "miBottom",
+        value: "bottom"
+      },
+      {
+        label: "miLeft",
+        value: "left"
+      },
+      {
+        label: "miRight",
+        value: "right"
+      }
+    ]
   }
 ];

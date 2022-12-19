@@ -23,6 +23,7 @@ export enum ACTION_NAMES{
   app_setTemplate = "app_setTemplate",
   app_selectBlock = "app_selectBlock",
   app_setZoom = "app_setZoom",
+  app_setFocusedBlockSelector = "app_setFocusedBlockSelector",
 
   template_setParam = "template_setParam",
   template_setCSS = "template_setCSS",
@@ -68,9 +69,10 @@ export enum INPUT_TYPES{
   size = "size",
   options = "options",
   color = "color",
-  margin = "margin",
-  border = "border",
-  file = "file"
+  margin = "margin", //not yet created
+  border = "border", //not yet created
+  file = "file",
+  blockSelect = "blockSelect"
 }
 
 export enum FOCUS_ORDER{

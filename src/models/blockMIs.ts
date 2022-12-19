@@ -12,6 +12,7 @@ export enum BLOCK_MI_NAMES{
   flexAlignVertical = "flexAlignVertical",
   flexWrap = "flexWrap",
   contentType = "contentType",
+  referenceId = "referenceId",
   backgroundColor = "backgroundColor",
   backgroundImage = "backgroundImage",
   backgroundSizeOptions = "backgroundSizeOptions",
@@ -51,8 +52,8 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     },
     {
       type: "prop",
-      propName: "blocks",
-      propProp: "length",
+      propName: "uuid",
+      propProp: "hasChildren",
       blackList: [],
       whiteList: [ZERO]
     }
@@ -118,6 +119,23 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         value: CONTENT_TYPE.copyFrom
       }
     ]
+  },
+  {
+    name: BLOCK_MI_NAMES.referenceId,
+    label: "miReferenceId",
+    miType: MI_LISTITEM_TYPE.blockParam,
+    paramName: "referenceId",
+    defaultValue: "",
+    isReadonly: false,
+    isAddable: true,
+    inputType: INPUT_TYPES.blockSelect,
+    inputOptions: [],
+    conditions: [{
+      type: "prop",
+      propName: "contentType",
+      blackList: [],
+      whiteList: [CONTENT_TYPE.copyFrom]
+    }]
   },
   {
     name: BLOCK_MI_NAMES.width,

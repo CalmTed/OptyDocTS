@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { DEFAULT_VALUES, ONE, SIZE_UNITS, THOUSAND, ZERO } from "src/models/constants";
+import { ACTION_NAMES, DEFAULT_VALUES, ONE, SIZE_UNITS, THOUSAND, ZERO } from "src/models/constants";
 import { SelectOption, StoreModel } from "src/models/types";
 import { WordType } from "src/store/translation";
 import styled from "styled-components";
@@ -243,4 +243,60 @@ export const MIFile: FC<MI & MIFileModel> = ({value, onChange, classes, style, s
       disabled={disabled}
     ></Input>
   </>;
+};
+
+interface MIblockSelect{
+  value: string,
+  onChange: (newVal: string) => void
+  store: StoreModel
+}
+
+export const MIblockSelect: FC<MI & MIblockSelect> = ({value, onChange, classes, style, store, disabled}) => {
+  const randomId = Math.round(Math.random() * THOUSAND);
+  const getDataList = () => {
+    let ret: React.ReactNode[] = [];
+    store.state.templates[0].blocks.map(b => {
+      if(b.label) {
+        ret = [
+          ...ret,
+          <option key={`${b.uuid}-label`} value={b.uuid}>{b.label}</option>,
+          <option key={b.uuid} value={b.uuid}>{b.uuid}</option>
+        ];
+      } else {
+        ret = [
+          ...ret,
+          <option key={b.uuid} value={b.uuid}>{b.uuid}</option>
+        ];
+      }
+    });
+    return ret;
+  };
+  const setFocusedSelecorId = (value: string | null) => {
+    store.dispach({
+      name: ACTION_NAMES.app_setFocusedBlockSelector,
+      payload: value
+    });
+    store.showToast(store.t("uiClickOnBlockToSelectAsReference"), "link");
+  };
+  const UUIDtoLabel:(arg: string) => string = (uuid) => {
+    return store.state.templates[0].blocks.find(b => b.uuid === uuid)?.label || uuid;
+  };
+  const LabeltoUUID:(arg: string) => string = (label) => {
+    return store.state.templates[0].blocks.find(b => b.label === label)?.uuid || label;
+  };
+  return <>
+    <Input
+      value={UUIDtoLabel(value)} 
+      onChange={(e) => { onChange(LabeltoUUID((e.target as HTMLInputElement).value)); }}
+      onFocus={ () => setFocusedSelecorId(store.state.selectedBlock) }
+      classes={classes}
+      style={style}
+      disabled={disabled}
+      list={`datalist-${randomId}`}
+    ></Input>
+    <datalist id={`datalist-${randomId}`}>{
+      getDataList()
+    }</datalist>
+  </>;
+  return <></>;
 };

@@ -39,6 +39,7 @@ const wordsEB = {
   uiBlockCopiedToClipboard: "Block copied to clipboard", 
   uiBlockDecodingProblem: "Block decoding problem",
   uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
+  uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
 
 
   //mi
@@ -71,6 +72,7 @@ const wordsEB = {
   miRight: "Right",
   miLeft: "Left",
   miContentType: "Content type",
+  miReferenceId: "Reference Id",
   miFixed: "Fixed",
   miVariable: "Variable",
   miSelect: "Select",

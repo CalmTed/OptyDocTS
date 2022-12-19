@@ -101,6 +101,12 @@ const appReducer: ReducerModel = (state, action) => {
       stateUpdated = true;
     }
     break;
+  case ACTION_NAMES.app_setFocusedBlockSelector:
+    if(action.payload !== state.focusedBlockSelectorID) {
+      state.focusedBlockSelectorID = action.payload;
+      stateUpdated = true;
+    }
+    break;
   default:
     console.error("unknown app reducer action", action);
   }

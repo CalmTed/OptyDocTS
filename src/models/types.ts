@@ -60,7 +60,10 @@ export type ActionModel = {
 } | {
   name: ACTION_NAMES.app_setZoom
   payload: number
-} | { //////    TEMPLATE     ///////
+} | {
+  name: ACTION_NAMES.app_setFocusedBlockSelector
+  payload: string | null
+}| { //////    TEMPLATE     ///////
   name: ACTION_NAMES.template_setParam
   payload: {
     paramName: keyof TemplateModel
@@ -139,7 +142,7 @@ export interface AppStateModel {
     [TAB_TYPE.Edit] : number
     [TAB_TYPE.Copy] : number
   }
-  
+  focusedBlockSelectorID: string | null
 }
 
 export interface TemplateModel {
@@ -246,7 +249,7 @@ export type MenuItemBlockListItemModel = {
 export type MICondition = {
   type: "prop"
   propName: keyof TemplateModel | keyof BlockModel
-  propProp?: string
+  propProp?: "hasChildren"
   whiteList: (string | number)[]
   blackList: (string | number)[] 
 } | {

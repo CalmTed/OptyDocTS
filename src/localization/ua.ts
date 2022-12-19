@@ -43,6 +43,7 @@ const wordsUA: Record<WordType, string> = {
   uiBlockCopiedToClipboard: "Блок скопійовано", 
   uiBlockDecodingProblem: "Помилка шифрування",
   uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
+  uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
 
   //mi
   miPageSize: "Розмір аркуша",
@@ -74,6 +75,7 @@ const wordsUA: Record<WordType, string> = {
   miRight: "Зправа",
   miLeft: "Зліва",
   miContentType: "Тип контенту",
+  miReferenceId: "ID referenta(?)",
   miFixed: "Статичний",
   miVariable: "Змінна",
   miSelect: "Вибір",

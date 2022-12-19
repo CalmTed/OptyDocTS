@@ -3,7 +3,7 @@ import { BlockMIs } from "src/models/blockMIs";
 import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
 import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel, BlockModel } from "src/models/types";
 import styled from "styled-components";
-import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea } from "./ui/MiTypes";
+import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea, MIblockSelect } from "./ui/MiTypes";
 
 interface MenuItemBlockComponentModel{
   store: StoreModel
@@ -72,18 +72,20 @@ const MIBlockParam: FC<MIBlockParam> = ({store, listItemData, disabled}) => {
   };
   return <>
     {
-      (
-        listItemData.inputType === INPUT_TYPES.options && 
-        <MISelect value={getValue(selectedBlock, listItemData)} t={store.t} options={listItemData.inputOptions} onChange={handleChange} disabled={disabled}></MISelect>
-      ) ||
-      (
-        listItemData.inputType === INPUT_TYPES.text &&
-        <MIText value={getValue(selectedBlock, listItemData)} onChange={handleChange} disabled={disabled}></MIText>
-      ) ||
-      (
-        listItemData.inputType === INPUT_TYPES.textarea &&
-        <MITextarea value={getValue(selectedBlock, listItemData)} onChange={handleChange} style={{"width":"100%"}} disabled={disabled}></MITextarea>
-      )
+      listItemData.inputType === INPUT_TYPES.options && 
+      <MISelect value={getValue(selectedBlock, listItemData)} t={store.t} options={listItemData.inputOptions} onChange={handleChange} disabled={disabled}></MISelect>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.text &&
+      <MIText value={getValue(selectedBlock, listItemData)} onChange={handleChange} disabled={disabled}></MIText>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.textarea &&
+      <MITextarea value={getValue(selectedBlock, listItemData)} onChange={handleChange} style={{"width":"100%"}} disabled={disabled}></MITextarea>
+    }
+    {
+      listItemData.inputType === INPUT_TYPES.blockSelect &&
+      <MIblockSelect value={getValue(selectedBlock, listItemData)} onChange={handleChange} store={store} style={{"width":"100%"}} disabled={disabled}></MIblockSelect>
     }
   </>;
 };
