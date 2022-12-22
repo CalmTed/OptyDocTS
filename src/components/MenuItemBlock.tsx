@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { BlockMIs } from "src/models/blockMIs";
-import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
+import { ACTION_NAMES, CONTENT_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
 import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel, BlockModel } from "src/models/types";
 import styled from "styled-components";
 import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea, MIblockSelect } from "./ui/MiTypes";
@@ -50,14 +50,42 @@ interface MIBlockParam{
 const MIBlockParam: FC<MIBlockParam> = ({store, listItemData, disabled}) => {
   const handleChange: (arg: string | number) => void = (value) => {
     if(listItemData.miType === MI_LISTITEM_TYPE.blockParam && !listItemData.isReadonly) {
-      store.dispach({
-        name: ACTION_NAMES.block_setParam,
-        payload: {
-          paramName: listItemData.paramName,
-          value: value,
-          blockUUID: null
+      //spectial case for changing content type
+      if(listItemData.paramName === "contentType") {
+        if(!store.state.templates[0].copyRows.length) {
+          store.dispach({
+            name: ACTION_NAMES.block_setParam,
+            payload: {
+              paramName: listItemData.paramName,
+              value: value,
+              blockUUID: null
+            }
+          });
+          return;
         }
-      });
+        if(selectedBlock?.contentType && value !== selectedBlock.contentType) {
+          store.showConfirm("You are about to change copy structure", "Are you sure you want to change content type? It will delete all the copies", () => {
+            store.dispach({
+              name: ACTION_NAMES.block_setParam,
+              payload: {
+                paramName: listItemData.paramName,
+                value: value,
+                blockUUID: null
+              }
+            });
+          });
+        }
+        null;
+      }else{
+        store.dispach({
+          name: ACTION_NAMES.block_setParam,
+          payload: {
+            paramName: listItemData.paramName,
+            value: value,
+            blockUUID: null
+          }
+        });
+      }
     }
   };
   const selectedBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);

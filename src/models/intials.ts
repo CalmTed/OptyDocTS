@@ -2,9 +2,9 @@ import { LANG_CODES } from "src/store/translation";
 import { BlockMIs, BLOCK_MI_NAMES } from "./blockMIs";
 import { TAB_TYPE, THEME_TYPE, Version, RandLength, A4Chrome, CONTENT_TYPE, MI_LISTITEM_TYPE, PAGE_ORIENTATION } from "./constants";
 import { TemplateMIs, TEMPLATE_MI_NAMES } from "./templateMIs";
-import { AppStateModel, BlockModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
+import { AppStateModel, BlockModel, CopyCellModel, CopyColumnModel, CopyRowModel, MenuItemBlockModel, MenuItemTemplateModel, TemplateModel } from "./types";
 
-type IdType = "t" | "b" | "tmi" | "bmi";
+type IdType = "t" | "b" | "tmi" | "bmi" | "cclm" | "crw" | "ccel";
 export const getId: (atr: IdType)=>string = (prefix) => {
   return `${prefix}${Math.round(Math.random() * RandLength)}`;
 };
@@ -38,7 +38,6 @@ export const getInitialTamplate: ()=>TemplateModel = () => {
     pageOrientation: PAGE_ORIENTATION.vertical,
     pageMargin: "0mm 0mm 0mm 0mm",
     copyColumns: [],
-    copyRefferenceIds: [],
     copyRows: [],
     blocks: [],
     menuItems: getInitialTemplateMis()
@@ -126,4 +125,42 @@ const getInitialBlockMis: ()=>MenuItemBlockModel[] = () => {
     BLOCK_MI_NAMES.display
   ];
   return initialMINames.map(name => initialBlockMIFactory(name));
+};
+
+export const getCopyColumn: (block: BlockModel) => CopyColumnModel = (block) => {
+  const colType = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType) ?  block.contentType : CONTENT_TYPE.variable;
+  if(colType === CONTENT_TYPE.select) {
+    return {
+      uuid: getId("cclm"),
+      label: block.variableLabel,
+      targetBlockId: block.uuid,
+      contentType: CONTENT_TYPE.select,
+      options: [...new Set(block.contentValue.split("\n"))],
+      defauldValue: block.contentValue.split("\n")[0]
+    };
+  }else{
+    return {
+      uuid: getId("cclm"),
+      label: block.variableLabel,
+      targetBlockId: block.uuid,
+      contentType: CONTENT_TYPE.variable,
+      defauldValue: block.contentValue
+    };
+  }
+};
+
+export const getCopyRow: (columns: CopyColumnModel[])=>CopyRowModel = (columns) => {
+  return {
+    uuid: getId("crw"),
+    cells: columns.map(col => {
+      return getNewCell(col);
+    })
+  };
+};
+const getNewCell: (column: CopyColumnModel) => CopyCellModel = (column) => {
+  return {
+    uuid: getId("ccel"),
+    columnId: column.uuid,
+    value: column.defauldValue
+  } as CopyCellModel;
 };

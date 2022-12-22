@@ -34573,6 +34573,7 @@ var ACTION_NAMES;
     ACTION_NAMES["app_setsidebarSectionHeight"] = "app_setsidebarSectionHeight";
     ACTION_NAMES["app_setTemplate"] = "app_setTemplate";
     ACTION_NAMES["app_selectBlock"] = "app_selectBlock";
+    ACTION_NAMES["app_selectCopy"] = "app_selectCopy";
     ACTION_NAMES["app_setZoom"] = "app_setZoom";
     ACTION_NAMES["app_setFocusedBlockSelector"] = "app_setFocusedBlockSelector";
     ACTION_NAMES["template_setParam"] = "template_setParam";
@@ -34582,6 +34583,9 @@ var ACTION_NAMES;
     ACTION_NAMES["template_addBlockInside"] = "template_addBlockInside";
     ACTION_NAMES["template_addBlockBefore"] = "template_addBlockBefore";
     ACTION_NAMES["template_toggleMI"] = "template_toggleMI";
+    ACTION_NAMES["template_addCopy"] = "template_addCopy";
+    ACTION_NAMES["template_removeCopy"] = "template_removeCopy";
+    ACTION_NAMES["template_setCopyValue"] = "template_setCopyValue";
     ACTION_NAMES["block_setParam"] = "block_setParam";
     ACTION_NAMES["block_setCSS"] = "block_setCSS";
     ACTION_NAMES["block_setFTP"] = "block_setFTP";
@@ -34709,6 +34713,8 @@ const wordsEB = {
     uiBlockDecodingProblem: "Block decoding problem",
     uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
     uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
+    uiDisclamerPrintingHeader: "Information for firefox users",
+    uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
     //mi
     miPageSize: "Page size",
     A4: "A4",
@@ -34740,6 +34746,7 @@ const wordsEB = {
     miLeft: "Left",
     miContentType: "Content type",
     miReferenceId: "Reference Id",
+    miVariableLabel: "Variable label",
     miFixed: "Fixed",
     miVariable: "Variable",
     miSelect: "Select",
@@ -34805,6 +34812,8 @@ const wordsUA = {
     uiBlockDecodingProblem: "Помилка шифрування",
     uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
     uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
+    uiDisclamerPrintingHeader: "Information for firefox users",
+    uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
@@ -34835,6 +34844,7 @@ const wordsUA = {
     miRight: "Зправа",
     miLeft: "Зліва",
     miContentType: "Тип контенту",
+    miVariableLabel: "Variable label",
     miReferenceId: "ID referenta(?)",
     miFixed: "Статичний",
     miVariable: "Змінна",
@@ -34887,6 +34897,7 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
     BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
     BLOCK_MI_NAMES["contentType"] = "contentType";
+    BLOCK_MI_NAMES["variableLabel"] = "variableLabel";
     BLOCK_MI_NAMES["referenceId"] = "referenceId";
     BLOCK_MI_NAMES["backgroundColor"] = "backgroundColor";
     BLOCK_MI_NAMES["backgroundImage"] = "backgroundImage";
@@ -34992,6 +35003,23 @@ const BlockMIs = [
                 value: CONTENT_TYPE.copyFrom
             }
         ]
+    },
+    {
+        name: BLOCK_MI_NAMES.variableLabel,
+        label: "miVariableLabel",
+        miType: MI_LISTITEM_TYPE.blockParam,
+        paramName: "variableLabel",
+        defaultValue: "",
+        isReadonly: false,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: [],
+        conditions: [{
+                type: "prop",
+                propName: "contentType",
+                blackList: [],
+                whiteList: [CONTENT_TYPE.variable, CONTENT_TYPE.select]
+            }]
     },
     {
         name: BLOCK_MI_NAMES.referenceId,
@@ -35533,7 +35561,6 @@ const getInitialTamplate = () => {
         pageOrientation: PAGE_ORIENTATION.vertical,
         pageMargin: "0mm 0mm 0mm 0mm",
         copyColumns: [],
-        copyRefferenceIds: [],
         copyRows: [],
         blocks: [],
         menuItems: getInitialTemplateMis()
@@ -35614,6 +35641,43 @@ const getInitialBlockMis = () => {
         BLOCK_MI_NAMES.display
     ];
     return initialMINames.map(name => initialBlockMIFactory(name));
+};
+const getCopyColumn = (block) => {
+    const colType = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType) ? block.contentType : CONTENT_TYPE.variable;
+    if (colType === CONTENT_TYPE.select) {
+        return {
+            uuid: getId("cclm"),
+            label: block.variableLabel,
+            targetBlockId: block.uuid,
+            contentType: CONTENT_TYPE.select,
+            options: [...new Set(block.contentValue.split("\n"))],
+            defauldValue: block.contentValue.split("\n")[0]
+        };
+    }
+    else {
+        return {
+            uuid: getId("cclm"),
+            label: block.variableLabel,
+            targetBlockId: block.uuid,
+            contentType: CONTENT_TYPE.variable,
+            defauldValue: block.contentValue
+        };
+    }
+};
+const getCopyRow = (columns) => {
+    return {
+        uuid: getId("crw"),
+        cells: columns.map(col => {
+            return getNewCell(col);
+        })
+    };
+};
+const getNewCell = (column) => {
+    return {
+        uuid: getId("ccel"),
+        columnId: column.uuid,
+        value: column.defauldValue
+    };
 };
 
 const fallbackCopyTextToClipboard = (text) => {
@@ -35763,40 +35827,7 @@ const TopbarStyle = qe.div `
     overflow-x: auto;
   }
 `;
-const Topbar = ({ store }) => {
-    const handleNewBlock = () => {
-        store.dispach({
-            name: ACTION_NAMES.template_addBlock
-        });
-    };
-    const handleRemoveBlock = () => {
-        store.dispach({
-            name: ACTION_NAMES.template_removeBlock
-        });
-    };
-    const handleTheme = () => {
-        const nextTheme = store.state.theme === THEME_TYPE.light ? THEME_TYPE.dark : store.state.theme === THEME_TYPE.dark ? THEME_TYPE.auto : THEME_TYPE.light;
-        store.dispach({
-            name: ACTION_NAMES.app_setTheme,
-            payload: nextTheme
-        });
-    };
-    const handleLanguage = () => {
-        const nextLang = store.state.langCode === LANG_CODES[0] ? LANG_CODES[1] : LANG_CODES[0];
-        store.dispach({
-            name: ACTION_NAMES.app_setLangCode,
-            payload: nextLang
-        });
-    };
-    const handleNewTemplate = () => {
-        store.showConfirm(store.t("uiConfirmNewTemplateHeader"), store.t("uiConfirmNewTemplateText"), () => {
-            store.showToast(store.t("uiNewTemplateCreated"), "newTemplate");
-            store.dispach({
-                name: ACTION_NAMES.app_setTemplate,
-                payload: getInitialTamplate()
-            });
-        });
-    };
+const topBarMethods = (store) => {
     const handleCopy = () => {
         const selectedBlock = store.state.templates[0].blocks.find(block => block.uuid === store.state.selectedBlock);
         if (!selectedBlock) {
@@ -35816,117 +35847,177 @@ const Topbar = ({ store }) => {
             store.showToast(store.t("uiBlockCopiedToClipboard"), "info");
         }
     };
-    const handlePaste = (isPasteBefore) => {
-        store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
-            const { result, block, children } = decodeBlock(text);
-            const selectedBlock = store.state.selectedBlock || null;
-            if (!result || !block) {
-                store.showToast(store.t("uiBlockDecodingProblem"), "alert");
-            }
-            else {
-                if (!isPasteBefore) {
-                    store.dispach({
-                        name: ACTION_NAMES.template_addBlockInside,
-                        payload: {
-                            block: block,
-                            children: children || [],
-                            parentId: selectedBlock
-                        }
-                    });
+    return {
+        handleNewBlock: () => {
+            store.dispach({
+                name: ACTION_NAMES.template_addBlock
+            });
+        },
+        handleRemoveBlock: () => {
+            store.dispach({
+                name: ACTION_NAMES.template_removeBlock
+            });
+        },
+        handleTheme: () => {
+            const nextTheme = store.state.theme === THEME_TYPE.light ? THEME_TYPE.dark : store.state.theme === THEME_TYPE.dark ? THEME_TYPE.auto : THEME_TYPE.light;
+            store.dispach({
+                name: ACTION_NAMES.app_setTheme,
+                payload: nextTheme
+            });
+        },
+        handleLanguage: () => {
+            const nextLang = store.state.langCode === LANG_CODES[0] ? LANG_CODES[1] : LANG_CODES[0];
+            store.dispach({
+                name: ACTION_NAMES.app_setLangCode,
+                payload: nextLang
+            });
+        },
+        handleNewTemplate: () => {
+            store.showConfirm(store.t("uiConfirmNewTemplateHeader"), store.t("uiConfirmNewTemplateText"), () => {
+                store.showToast(store.t("uiNewTemplateCreated"), "newTemplate");
+                store.dispach({
+                    name: ACTION_NAMES.app_setTemplate,
+                    payload: getInitialTamplate()
+                });
+            });
+        },
+        handleCopy,
+        handlePaste: (isPasteBefore) => {
+            store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
+                const { result, block, children } = decodeBlock(text);
+                const selectedBlock = store.state.selectedBlock || null;
+                if (!result || !block) {
+                    store.showToast(store.t("uiBlockDecodingProblem"), "alert");
                 }
                 else {
-                    if (selectedBlock) {
+                    if (!isPasteBefore) {
                         store.dispach({
-                            name: ACTION_NAMES.template_addBlockBefore,
+                            name: ACTION_NAMES.template_addBlockInside,
                             payload: {
                                 block: block,
                                 children: children || [],
-                                successorId: selectedBlock
+                                parentId: selectedBlock
                             }
                         });
                     }
                     else {
-                        store.showToast(store.t("uiNoBlockSelected"));
+                        if (selectedBlock) {
+                            store.dispach({
+                                name: ACTION_NAMES.template_addBlockBefore,
+                                payload: {
+                                    block: block,
+                                    children: children || [],
+                                    successorId: selectedBlock
+                                }
+                            });
+                        }
+                        else {
+                            store.showToast(store.t("uiNoBlockSelected"));
+                        }
                     }
                 }
-            }
-        });
-    };
-    const handleCut = () => {
-        handleCopy();
-        store.dispach({
-            name: ACTION_NAMES.template_removeBlock
-        });
-    };
-    const handleDuplicate = () => {
-        const block = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
-        if (!block) {
-            return;
-        }
-        const getChildren = (parentId) => {
-            let ret = [];
-            store.state.templates[0].blocks.filter(block => block.parentId === parentId).map(block => {
-                ret = [...ret, block, ...getChildren(block.uuid)];
             });
-            return ret;
-        };
-        store.dispach({
-            name: ACTION_NAMES.template_addBlockInside,
-            payload: {
-                block: block,
-                children: getChildren(block.uuid) || [],
-                parentId: block?.parentId
+        },
+        handleCut: () => {
+            handleCopy();
+            store.dispach({
+                name: ACTION_NAMES.template_removeBlock
+            });
+        },
+        handleDuplicate: () => {
+            const block = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
+            if (!block) {
+                return;
             }
-        });
-    };
-    const handlePrint = () => {
-        window.print();
-        // store.showToast(store.t("uiPrinted"), "print");
-    };
-    const handleExport = () => {
-        store.showToast(store.t("uiTemplateExporting"), "export");
-        exportTemplate(store.state.templates[0], () => {
-            store.showToast(store.t("uiTemplateExportred"), "export");
-        });
-    };
-    const handleImport = (e) => {
-        const file = e.target.files?.[0];
-        if (!file) {
-            return;
-        }
-        importTemplate(file, (result) => {
-            if (!result) {
-                store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
+            const getChildren = (parentId) => {
+                let ret = [];
+                store.state.templates[0].blocks.filter(block => block.parentId === parentId).map(block => {
+                    ret = [...ret, block, ...getChildren(block.uuid)];
+                });
+                return ret;
+            };
+            store.dispach({
+                name: ACTION_NAMES.template_addBlockInside,
+                payload: {
+                    block: block,
+                    children: getChildren(block.uuid) || [],
+                    parentId: block?.parentId
+                }
+            });
+        },
+        handlePrint: () => {
+            window.print();
+        },
+        handleExport: () => {
+            store.showToast(store.t("uiTemplateExporting"), "export");
+            exportTemplate(store.state.templates[0], () => {
+                store.showToast(store.t("uiTemplateExportred"), "export");
+            });
+        },
+        handleImport: (e) => {
+            const file = e.target.files?.[0];
+            if (!file) {
+                return;
+            }
+            importTemplate(file, (result) => {
+                if (!result) {
+                    store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
+                    return;
+                }
+                store.dispach({
+                    name: ACTION_NAMES.app_setTemplate,
+                    payload: result
+                });
+                store.showToast(store.t("uiTemplateImported"), "import");
+            });
+            store.showToast(store.t("uiTemplateImporting"), "import");
+        },
+        handleAddCopy: () => {
+            store.dispach({
+                name: ACTION_NAMES.template_addCopy
+            });
+        },
+        handleRemoveCopy: () => {
+            if (!store.state.selectedCopy) {
                 return;
             }
             store.dispach({
-                name: ACTION_NAMES.app_setTemplate,
-                payload: result
+                name: ACTION_NAMES.template_removeCopy,
+                payload: {
+                    copyUUID: store.state.selectedCopy
+                }
             });
-            store.showToast(store.t("uiTemplateImported"), "import");
-        });
-        store.showToast(store.t("uiTemplateImporting"), "import");
+        }
     };
+};
+const Topbar = ({ store }) => {
+    const methods = topBarMethods(store);
     const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
     return React.createElement(TopbarStyle, { className: "topbar" },
         React.createElement("div", { className: "templateTools" },
-            React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: handleNewBlock, disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
-            React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => handlePaste(false), disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
-            store.state.selectedBlock && React.createElement(React.Fragment, null,
-                React.createElement(TopbarButton, { title: store.t("topBarPasteBefore"), iconType: "pasteBefore", onClick: () => handlePaste(true) }),
-                React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: handleRemoveBlock }),
-                React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: handleCopy }),
-                React.createElement(TopbarButton, { title: store.t("topBarCutBlock"), iconType: "cut", onClick: handleCut }),
-                React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: handleDuplicate }))),
+            store.state.selectedTab === TAB_TYPE.Edit &&
+                React.createElement(React.Fragment, null,
+                    React.createElement(TopbarButton, { title: store.t("topBarAddBlock"), iconType: "newBlock", onClick: methods.handleNewBlock, disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
+                    React.createElement(TopbarButton, { title: store.t("topBarPasteInside"), iconType: "paste", onClick: () => methods.handlePaste(false), disabled: !isSelectedBlockFixed && !!store.state.selectedBlock }),
+                    store.state.selectedBlock && React.createElement(React.Fragment, null,
+                        React.createElement(TopbarButton, { title: store.t("topBarPasteBefore"), iconType: "pasteBefore", onClick: () => methods.handlePaste(true) }),
+                        React.createElement(TopbarButton, { title: store.t("topBarRemoveBlock"), iconType: "removeBlock", onClick: methods.handleRemoveBlock }),
+                        React.createElement(TopbarButton, { title: store.t("topBarCopyBlock"), iconType: "copy", onClick: methods.handleCopy }),
+                        React.createElement(TopbarButton, { title: store.t("topBarCutBlock"), iconType: "cut", onClick: methods.handleCut }),
+                        React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: methods.handleDuplicate }))),
+            store.state.selectedTab === TAB_TYPE.Copy &&
+                React.createElement(React.Fragment, null,
+                    React.createElement(TopbarButton, { title: (console.log("TODO"), undefined), iconType: "plus", onClick: () => methods.handleAddCopy() }),
+                    React.createElement(TopbarButton, { title: (console.log("TODO"), undefined), iconType: "minus", onClick: () => methods.handleRemoveCopy(), disabled: !store.state.selectedCopy }))),
         React.createElement("div", { className: "appTools" },
-            React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
+            React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: methods.handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
             React.createElement("label", null,
                 React.createElement(TopbarButton, { title: store.t("topBarImportTemplate"), iconType: "import", onClick: () => null }),
-                React.createElement("input", { style: { "display": "none" }, type: "file", onChange: handleImport })),
-            React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: handleExport, disabled: store.state.lastChange === ZERO }),
-            React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
-            React.createElement(TopbarButton, { title: store.t("topBarChangeTheme"), iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: handleTheme }),
-            React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: "setting", onClick: handleLanguage })));
+                React.createElement("input", { style: { "display": "none" }, type: "file", onChange: methods.handleImport })),
+            React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: methods.handleExport, disabled: store.state.lastChange === ZERO }),
+            React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: methods.handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
+            React.createElement(TopbarButton, { title: store.t("topBarChangeTheme"), iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: methods.handleTheme }),
+            React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: "setting", onClick: methods.handleLanguage })));
 };
 
 const TabListStyle = qe.div `
@@ -36477,14 +36568,42 @@ const MenuItemBlock = ({ mi, store, disabled }) => {
 const MIBlockParam = ({ store, listItemData, disabled }) => {
     const handleChange = (value) => {
         if (listItemData.miType === MI_LISTITEM_TYPE.blockParam && !listItemData.isReadonly) {
-            store.dispach({
-                name: ACTION_NAMES.block_setParam,
-                payload: {
-                    paramName: listItemData.paramName,
-                    value: value,
-                    blockUUID: null
+            //spectial case for changing content type
+            if (listItemData.paramName === "contentType") {
+                if (!store.state.templates[0].copyRows.length) {
+                    store.dispach({
+                        name: ACTION_NAMES.block_setParam,
+                        payload: {
+                            paramName: listItemData.paramName,
+                            value: value,
+                            blockUUID: null
+                        }
+                    });
+                    return;
                 }
-            });
+                if (selectedBlock?.contentType && value !== selectedBlock.contentType) {
+                    store.showConfirm("You are about to change copy structure", "Are you sure you want to change content type? It will delete all the copies", () => {
+                        store.dispach({
+                            name: ACTION_NAMES.block_setParam,
+                            payload: {
+                                paramName: listItemData.paramName,
+                                value: value,
+                                blockUUID: null
+                            }
+                        });
+                    });
+                }
+            }
+            else {
+                store.dispach({
+                    name: ACTION_NAMES.block_setParam,
+                    payload: {
+                        paramName: listItemData.paramName,
+                        value: value,
+                        blockUUID: null
+                    }
+                });
+            }
         }
     };
     const selectedBlock = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
@@ -36734,76 +36853,77 @@ const MIs = ({ store, targetType, addableType }) => {
         }).map(({ mi, listMI, isDisabled }) => listMI && React.createElement(MenuItemTemplate, { key: mi.uuid, store: store, mi: mi, disabled: isDisabled })));
     }
 };
+
 const PickerListStyle = qe.div `
-  visibility: hidden;
-  opacity: 0;
-  height: 0;
-  max-height: calc( var(--row-height) * 4.5);
-  transition: all var(--transition);
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  --row-height: 2.5em;
-  overflow-y: auto;
-  position: fixed;
-  width: var(--sidebar-width);
-  top: var(--topbar-height);
-  & div{
-    width: 100%;
-    height: var(--row-height);
-  }
+visibility: hidden;
+opacity: 0;
+height: 0;
+max-height: calc( var(--row-height) * 4.5);
+transition: all var(--transition);
+display: flex;
+flex-wrap: wrap;
+align-content: flex-start;
+--row-height: 2.5em;
+overflow-y: auto;
+position: fixed;
+width: var(--sidebar-width);
+top: var(--topbar-height);
+& div{
+  width: 100%;
+  height: var(--row-height);
+}
 `;
 const PickerStyle = qe.div `
-  padding: 0;
-  z-index: var(--z-mi-picker);
-  :focus-within ${PickerListStyle}{
-    visibility: visible;
-    opacity: 1;
-    min-height: calc( var(--row-height) * 9);
-  }
+padding: 0;
+z-index: var(--z-mi-picker);
+:focus-within ${PickerListStyle}{
+  visibility: visible;
+  opacity: 1;
+  min-height: calc( var(--row-height) * 9);
+}
 
 `;
 const PickerListItemStyle = qe.div `
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 var(--sidebar-padding);
-  background: var(--section-bg);
-  border: 0.2em solid var(--app-bg);
-  border-bottom-width: 0;
-  border-top-width: 0;
-  &:first-child{
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    border-top-width: 0.2em;
-  }
-  &:last-child{
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    border-bottom-width: 0.2em;
-  }
-  &.active.addable{
-    color: var(--main-color);
-    & .icon{
-      --icon-color: var(--main-color);
-    }
-  }
-  &.addable:hover{
-    background: var(--main-color);
-    cursor: pointer;
-    color: var(--section-bg);
-    border-color: var(--main-color);
-    & .icon{
-      --icon-color: var(--section-bg);
-    }
-  }
+display: flex;
+align-items: center;
+justify-content: flex-start;
+padding: 0 var(--sidebar-padding);
+background: var(--section-bg);
+border: 0.2em solid var(--app-bg);
+border-bottom-width: 0;
+border-top-width: 0;
+&:first-child{
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  border-top-width: 0.2em;
+}
+&:last-child{
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border-bottom-width: 0.2em;
+}
+&.active.addable{
+  color: var(--main-color);
   & .icon{
-    width: 1.3em;
+    --icon-color: var(--main-color);
   }
+}
+&.addable:hover{
+  background: var(--main-color);
+  cursor: pointer;
+  color: var(--section-bg);
+  border-color: var(--main-color);
+  & .icon{
+    --icon-color: var(--section-bg);
+  }
+}
+& .icon{
+  width: 1.3em;
+}
 `;
 const PickerLabelStyle = qe.span `
-  display: flex;
-  cursor: pointer;
-  font-size: 110%;
-  padding: var(--sidebar-padding);
+display: flex;
+cursor: pointer;
+font-size: 110%;
+padding: var(--sidebar-padding);
 `;
 const MIPicker = ({ store, target }) => {
     const isBlockTarget = target === MI_TARGET.block;
@@ -36866,7 +36986,93 @@ const MIPicker = ({ store, target }) => {
             store.t(mi.data.label)))));
 };
 
-const SidebarStyle$1 = qe.div `
+const MICopyNavStyle = qe.div `
+  padding: 0.6em 1em;
+  diplay: flex;
+  flex-wrap: wrap;
+  .copyNavArrow{
+    width: 1em;
+    display: flex;
+    align-items: center;
+    justyfy-content: center;
+    font-size: 110%;
+  }
+`;
+const MICopyNav = ({ store }) => {
+    const handleSelectCopy = (arg) => {
+        store.dispach({
+            name: ACTION_NAMES.app_selectCopy,
+            payload: arg === "null" ? null : arg
+        });
+    };
+    const copiesOptions = () => {
+        return [
+            {
+                label: "None",
+                value: "null"
+            },
+            ...store.state.templates[0].copyRows.map((row, i) => {
+                return {
+                    label: `Copy ${i + ONE} `,
+                    value: row.uuid
+                };
+            })
+        ];
+    };
+    return React.createElement(MICopyNavStyle, null,
+        React.createElement(Select, { value: store.state.selectedCopy || "null", options: copiesOptions(), onChange: (newVal) => handleSelectCopy(String(newVal.value)) }));
+};
+
+const CopyVarStyle = qe.div `
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.6em 0;
+  label{
+    padding-bottom: 0.3em;
+  }
+`;
+const MICopyVarsStyle = qe.div `
+  padding: 0.6em 1em;
+  diplay: flex;
+  flex-wrap: wrap;
+  .input{
+    width: 100%;
+  }
+`;
+const MICopyVars = ({ store }) => {
+    const row = store.state.templates[0].copyRows.find(cell => cell.uuid === store.state.selectedCopy);
+    const handleValueChange = (newVal, cell) => {
+        if (!row || !cell) {
+            return;
+        }
+        store.dispach({
+            name: ACTION_NAMES.template_setCopyValue,
+            payload: {
+                cellUUID: cell.uuid,
+                value: newVal
+            }
+        });
+    };
+    return React.createElement(MICopyVarsStyle, null, row?.cells && row.cells.map(cell => {
+        const column = store.state.templates[0].copyColumns.find(col => col.uuid === cell.columnId);
+        if (!column) {
+            return;
+        }
+        return React.createElement(CopyVarStyle, { key: cell.uuid },
+            React.createElement("label", null, column.label),
+            column.contentType === CONTENT_TYPE.variable && React.createElement(Input, { value: cell.value, onChange: (e) => handleValueChange(e.target.value, cell) }),
+            column.contentType === CONTENT_TYPE.select &&
+                React.createElement(Select, { value: cell.value, options: column.options.map(c => {
+                        return {
+                            label: c,
+                            value: c
+                        };
+                    }), onChange: (newVal) => handleValueChange(String(newVal.value), cell) }));
+    }));
+};
+
+const SidebarStyle = qe.div `
   background: var(--section-bg);
   position: fixed;
   width: var(--sidebar-width);
@@ -36990,7 +37196,7 @@ const Sidebar = ({ store }) => {
     };
     const nonBlock = store.state.selectedBlock === null;
     const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
-    return React.createElement(SidebarStyle$1, { className: "sidebar" },
+    return React.createElement(SidebarStyle, { className: "sidebar" },
         React.createElement(Tabs, { store: store }),
         store.state.selectedTab === TAB_TYPE.Edit &&
             React.createElement(Split, { store: store },
@@ -36999,7 +37205,14 @@ const Sidebar = ({ store }) => {
                         React.createElement(MIPicker, { store: store, target: MItaget }),
                         React.createElement(MIs, { store: store, addableType: "fixed", targetType: MItaget }),
                         React.createElement(MIs, { store: store, addableType: "addable", targetType: MItaget }))),
-                React.createElement(SplitStyle, null, renderChildren(null, ZERO))));
+                React.createElement(SplitStyle, null, renderChildren(null, ZERO))),
+        store.state.selectedTab === TAB_TYPE.Copy &&
+            React.createElement(Split, { store: store },
+                React.createElement(SplitStyle, null,
+                    React.createElement(React.Fragment, null,
+                        React.createElement(MICopyNav, { store: store }),
+                        React.createElement(MICopyVars, { store: store }))),
+                React.createElement(SplitStyle, null)));
 };
 const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollapsedChange }) => {
     const handleMouseEnter = (uuid) => {
@@ -37107,8 +37320,8 @@ const ButtonStyle = qe.div `
     background: var(--app-bg);
   }
 `;
-const Button = ({ children, onClick, type = "normal", icon, style, disabled = false }) => {
-    return React.createElement(ButtonStyle, { onClick: (event) => { !disabled ? onClick(event) : null; }, className: `${type} ${disabled ? "disabled" : ""}`, style: style },
+const Button = ({ children, onClick, type = "normal", icon, style, classes, disabled = false }) => {
+    return React.createElement(ButtonStyle, { onClick: (event) => { !disabled ? onClick(event) : null; }, className: `${type} ${disabled ? "disabled" : ""} ${classes ? classes : ""}`, style: style },
         icon && React.createElement(Icon, { iconType: icon }),
         children);
 };
@@ -37271,7 +37484,7 @@ const useUI = () => {
             icon: prompt.icon
         });
     };
-    const showAlert = (header, text, onCancel, icon) => {
+    const showAlert = (header, text, onConfirm, onCancel, icon) => {
         setPrompt({
             header: header,
             text: text,
@@ -37282,7 +37495,10 @@ const useUI = () => {
                 hidePrompt();
                 onCancel ? onCancel() : null;
             },
-            onConfirm: prompt.onConfirm,
+            onConfirm: () => {
+                hidePrompt();
+                onConfirm ? onConfirm() : null;
+            },
             onProceed: prompt.onProceed,
             icon: icon
         });
@@ -37336,6 +37552,10 @@ const useUI = () => {
     };
 };
 
+const CopiesStack = ({ store }) => {
+    return React.createElement(React.Fragment, null);
+};
+
 const considerZooming = (value) => {
     //does not replaces %, b.c % are scalable on it own
     const newValue = value.replace(sizeMask, (str) => {
@@ -37358,6 +37578,7 @@ const BlockStyle = qe.div `
   width: auto;
   height: auto;
   &.selected{
+    outline-width: 2px;
     outline-color: var(--main-color);
   }
   &.hovered:not(.selected):not(& *:hover),:hover:not(.selected){
@@ -37473,7 +37694,93 @@ const Block = ({ store, block, classes }) => {
     return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes} ${variable} ${coping}`, onClick: (e) => handleClick(e, store, block.uuid) }, !!children.length && block.contentType === CONTENT_TYPE.fixed ? getChildren(children, store) : getContent(block, store));
 };
 
-const SidebarStyle = qe.div `
+const EditStack = ({ store }) => {
+    const pageStyles = (state) => {
+        let ret = {};
+        state.templates[0].menuItems.filter(mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(cssMI => {
+            const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
+            if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
+                return;
+            }
+            if (!listMI.CSSParam) {
+                return;
+            }
+            ret = {
+                ...ret,
+                [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
+            };
+        });
+        return ret;
+    };
+    const renderPage = (blocks, store) => {
+        const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
+        return React.createElement(PageStyle$1, { key: pageKey, className: "page", style: pageStyles(store.state) }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
+    };
+    const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
+    const rootBlocks = (blocks) => {
+        //v.3
+        //we expect page style to be
+        // display: flex, justify-content: start, align-content: start
+        const ret = [];
+        let pageIndex = ZERO;
+        let blockIndex = ZERO;
+        const blocksLength = blocks.length - ONE;
+        let rowTop = ZERO;
+        let borderB = ZERO;
+        let borderR = ZERO;
+        while (blockIndex <= blocksLength) {
+            const blockFtpW = blocks[blockIndex].FTPProportions.width;
+            const blockFtpH = blocks[blockIndex].FTPProportions.height;
+            //do we need to break page?
+            if (rowTop + blockFtpH > ONE) {
+                pageIndex++;
+                rowTop = ZERO;
+                borderB = ZERO;
+                borderR = ZERO;
+            }
+            else {
+                //do we need to break line?
+                if (borderR + blockFtpW > ONE) {
+                    rowTop = borderB;
+                    borderR = blockFtpW;
+                    borderB = borderB + blockFtpH;
+                    //do we need to break page now?
+                    if (borderB > ONE) {
+                        pageIndex++;
+                        rowTop = ZERO;
+                        borderB = ZERO;
+                        borderR = ZERO;
+                        //do we need to update borderB?
+                        if (rowTop + blockFtpH > borderB) {
+                            borderB = rowTop + blockFtpH;
+                        }
+                        //at least updating borderR
+                        borderR += blockFtpW;
+                    }
+                }
+                else {
+                    //do we need to update borderB?
+                    if (rowTop + blockFtpH > borderB) {
+                        borderB = rowTop + blockFtpH;
+                    }
+                    //at least updating borderR
+                    borderR += blockFtpW;
+                }
+            }
+            if (!ret[pageIndex]) {
+                ret[pageIndex] = [];
+            }
+            ret[pageIndex].push(blocks[blockIndex]);
+            blockIndex++;
+        }
+        return ret;
+    };
+    return React.createElement(React.Fragment, null, rootBlocks(rootChildren).map(childList => {
+        return renderPage(childList, store);
+    }));
+};
+
+const StackStyle = qe.div `
   position: fixed;
   top: var(--topbar-height);
   left: var(--sidebar-width);
@@ -37555,133 +37862,19 @@ const Stack = ({ store }) => {
             }
         });
     }, AFTER_ANIMATION);
-    const pageStyles = (state) => {
-        let ret = {};
-        state.templates[0].menuItems.filter(mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(cssMI => {
-            const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
-            if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
-                return;
-            }
-            if (!listMI.CSSParam) {
-                return;
-            }
-            ret = {
-                ...ret,
-                [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
-            };
-        });
-        return ret;
-    };
-    const renderPage = (blocks, store) => {
-        const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
-        return React.createElement(PageStyle$1, { key: pageKey, className: "page", style: pageStyles(store.state) }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
-    };
-    const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
     const pageSize = store.state.templates[0].pageSizeMM.split(" ");
     const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
     const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
-    const rootBlocks = (blocks) => {
-        //v.3
-        //we expect page style to be
-        // display: flex, justify-content: start, align-content: start
-        const ret = [];
-        let pageIndex = ZERO;
-        let blockIndex = ZERO;
-        const blocksLength = blocks.length - ONE;
-        let rowTop = ZERO;
-        let borderB = ZERO;
-        let borderR = ZERO;
-        while (blockIndex <= blocksLength) {
-            const blockFtpW = blocks[blockIndex].FTPProportions.width;
-            const blockFtpH = blocks[blockIndex].FTPProportions.height;
-            // console.log(`BLOCK ${blockIndex}`);
-            // console.log("start");
-            // console.log("rowTop", rowTop);
-            // console.log("blockH", blockFtpH);
-            // console.log("blockW", blockFtpW);
-            // console.log("borderB", borderB);
-            // console.log("borderR", borderR);
-            //do we need to break page?
-            if (rowTop + blockFtpH > ONE) {
-                pageIndex++;
-                rowTop = ZERO;
-                borderB = ZERO;
-                borderR = ZERO;
-            }
-            else {
-                //do we need to break line?
-                if (borderR + blockFtpW > ONE) {
-                    rowTop = borderB;
-                    borderR = blockFtpW;
-                    borderB = borderB + blockFtpH;
-                    //do we need to break page now?
-                    if (borderB > ONE) {
-                        pageIndex++;
-                        rowTop = ZERO;
-                        borderB = ZERO;
-                        borderR = ZERO;
-                        //do we need to update borderB?
-                        if (rowTop + blockFtpH > borderB) {
-                            borderB = rowTop + blockFtpH;
-                        }
-                        //at least updating borderR
-                        borderR += blockFtpW;
-                    }
-                }
-                else {
-                    //do we need to update borderB?
-                    if (rowTop + blockFtpH > borderB) {
-                        borderB = rowTop + blockFtpH;
-                    }
-                    //at least updating borderR
-                    borderR += blockFtpW;
-                }
-            }
-            if (!ret[pageIndex]) {
-                ret[pageIndex] = [];
-            }
-            ret[pageIndex].push(blocks[blockIndex]);
-            blockIndex++;
-            // console.log("end");
-            // console.log("rowTop", rowTop);
-            // console.log("blockH", blockFtpH);
-            // console.log("blockW", blockFtpW);
-            // console.log("borderB", borderB);
-            // console.log("borderR", borderR);
-        }
-        return ret;
-    };
-    // THIS MARGINS ARE BREAKING FTP CALCULATING SO BETTER TO USE BLOCK MARGINS
-    // const getMargins: (arg: string) => CSSProperties = (string) => {
-    //   let marginsRet: string[] = ["0", "0", "0", "0"];
-    //   const margins = string.trim().replace(/\s{2,}/g, " ").split(" ");
-    //   switch (margins.length) {
-    //   case ONE:
-    //     marginsRet = marginsRet.map(() => margins[0]);
-    //     break;
-    //   case TWO + ONE:
-    //   case TWO:
-    //     marginsRet = marginsRet.map((ret, i) => margins[(i + ONE) % TWO]);
-    //     break;
-    //   case TWO + TWO:
-    //     marginsRet = marginsRet.map((ret, i) => margins[i]);
-    //     break;
-    //   }
-    //   return {
-    //     "--page-margin-top": marginsRet[0],
-    //     "--page-margin-right": marginsRet[1],
-    //     "--page-margin-bottom": marginsRet[2],
-    //     "--page-margin-left": marginsRet[3]
-    //   } as CSSProperties;
-    // };
-    return React.createElement(SidebarStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
+    return React.createElement(StackStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
             // ...getMargins(store.state.templates[0].pageMargin),
             "--zoom": store.state.zoomByTab[store.state.selectedTab],
             "--page-size-1": modifiedSize[0],
             "--page-size-2": modifiedSize[1]
-        } }, rootBlocks(rootChildren).map(childList => {
-        return renderPage(childList, store);
-    }));
+        } },
+        store.state.selectedTab === TAB_TYPE.Edit &&
+            React.createElement(EditStack, { store: store }),
+        store.state.selectedTab === TAB_TYPE.Copy &&
+            React.createElement(CopiesStack, { store: store }));
 };
 
 const PageStyle = qe.div `
@@ -37848,7 +38041,6 @@ const Page = ({ state, dispach }) => {
             if (!store.state.focusedBlockSelectorID) {
                 return;
             }
-            console.log("ref blur");
             store.dispach({
                 name: ACTION_NAMES.app_setFocusedBlockSelector,
                 payload: null
@@ -37946,7 +38138,7 @@ const appReducer = (state, action) => {
             if (action.payload !== state.selectedBlock) {
                 state.selectedBlock = action.payload;
                 stateUpdated = true;
-                //oncollapsing all parents
+                //collapsing all parents
                 if (action.payload) {
                     const selectedBlock = state.templates[0].blocks.find(b => b.uuid === action.payload);
                     let targetBlock = state.templates[0].blocks.find(b => b.uuid === selectedBlock?.parentId);
@@ -37959,6 +38151,12 @@ const appReducer = (state, action) => {
                         i--;
                     }
                 }
+            }
+            break;
+        case ACTION_NAMES.app_selectCopy:
+            if (action.payload !== state.selectedCopy) {
+                state.selectedCopy = action.payload;
+                stateUpdated = true;
             }
             break;
         case ACTION_NAMES.app_setZoom:
@@ -38053,7 +38251,7 @@ const templateReducer = (state, action) => {
                 ...cleanUpBlock(action.payload.block),
                 parentId: action.payload.parentId
             };
-            state.templates[0].blocks.push(newInsertedBlock);
+            template.blocks.push(newInsertedBlock);
             if (action.payload.children) {
                 const getAndCleanUpChildren = (list, fromParent, toParent) => {
                     let ret = [];
@@ -38072,23 +38270,23 @@ const templateReducer = (state, action) => {
                 };
                 const reparentedAndClearedChildren = getAndCleanUpChildren(action.payload.children, action.payload.block.uuid, newInsertedBlock.uuid);
                 reparentedAndClearedChildren.map(child => {
-                    state.templates[0].blocks.push(child);
+                    template.blocks.push(child);
                 });
             }
             stateUpdated = true;
             break;
         case ACTION_NAMES.template_addBlockBefore:
-            const successorBlock = state.templates[0].blocks.find(block => block.uuid === action.payload.successorId);
+            const successorBlock = template.blocks.find(block => block.uuid === action.payload.successorId);
             if (!successorBlock) {
                 break;
             }
-            const successorIndex = state.templates[0].blocks.indexOf(successorBlock);
+            const successorIndex = template.blocks.indexOf(successorBlock);
             const newNieigborBlock = {
                 ...cleanUpBlock(action.payload.block),
                 parentId: successorBlock.parentId
             };
             //adding right before successor block
-            state.templates[0].blocks.splice(successorIndex, ZERO, newNieigborBlock);
+            template.blocks.splice(successorIndex, ZERO, newNieigborBlock);
             //adding all pasted block's children
             if (action.payload.children) {
                 const getAndCleanUpChildren = (list, fromParent, toParent) => {
@@ -38108,21 +38306,46 @@ const templateReducer = (state, action) => {
                 };
                 const reparentedAndClearedChildren = getAndCleanUpChildren(action.payload.children, action.payload.block.uuid, newNieigborBlock.uuid);
                 reparentedAndClearedChildren.map(child => {
-                    state.templates[0].blocks.push(child);
+                    template.blocks.push(child);
                 });
             }
             stateUpdated = true;
             break;
         case ACTION_NAMES.template_toggleMI:
-            const templateToggleMI = state.templates[0];
-            const miToChange = templateToggleMI.menuItems.find(mi => mi.miListItemName === action.payload.miName);
+            const miToChange = template.menuItems.find(mi => mi.miListItemName === action.payload.miName);
             if (miToChange) { //remove mi from list if exists 
-                templateToggleMI.menuItems = templateToggleMI.menuItems.filter(mi => mi.miListItemName !== action.payload.miName);
+                template.menuItems = template.menuItems.filter(mi => mi.miListItemName !== action.payload.miName);
                 stateUpdated = true;
             }
             else { //add mi to mist id not exists 
                 if (TemplateMIs.find(mi => mi.name === action.payload.miName)) {
-                    templateToggleMI.menuItems = [...templateToggleMI.menuItems, ...[initialTemplateMIFactory(action.payload.miName)]];
+                    template.menuItems = [...template.menuItems, ...[initialTemplateMIFactory(action.payload.miName)]];
+                    stateUpdated = true;
+                }
+            }
+            break;
+        case ACTION_NAMES.template_addCopy:
+            const newCopy = getCopyRow(template.copyColumns);
+            state.templates[0].copyRows.push(newCopy);
+            state.selectedCopy = newCopy.uuid;
+            stateUpdated = true;
+            break;
+        case ACTION_NAMES.template_removeCopy:
+            const copyRowToDelete = template.copyRows.find(cr => cr.uuid === action.payload.copyUUID);
+            if (copyRowToDelete) {
+                const copyRowIndex = template.copyRows.indexOf(copyRowToDelete);
+                const nextCopyID = copyRowIndex === ZERO ? null : template.copyRows[copyRowIndex - ONE].uuid;
+                template.copyRows = template.copyRows.filter(cr => cr.uuid !== action.payload.copyUUID);
+                state.selectedCopy = nextCopyID;
+                stateUpdated = true;
+            }
+            break;
+        case ACTION_NAMES.template_setCopyValue:
+            const targetCopyRow = template.copyRows.find(cr => cr.cells.find(cc => cc.uuid === action.payload.cellUUID));
+            if (targetCopyRow) {
+                const targetCell = targetCopyRow.cells.find(cell => cell.uuid === action.payload.cellUUID);
+                if (targetCell) {
+                    targetCell.value = action.payload.value;
                     stateUpdated = true;
                 }
             }
@@ -38140,6 +38363,58 @@ const templateReducer = (state, action) => {
 };
 const blockReducer = (state, action) => {
     let stateUpdated = false;
+    const generateCopyColumns = (state) => {
+        let copyColumns = [];
+        const checkForVarFields = (block) => {
+            let ret = [];
+            //if has chldren check children => add their return value to ret array
+            if (state.templates[0].blocks.find(b => b.parentId === block.uuid)) {
+                state.templates[0].blocks.filter(b => b.parentId === block.uuid).map(b => {
+                    ret = [...ret, ...checkForVarFields(b)];
+                });
+            }
+            else {
+                //if has not and has variable or selector type => add to array
+                if ([CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType)) {
+                    ret = [getCopyColumn(block)];
+                }
+            }
+            return ret;
+        };
+        state.templates[0].blocks.filter(b => b.parentId === null).map(b => {
+            copyColumns = [...copyColumns, ...checkForVarFields(b)];
+        });
+        state.selectedCopy = null;
+        return copyColumns;
+    };
+    const renameCopyColumns = (state, targetBlockId, newLabel) => {
+        return state.templates[0].copyColumns.map(col => col.targetBlockId === targetBlockId ? {
+            ...col,
+            label: newLabel
+        } : col);
+    };
+    const changeCopyColumnsValues = (state, targetBlock) => {
+        return state.templates[0].copyColumns.map(col => {
+            if (col.targetBlockId === targetBlock.uuid) {
+                if (targetBlock.contentType === CONTENT_TYPE.select) {
+                    return {
+                        ...col,
+                        defauldValue: targetBlock.contentValue.split("\n")[0],
+                        options: [...new Set(targetBlock.contentValue.split("\n"))]
+                    };
+                }
+                else {
+                    return {
+                        ...col,
+                        defauldValue: targetBlock.contentValue
+                    };
+                }
+            }
+            else {
+                return col;
+            }
+        });
+    };
     switch (action.name) {
         case ACTION_NAMES.block_setParam:
             const blockSetParam = state.templates[0].blocks.find(block => block.uuid === (action?.payload?.blockUUID ? action?.payload?.blockUUID : state.selectedBlock));
@@ -38152,6 +38427,17 @@ const blockReducer = (state, action) => {
             if (Object.keys(blockSetParam).includes(action.payload.paramName)) {
                 if (action.payload.value !== blockSetParam[action.payload.paramName]) {
                     blockSetParam[action.payload.paramName] = action.payload.value;
+                    if (["contentType"].includes(action.payload.paramName)) {
+                        //changing copy columns
+                        state.templates[0].copyColumns = generateCopyColumns(state);
+                        state.templates[0].copyRows = [];
+                    }
+                    if (["variableLabel"].includes(action.payload.paramName)) {
+                        state.templates[0].copyColumns = renameCopyColumns(state, blockSetParam.uuid, String(action.payload.value));
+                    }
+                    if (["contentValue"].includes(action.payload.paramName)) {
+                        state.templates[0].copyColumns = changeCopyColumnsValues(state, blockSetParam);
+                    }
                     stateUpdated = true;
                 }
             }

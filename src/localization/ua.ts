@@ -44,6 +44,8 @@ const wordsUA: Record<WordType, string> = {
   uiBlockDecodingProblem: "Помилка шифрування",
   uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
   uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
+  uiDisclamerPrintingHeader: "Information for firefox users",
+  uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
 
   //mi
   miPageSize: "Розмір аркуша",
@@ -75,6 +77,7 @@ const wordsUA: Record<WordType, string> = {
   miRight: "Зправа",
   miLeft: "Зліва",
   miContentType: "Тип контенту",
+  miVariableLabel: "Variable label",
   miReferenceId: "ID referenta(?)",
   miFixed: "Статичний",
   miVariable: "Змінна",

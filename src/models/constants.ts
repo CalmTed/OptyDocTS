@@ -22,6 +22,7 @@ export enum ACTION_NAMES{
   app_setsidebarSectionHeight = "app_setsidebarSectionHeight",
   app_setTemplate = "app_setTemplate",
   app_selectBlock = "app_selectBlock",
+  app_selectCopy = "app_selectCopy",
   app_setZoom = "app_setZoom",
   app_setFocusedBlockSelector = "app_setFocusedBlockSelector",
 
@@ -32,6 +33,10 @@ export enum ACTION_NAMES{
   template_addBlockInside = "template_addBlockInside",
   template_addBlockBefore = "template_addBlockBefore",
   template_toggleMI = "template_toggleMI",
+  template_addCopy = "template_addCopy",
+  template_removeCopy = "template_removeCopy",
+  template_setCopyValue = "template_setCopyValue",
+
   
   block_setParam = "block_setParam",
   block_setCSS = "block_setCSS",

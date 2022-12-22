@@ -186,7 +186,6 @@ const Page: FC<PageModel> = ({state, dispach}) => {
       if(!store.state.focusedBlockSelectorID) {
         return;
       }
-      console.log("ref blur");
       store.dispach({
         name: ACTION_NAMES.app_setFocusedBlockSelector,
         payload: null

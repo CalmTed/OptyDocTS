@@ -22,6 +22,7 @@ const BlockStyle = styled.div`
   width: auto;
   height: auto;
   &.selected{
+    outline-width: 2px;
     outline-color: var(--main-color);
   }
   &.hovered:not(.selected):not(& *:hover),:hover:not(.selected){

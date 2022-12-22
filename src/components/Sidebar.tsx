@@ -5,8 +5,11 @@ import Tabs from "./Tabs";
 import Split from "./ui/Split";
 import { ACTION_NAMES, CONTENT_TYPE, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import { BLOCK_MI_NAMES } from "src/models/blockMIs";
-import { MIPicker, MIs } from "./ui/Mis";
+import { MIs } from "./ui/Mis";
 import Icon from "./ui/Icon";
+import { MIPicker } from "./ui/MIPicker";
+import { MICopyNav } from "./ui/MICopyNav";
+import { MICopyVars } from "./ui/MICopyVars";
 
 interface SidebarModel {
   store: StoreModel
@@ -166,6 +169,18 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
           {
             renderChildren(null, ZERO)
           }
+        </SplitStyle>
+      </Split>
+    }
+    { store.state.selectedTab === TAB_TYPE.Copy &&
+      <Split store={store}>
+        <SplitStyle>
+          <>
+            <MICopyNav store={store}/>
+            <MICopyVars store={store}></MICopyVars>
+          </>
+        </SplitStyle>
+        <SplitStyle>
         </SplitStyle>
       </Split>
     }

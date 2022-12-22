@@ -40,7 +40,8 @@ const wordsEB = {
   uiBlockDecodingProblem: "Block decoding problem",
   uiImageHasToBeLessThenMB: "Error: Image has to be less then 3MB",
   uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
-
+  uiDisclamerPrintingHeader: "Information for firefox users",
+  uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
 
   //mi
   miPageSize: "Page size",
@@ -73,6 +74,7 @@ const wordsEB = {
   miLeft: "Left",
   miContentType: "Content type",
   miReferenceId: "Reference Id",
+  miVariableLabel: "Variable label",
   miFixed: "Fixed",
   miVariable: "Variable",
   miSelect: "Select",

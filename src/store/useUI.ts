@@ -65,7 +65,7 @@ const useUI = () => {
       icon: prompt.icon
     });
   };
-  const showAlert: StoreModel["showAlert"] = (header, text, onCancel, icon) => {
+  const showAlert: StoreModel["showAlert"] = (header, text, onConfirm, onCancel, icon) => {
     setPrompt({
       header: header,
       text: text,
@@ -76,7 +76,10 @@ const useUI = () => {
         hidePrompt();
         onCancel ? onCancel() : null;
       },
-      onConfirm: prompt.onConfirm,
+      onConfirm: () => {
+        hidePrompt();
+        onConfirm ? onConfirm() : null;
+      },
       onProceed: prompt.onProceed,
       icon: icon
     });

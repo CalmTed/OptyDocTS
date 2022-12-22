@@ -12,6 +12,7 @@ export enum BLOCK_MI_NAMES{
   flexAlignVertical = "flexAlignVertical",
   flexWrap = "flexWrap",
   contentType = "contentType",
+  variableLabel = "variableLabel",
   referenceId = "referenceId",
   backgroundColor = "backgroundColor",
   backgroundImage = "backgroundImage",
@@ -119,6 +120,23 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         value: CONTENT_TYPE.copyFrom
       }
     ]
+  },
+  {
+    name: BLOCK_MI_NAMES.variableLabel,
+    label: "miVariableLabel",
+    miType: MI_LISTITEM_TYPE.blockParam,
+    paramName: "variableLabel",
+    defaultValue: "",
+    isReadonly: false,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: [],
+    conditions: [{
+      type: "prop",
+      propName: "contentType",
+      blackList: [],
+      whiteList: [CONTENT_TYPE.variable, CONTENT_TYPE.select]
+    }]
   },
   {
     name: BLOCK_MI_NAMES.referenceId,

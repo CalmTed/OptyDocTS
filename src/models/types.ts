@@ -14,6 +14,7 @@ export interface StoreModel {
   showAlert: (
     header: string,
     text: string,
+  onConfirm?: () => void,
     onCancel?: () => void,
     icon?: IconTypeKey
   ) => void
@@ -58,6 +59,9 @@ export type ActionModel = {
   name: ACTION_NAMES.app_selectBlock
   payload: string | null
 } | {
+  name: ACTION_NAMES.app_selectCopy
+  payload: "prev" | "next" | string | null
+} | {
   name: ACTION_NAMES.app_setZoom
   payload: number
 } | {
@@ -99,6 +103,19 @@ export type ActionModel = {
   payload: {
     miName: TEMPLATE_MI_NAMES
   }
+} | {
+  name: ACTION_NAMES.template_addCopy
+} | {
+  name: ACTION_NAMES.template_removeCopy
+  payload: {
+    copyUUID: string
+  }
+} | {
+  name: ACTION_NAMES.template_setCopyValue
+  payload: {
+    cellUUID: string
+    value: string 
+  }
 } | {////////     BLOCK     /////////
   name: ACTION_NAMES.block_setParam
   payload: {
@@ -135,7 +152,7 @@ export interface AppStateModel {
   langCode: LanguageType
   selectedTab: TAB_TYPE
   selectedBlock: string | null
-  selectedCopy: number | null
+  selectedCopy: string | null
   sidebarSectionHeight: number
   templates: TemplateModel[]
   zoomByTab: {
@@ -153,9 +170,8 @@ export interface TemplateModel {
   pageSizeMM: string //in milimeters for width and height
   pageOrientation: PAGE_ORIENTATION;
   pageMargin: string //in any css units for top, right, bottom, left
-  copyColumns: string[]
-  copyRefferenceIds: string[]
-  copyRows: string[]
+  copyColumns: CopyColumnModel[]
+  copyRows: CopyRowModel[]
   blocks: BlockModel[]
   menuItems: MenuItemTemplateModel[]
 }
@@ -260,3 +276,27 @@ export type MICondition = {
 }
 
 export type ReducerModel = (state: AppStateModel, action: ActionModel) => {state: AppStateModel, stateUpdated: boolean}
+
+export type CopyColumnModel = {
+  uuid: string
+  label: string
+  targetBlockId: string
+  contentType: CONTENT_TYPE.variable
+  defauldValue: string
+} | {
+  uuid: string
+  label: string
+  targetBlockId: string
+  contentType: CONTENT_TYPE.select
+  options: string[]
+  defauldValue: string
+}
+export interface CopyRowModel{
+  uuid: string
+  cells: CopyCellModel[]
+}
+export interface CopyCellModel{
+  uuid: string
+  columnId: string
+  value: string
+}

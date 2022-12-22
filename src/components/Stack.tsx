@@ -1,16 +1,15 @@
 import React, { FC } from "react";
 import styled, { CSSProperties } from "styled-components";
-import { AppStateModel, BlockModel, StoreModel } from "src/models/types";
-import { ACTION_NAMES, AFTER_ANIMATION, MI_LISTITEM_TYPE, ONE, PAGE_ORIENTATION, THOUSAND, ZERO } from "src/models/constants";
-import { Block } from "./Block";
-import { TemplateMIs } from "src/models/templateMIs";
-import considerZooming from "src/store/considerZooming";
+import { StoreModel } from "src/models/types";
+import { ACTION_NAMES, AFTER_ANIMATION, PAGE_ORIENTATION, TAB_TYPE, THOUSAND} from "src/models/constants";
+import { CopiesStack } from "./CopiesStack";
+import { EditStack } from "./EditStack";
 
 interface StackModel {
   store: StoreModel
 }
 
-const SidebarStyle = styled.div`
+const StackStyle = styled.div`
   position: fixed;
   top: var(--topbar-height);
   left: var(--sidebar-width);
@@ -32,7 +31,7 @@ const SidebarStyle = styled.div`
   --page-margin-left: 0mm;
 `;
 
-const PageStyle = styled.div`
+export const PageStyle = styled.div`
   cursor: default;
   background: var(--section-bg);
   transition: all var(--transition);
@@ -96,138 +95,12 @@ const Stack: FC<StackModel> = ({store}) => {
       }
     });
   }, AFTER_ANIMATION);
-  const pageStyles: (arg: AppStateModel) => React.CSSProperties = (state) => {
-    let ret:CSSProperties = {};
-    state.templates[0].menuItems.filter(
-      mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(
-      cssMI => {
-        const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
-        if(!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
-          return;
-        }
-        if(!listMI.CSSParam) {
-          return;
-        }
-        ret = {
-          ...ret,
-          [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
-        };
-      });
-    return ret;
-  };
-  const renderPage: (block: BlockModel[], store: StoreModel) => React.ReactNode = (blocks, store) => {
-    const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
-    return <PageStyle
-      key={pageKey}
-      className="page"
-      style={pageStyles(store.state)}
-    >
-      {
-        blocks.map(block => 
-          <Block key={block.uuid} classes="rootBlock" store={store} block={block}></Block>
-        )
-      }
-    </PageStyle>;
-  };
-  const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
+
+
   const pageSize = store.state.templates[0].pageSizeMM.split(" ");
   const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
   const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
-  const rootBlocks: (blocks: BlockModel[]) => BlockModel[][] = (blocks) => {
-    //v.3
-    //we expect page style to be
-    // display: flex, justify-content: start, align-content: start
-    const ret:BlockModel[][] = [];
-    let pageIndex = ZERO;
-    let blockIndex = ZERO;
-    const blocksLength = blocks.length - ONE;
-    let rowTop = ZERO;
-    let borderB = ZERO;
-    let borderR = ZERO;
-    while(blockIndex <= blocksLength) {
-      const blockFtpW = blocks[blockIndex].FTPProportions.width;
-      const blockFtpH = blocks[blockIndex].FTPProportions.height;
-      // console.log(`BLOCK ${blockIndex}`);
-      // console.log("start");
-      // console.log("rowTop", rowTop);
-      // console.log("blockH", blockFtpH);
-      // console.log("blockW", blockFtpW);
-      // console.log("borderB", borderB);
-      // console.log("borderR", borderR);
-      //do we need to break page?
-      if(rowTop + blockFtpH > ONE) {
-        pageIndex++;
-        rowTop = ZERO;
-        borderB = ZERO;
-        borderR = ZERO;
-      }else{
-        //do we need to break line?
-        if(borderR + blockFtpW > ONE) {
-          rowTop = borderB;
-          borderR = blockFtpW;
-          borderB = borderB + blockFtpH;
-          //do we need to break page now?
-          if(borderB > ONE) {
-            pageIndex++;
-            rowTop = ZERO;
-            borderB = ZERO;
-            borderR = ZERO;
-            //do we need to update borderB?
-            if(rowTop + blockFtpH > borderB) {
-              borderB = rowTop + blockFtpH;
-            }
-            //at least updating borderR
-            borderR += blockFtpW;
-          }
-        }else{
-          //do we need to update borderB?
-          if(rowTop + blockFtpH > borderB) {
-            borderB = rowTop + blockFtpH;
-          }
-          //at least updating borderR
-          borderR += blockFtpW;
-        }
-      }
-      if(!ret[pageIndex]) {
-        ret[pageIndex] = [];
-      }
-      ret[pageIndex].push(blocks[blockIndex]);
-      blockIndex++;
-      // console.log("end");
-      // console.log("rowTop", rowTop);
-      // console.log("blockH", blockFtpH);
-      // console.log("blockW", blockFtpW);
-      // console.log("borderB", borderB);
-      // console.log("borderR", borderR);
-    }
-    return ret;
-  };
-
-  // THIS MARGINS ARE BREAKING FTP CALCULATING SO BETTER TO USE BLOCK MARGINS
-
-  // const getMargins: (arg: string) => CSSProperties = (string) => {
-  //   let marginsRet: string[] = ["0", "0", "0", "0"];
-  //   const margins = string.trim().replace(/\s{2,}/g, " ").split(" ");
-  //   switch (margins.length) {
-  //   case ONE:
-  //     marginsRet = marginsRet.map(() => margins[0]);
-  //     break;
-  //   case TWO + ONE:
-  //   case TWO:
-  //     marginsRet = marginsRet.map((ret, i) => margins[(i + ONE) % TWO]);
-  //     break;
-  //   case TWO + TWO:
-  //     marginsRet = marginsRet.map((ret, i) => margins[i]);
-  //     break;
-  //   }
-  //   return {
-  //     "--page-margin-top": marginsRet[0],
-  //     "--page-margin-right": marginsRet[1],
-  //     "--page-margin-bottom": marginsRet[2],
-  //     "--page-margin-left": marginsRet[3]
-  //   } as CSSProperties;
-  // };
-  return <SidebarStyle
+  return <StackStyle
     className="stack"
     onClick={(e) => { (e.target as HTMLElement).classList.contains("stack") && handleBlockSelect(null); }}
     style={({
@@ -238,11 +111,14 @@ const Stack: FC<StackModel> = ({store}) => {
     } as CSSProperties)}
   >
     {
-      rootBlocks(rootChildren).map(childList => {
-        return renderPage(childList, store);
-      })
+      store.state.selectedTab === TAB_TYPE.Edit && 
+      <EditStack store={store}/>
     }
-  </SidebarStyle>;
+    {
+      store.state.selectedTab === TAB_TYPE.Copy && 
+      <CopiesStack store={store} />
+    }
+  </StackStyle>;
 };
 
 export default Stack;

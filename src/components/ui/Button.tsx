@@ -11,6 +11,7 @@ interface ButtonModel{
   type?: ButtonType
   icon?: IconTypeKey
   style?: React.CSSProperties
+  classes?: string
   disabled?: boolean
 }
 
@@ -50,10 +51,10 @@ const ButtonStyle = styled.div`
   }
 `;
 
-const Button: FC<ButtonModel> = ({children, onClick, type = "normal", icon, style, disabled = false}) => {
+const Button: FC<ButtonModel> = ({children, onClick, type = "normal", icon, style, classes, disabled = false}) => {
   return <ButtonStyle
     onClick={ (event: React.MouseEvent) => { !disabled ? onClick(event) : null; } }
-    className={`${type} ${ disabled ? "disabled" : "" }`}
+    className={`${type} ${ disabled ? "disabled" : "" } ${classes ?  classes : ""}`}
     style={style}
   >
     {icon && <Icon iconType={icon}/>}
