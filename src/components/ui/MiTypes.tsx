@@ -86,9 +86,11 @@ export const MISize: FC<MI & MISize> = ({value, onChange, classes, style, disabl
     const amount = ONE * special;
     if(e.key === "ArrowRight" && special !== ZERO) {
       target.value = crement(fromT(target.value), amount);
+      e.preventDefault();
     }
     if(e.key === "ArrowLeft" && special !== ZERO) {
       target.value = crement(fromT(target.value), -amount);
+      e.preventDefault();
     }
     onChange(target.value);
   };

@@ -15,7 +15,9 @@ interface MIsInterface {
 export const MIs: FC<MIsInterface> = ({store, targetType, addableType}) => {
   const isAddable = addableType === "addable";
   const isBlock = targetType === MI_TARGET.block;
-  const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems;//.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });  
+  const templateMis = TemplateMIs.map(listMi => store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMi.name)).filter(mi => !!mi);
+  const blockMis = BlockMIs.map(listBlockMi => store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.find(mi => mi.miListItemName === listBlockMi.name)).filter(mi => !!mi);
+  const targetMIs = isBlock ? blockMis : templateMis;
   if(!targetMIs) {
     return <></>;
   }

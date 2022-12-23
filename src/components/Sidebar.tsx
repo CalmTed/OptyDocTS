@@ -210,7 +210,7 @@ const TreeBrunch: FC<TreeBrunchModel> = ({block, brunchChildren, selected, level
     }
     target.classList.remove("hovered");
   };
-  const label = block.label.length ? block.label : block.uuid;
+  const label = block.label.length ? block.label : block.contentValue ? "\"" + block.contentValue.split("\n")[0].substring(ZERO, TWO * TWO * TWO * TWO) + "\"" : block.uuid;
   const colapsedState = block.treeViewCollapseState;
   const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
   const isVariable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType);

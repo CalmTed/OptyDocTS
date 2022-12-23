@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled, { CSSProperties } from "styled-components";
 import { StoreModel } from "src/models/types";
-import { ACTION_NAMES, AFTER_ANIMATION, PAGE_ORIENTATION, TAB_TYPE, THOUSAND} from "src/models/constants";
+import { ACTION_NAMES, PAGE_ORIENTATION, TAB_TYPE } from "src/models/constants";
 import { CopiesStack } from "./CopiesStack";
 import { EditStack } from "./EditStack";
 
@@ -57,52 +57,27 @@ export const PageStyle = styled.div`
 
 const Stack: FC<StackModel> = ({store}) => {
 
-  const handleBlockSelect = (uuid: string | null) => {
-    store.dispach({
-      name: ACTION_NAMES.app_selectBlock,
-      payload: uuid
-    });
+  const handleClick = (tab: TAB_TYPE) => {
+    if(tab === TAB_TYPE.Edit) {
+      store.dispach({
+        name: ACTION_NAMES.app_selectBlock,
+        payload: null
+      });
+    }
+    if(tab === TAB_TYPE.Copy) {
+      store.dispach({
+        name: ACTION_NAMES.app_selectCopy,
+        payload: null
+      });
+    }
   };
-  
-  //it seems like this is the only reliable way to get correct dom element size
-  setTimeout(() => {
-    const rootBlocks = document.querySelectorAll(".rootBlock");
-    [...rootBlocks].map((block) => {
-      const pageDOM = block.parentElement as HTMLElement;
-      //getting block uuid
-      const blockUUID = block.className.split(" ").find(name => /uuid-b(\d){1,}/.test(name))?.replace("uuid-", "") || "";
-      //getting size proportions
-      const pageRightBorder = pageDOM.clientWidth;
-      const pageBottomBorder = pageDOM.clientHeight;
-      const blockHeight = block.clientHeight;
-      const blockWidth = block.clientWidth;
-      const widthProportion = Math.round(blockWidth / pageRightBorder * THOUSAND) / THOUSAND;
-      const heightProportion = Math.round(blockHeight / pageBottomBorder * THOUSAND) / THOUSAND;
-      //comparing to state saved
-      const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
-      if(targetBlock) {
-        if(heightProportion && widthProportion &&
-          (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion)) {
-          store.dispach({
-            name: ACTION_NAMES.block_setFTP,
-            payload: {
-              blockUUID: blockUUID,
-              width: widthProportion,
-              height: heightProportion
-            }
-          });
-        }
-      }
-    });
-  }, AFTER_ANIMATION);
-
 
   const pageSize = store.state.templates[0].pageSizeMM.split(" ");
   const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
   const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
   return <StackStyle
     className="stack"
-    onClick={(e) => { (e.target as HTMLElement).classList.contains("stack") && handleBlockSelect(null); }}
+    onClick={(e) => { (e.target as HTMLElement).classList.contains("stack") && handleClick(store.state.selectedTab); }}
     style={({
       // ...getMargins(store.state.templates[0].pageMargin),
       "--zoom":store.state.zoomByTab[store.state.selectedTab],

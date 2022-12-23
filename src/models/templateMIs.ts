@@ -14,12 +14,23 @@ export enum TEMPLATE_MI_NAMES{
   fontSize = "fontSize",
   backgroundSizeOptions = "backgroundSizeOptions",
   backgroundRepeat = "backgroundRepeat",
-  backgroundPosition = "backgroundPosition"
+  backgroundPosition = "backgroundPosition",
+  flexAlignHorizontal = "flexAlignHorizontal",
+  flexAlignVertical = "flexAlignVertical"
 }
 
-export type TemplateMINames = "mi0001" | "mi0002" | "mi0003" | "mi0004" | "mi0005"
-
 export const TemplateMIs:MenuItemTemplateListItemModel[] = [
+  {
+    name: TEMPLATE_MI_NAMES.name,
+    label: "miName",
+    miType: MI_LISTITEM_TYPE.templateParam,
+    paramName: "name",
+    defaultValue: "New template",
+    isReadonly: false,
+    isAddable: false,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
   {
     name: TEMPLATE_MI_NAMES.size,
     label: "miPageSize",
@@ -80,17 +91,6 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     inputOptions: []
   },
   {
-    name: TEMPLATE_MI_NAMES.name,
-    label: "miName",
-    miType: MI_LISTITEM_TYPE.templateParam,
-    paramName: "name",
-    defaultValue: "New template",
-    isReadonly: false,
-    isAddable: false,
-    inputType: INPUT_TYPES.text,
-    inputOptions: []
-  },
-  {
     name: TEMPLATE_MI_NAMES.pageMargin,
     label: "miPadding",
     miType: MI_LISTITEM_TYPE.templateParam,
@@ -100,6 +100,60 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     isAddable: false,
     inputType: INPUT_TYPES.text,
     inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.flexAlignHorizontal,
+    label: "miFlexAlignHorizontal",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "justifyContent",
+    CSSDefaultValue: "flex-start",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miLeft",
+        value: "flex-start"
+      },
+      {
+        label: "miCenter",
+        value: "center"
+      },
+      {
+        label: "miRight",
+        value: "flex-end"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
+      }
+    ]
+  },
+  {
+    name: TEMPLATE_MI_NAMES.flexAlignVertical,
+    label: "miFlexAlignVertical",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "alignContent",
+    CSSDefaultValue: "flex-start",
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miTop",
+        value: "flex-start"
+      },
+      {
+        label: "miCenter",
+        value: "center"
+      },
+      {
+        label: "miBottom",
+        value: "flex-end"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
+      }
+    ]
   },
   {
     name: TEMPLATE_MI_NAMES.backgroundColor,

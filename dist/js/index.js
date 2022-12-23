@@ -34665,8 +34665,8 @@ var SIZE_UNITS;
 })(SIZE_UNITS || (SIZE_UNITS = {}));
 //we filter % character insize considerZooming component
 const sizeMask = new RegExp("("
-    + Object.values(SIZE_UNITS).map(unit => `^(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}$`).join("|")
-    + ")");
+    + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+    + ")", "g");
 var DEFAULT_VALUES;
 (function (DEFAULT_VALUES) {
     DEFAULT_VALUES["inherit"] = "inherit";
@@ -34688,6 +34688,8 @@ const wordsEB = {
     topBarCutBlock: "Cut block",
     topBarDuplicateBlock: "Duplicate block",
     topBarPrint: "Print",
+    topBarAddCopy: "Add copy",
+    topBarRemoveCopy: "Remove copy",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
@@ -34744,6 +34746,9 @@ const wordsEB = {
     miCenter: "Center",
     miRight: "Right",
     miLeft: "Left",
+    miSpaceEvenly: "Space evenly",
+    miSpaceAround: "Space around",
+    miSpaceBetween: "Space between",
     miContentType: "Content type",
     miReferenceId: "Reference Id",
     miVariableLabel: "Variable label",
@@ -34760,6 +34765,8 @@ const wordsEB = {
     miFontFamily: "Font",
     miFontSize: "Font size",
     miFontColor: "Font color",
+    miFontWeight: "Font weight",
+    miFontStyle: "Font style",
     miFlexWrap: "Flex wrap",
     miWrap: "Wrap",
     miNoWrap: "No wrap",
@@ -34767,6 +34774,18 @@ const wordsEB = {
     miCover: "Cover",
     miNoRepeat: "No repeat",
     miRepeat: "Repeat",
+    miBorder: "Border",
+    miBorderTop: "Border top",
+    miBorderBottom: "Border bottom",
+    miBorderRight: "Border right",
+    miBorderLeft: "Border left",
+    miMargin: "Margin",
+    miSerif: "Serif",
+    miSansSerif: "SansSerif",
+    miMonospace: "Monospace",
+    miNormal: "Normal",
+    miBold: "Bold",
+    miItalic: "Italic",
     undefined: ""
 };
 
@@ -34786,6 +34805,8 @@ const wordsUA = {
     topBarCutBlock: "Вирізати блок",
     topBarDuplicateBlock: "Дублювати блок",
     topBarPrint: "Друкувати",
+    topBarAddCopy: "Add copy",
+    topBarRemoveCopy: "Remove copy",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34843,6 +34864,9 @@ const wordsUA = {
     miCenter: "Поцентру",
     miRight: "Зправа",
     miLeft: "Зліва",
+    miSpaceEvenly: "Space evenly",
+    miSpaceAround: "Space around",
+    miSpaceBetween: "Space between",
     miContentType: "Тип контенту",
     miVariableLabel: "Variable label",
     miReferenceId: "ID referenta(?)",
@@ -34859,6 +34883,8 @@ const wordsUA = {
     miFontFamily: "Шрифт",
     miFontColor: "Колір фришту",
     miFontSize: "Розмір фрифту",
+    miFontWeight: "Font weight",
+    miFontStyle: "Font style",
     miFlexWrap: "Флекс перенос блоків",
     miWrap: "Переносити",
     miNoWrap: "Не переносити",
@@ -34866,6 +34892,18 @@ const wordsUA = {
     miCover: "По більшій стороні",
     miNoRepeat: "Не повторювати",
     miRepeat: "Повторювати",
+    miBorder: "Border",
+    miBorderTop: "Border top",
+    miBorderBottom: "Border bottom",
+    miBorderRight: "Border right",
+    miBorderLeft: "Border left",
+    miMargin: "Margin",
+    miSerif: "Serif",
+    miSansSerif: "SansSerif",
+    miMonospace: "Monospace",
+    miNormal: "Normal",
+    miBold: "Bold",
+    miItalic: "Italic",
     undefined: ""
 };
 
@@ -34906,6 +34944,16 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["backgroundPosition"] = "backgroundPosition";
     BLOCK_MI_NAMES["fontColor"] = "fontColor";
     BLOCK_MI_NAMES["fontSize"] = "fontSize";
+    BLOCK_MI_NAMES["fontFamily"] = "fontFamily";
+    BLOCK_MI_NAMES["fontWeight"] = "fontWeight";
+    BLOCK_MI_NAMES["fontStyle"] = "fontStyle";
+    BLOCK_MI_NAMES["border"] = "border";
+    BLOCK_MI_NAMES["borderTop"] = "borderTop";
+    BLOCK_MI_NAMES["borderBottom"] = "borderBottom";
+    BLOCK_MI_NAMES["borderLeft"] = "borderLeft";
+    BLOCK_MI_NAMES["borderRight"] = "borderRight";
+    BLOCK_MI_NAMES["padding"] = "padding";
+    BLOCK_MI_NAMES["margin"] = "margin";
 })(BLOCK_MI_NAMES || (BLOCK_MI_NAMES = {}));
 const BlockMIs = [
     {
@@ -35083,6 +35131,18 @@ const BlockMIs = [
                 value: "flex-end"
             },
             {
+                label: "miSpaceBetween",
+                value: "space-between"
+            },
+            {
+                label: "miSpaceAround",
+                value: "space-around"
+            },
+            {
+                label: "miSpaceEvenly",
+                value: "space-evenly"
+            },
+            {
                 label: "miInherit",
                 value: "inherit"
             }
@@ -35153,6 +35213,78 @@ const BlockMIs = [
             {
                 label: "miInherit",
                 value: "inherit"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.fontFamily,
+        label: "miFontFamily",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "fontFamily",
+        CSSDefaultValue: "#000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miSerif",
+                value: "serif"
+            },
+            {
+                label: "miSansSerif",
+                value: "sans-serif"
+            },
+            {
+                label: "miMonospace",
+                value: "monospace"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.fontWeight,
+        label: "miFontWeight",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "fontWeight",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miInherit",
+                value: "inherit"
+            },
+            {
+                label: "miNormal",
+                value: "normal"
+            },
+            {
+                label: "miBold",
+                value: "bold"
+            }
+        ]
+    },
+    {
+        name: BLOCK_MI_NAMES.fontStyle,
+        label: "miFontStyle",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "fontStyle",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miInherit",
+                value: "inherit"
+            },
+            {
+                label: "miNormal",
+                value: "normal"
+            },
+            {
+                label: "miItalic",
+                value: "italic"
             }
         ]
     },
@@ -35283,6 +35415,83 @@ const BlockMIs = [
                 value: "right"
             }
         ]
+    },
+    {
+        name: BLOCK_MI_NAMES.border,
+        label: "miBorder",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "border",
+        CSSDefaultValue: "1px solid #000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.borderTop,
+        label: "miBorderTop",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "borderTop",
+        CSSDefaultValue: "1px solid #000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.borderBottom,
+        label: "miBorderBottom",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "borderBottom",
+        CSSDefaultValue: "1px solid #000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.borderLeft,
+        label: "miBorderLeft",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "borderLeft",
+        CSSDefaultValue: "1px solid #000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.borderRight,
+        label: "miBorderRight",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "borderRight",
+        CSSDefaultValue: "1px solid #000",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.margin,
+        label: "miMargin",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "margin",
+        CSSDefaultValue: "0px",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
+    {
+        name: BLOCK_MI_NAMES.padding,
+        label: "miPadding",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "padding",
+        CSSDefaultValue: "0px",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
     }
 ];
 
@@ -35301,8 +35510,21 @@ var TEMPLATE_MI_NAMES;
     TEMPLATE_MI_NAMES["backgroundSizeOptions"] = "backgroundSizeOptions";
     TEMPLATE_MI_NAMES["backgroundRepeat"] = "backgroundRepeat";
     TEMPLATE_MI_NAMES["backgroundPosition"] = "backgroundPosition";
+    TEMPLATE_MI_NAMES["flexAlignHorizontal"] = "flexAlignHorizontal";
+    TEMPLATE_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
 })(TEMPLATE_MI_NAMES || (TEMPLATE_MI_NAMES = {}));
 const TemplateMIs = [
+    {
+        name: TEMPLATE_MI_NAMES.name,
+        label: "miName",
+        miType: MI_LISTITEM_TYPE.templateParam,
+        paramName: "name",
+        defaultValue: "New template",
+        isReadonly: false,
+        isAddable: false,
+        inputType: INPUT_TYPES.text,
+        inputOptions: []
+    },
     {
         name: TEMPLATE_MI_NAMES.size,
         label: "miPageSize",
@@ -35363,17 +35585,6 @@ const TemplateMIs = [
         inputOptions: []
     },
     {
-        name: TEMPLATE_MI_NAMES.name,
-        label: "miName",
-        miType: MI_LISTITEM_TYPE.templateParam,
-        paramName: "name",
-        defaultValue: "New template",
-        isReadonly: false,
-        isAddable: false,
-        inputType: INPUT_TYPES.text,
-        inputOptions: []
-    },
-    {
         name: TEMPLATE_MI_NAMES.pageMargin,
         label: "miPadding",
         miType: MI_LISTITEM_TYPE.templateParam,
@@ -35383,6 +35594,60 @@ const TemplateMIs = [
         isAddable: false,
         inputType: INPUT_TYPES.text,
         inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.flexAlignHorizontal,
+        label: "miFlexAlignHorizontal",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "justifyContent",
+        CSSDefaultValue: "flex-start",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miLeft",
+                value: "flex-start"
+            },
+            {
+                label: "miCenter",
+                value: "center"
+            },
+            {
+                label: "miRight",
+                value: "flex-end"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
+            }
+        ]
+    },
+    {
+        name: TEMPLATE_MI_NAMES.flexAlignVertical,
+        label: "miFlexAlignVertical",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "alignContent",
+        CSSDefaultValue: "flex-start",
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miTop",
+                value: "flex-start"
+            },
+            {
+                label: "miCenter",
+                value: "center"
+            },
+            {
+                label: "miBottom",
+                value: "flex-end"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
+            }
+        ]
     },
     {
         name: TEMPLATE_MI_NAMES.backgroundColor,
@@ -35715,7 +35980,7 @@ const encodeBlock = (block, children) => {
         block,
         children
     };
-    const encodedString = JSON.stringify(payload);
+    const encodedString = encodeURI(JSON.stringify(payload));
     return `${btoa(encodedString).replace(/i/g, "_").replace(/ab/g, "i").replace(/_/g, "ab")}`;
 };
 const decodeBlock = (string) => {
@@ -35726,7 +35991,7 @@ const decodeBlock = (string) => {
     };
     try {
         const decodedString = atob(string.replace(/ab/g, "_").replace(/i/g, "ab").replace(/_/g, "i"));
-        const posibleBlock = JSON.parse(decodedString);
+        const posibleBlock = JSON.parse(decodeURI(decodedString));
         if (JSON.stringify(Object.keys(posibleBlock)) !== "[\"version\",\"uuid\",\"block\",\"children\"]") {
             console.error("DECODING: payload keys are wrong", JSON.stringify(Object.keys(posibleBlock)));
             return ret;
@@ -35753,7 +36018,7 @@ const encodeTemplate = (template) => {
         uuid: template.uuid,
         template
     };
-    const encodedString = JSON.stringify(payload);
+    const encodedString = encodeURI(JSON.stringify(payload));
     return `${btoa(encodedString).replace(/i/g, "_").replace(/ab/g, "i").replace(/_/g, "ab")}`;
 };
 const decodeTemplate = (string) => {
@@ -35763,7 +36028,7 @@ const decodeTemplate = (string) => {
     };
     try {
         const decodedString = atob(string.replace(/ab/g, "_").replace(/i/g, "ab").replace(/_/g, "i"));
-        const posibleTemplate = JSON.parse(decodedString);
+        const posibleTemplate = JSON.parse(decodeURI(decodedString));
         if (JSON.stringify(Object.keys(posibleTemplate)) !== "[\"version\",\"uuid\",\"template\"]") {
             console.error("DECODING: payload keys are wrong", JSON.stringify(Object.keys(posibleTemplate)));
             return ret;
@@ -36007,8 +36272,8 @@ const Topbar = ({ store }) => {
                         React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: methods.handleDuplicate }))),
             store.state.selectedTab === TAB_TYPE.Copy &&
                 React.createElement(React.Fragment, null,
-                    React.createElement(TopbarButton, { title: (console.log("TODO"), undefined), iconType: "plus", onClick: () => methods.handleAddCopy() }),
-                    React.createElement(TopbarButton, { title: (console.log("TODO"), undefined), iconType: "minus", onClick: () => methods.handleRemoveCopy(), disabled: !store.state.selectedCopy }))),
+                    React.createElement(TopbarButton, { title: store.t("topBarAddCopy"), iconType: "plus", onClick: () => methods.handleAddCopy() }),
+                    React.createElement(TopbarButton, { title: store.t("topBarRemoveCopy"), iconType: "minus", onClick: () => methods.handleRemoveCopy(), disabled: !store.state.selectedCopy }))),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: methods.handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
             React.createElement("label", null,
@@ -36397,9 +36662,11 @@ const MISize = ({ value, onChange, classes, style, disabled }) => {
         const amount = ONE * special;
         if (e.key === "ArrowRight" && special !== ZERO) {
             target.value = crement(fromT(target.value), amount);
+            e.preventDefault();
         }
         if (e.key === "ArrowLeft" && special !== ZERO) {
             target.value = crement(fromT(target.value), -amount);
+            e.preventDefault();
         }
         onChange(target.value);
     };
@@ -36732,7 +36999,9 @@ const MITemplateCSS = ({ store, listItemData, mi, disabled }) => {
 const MIs = ({ store, targetType, addableType }) => {
     const isAddable = addableType === "addable";
     const isBlock = targetType === MI_TARGET.block;
-    const targetMIs = isBlock ? store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems : store.state.templates[0].menuItems; //.sort((miA, miB) => { return miA.timeAdded - miB.timeAdded; });  
+    const templateMis = TemplateMIs.map(listMi => store.state.templates[0].menuItems.find(mi => mi.miListItemName === listMi.name)).filter(mi => !!mi);
+    const blockMis = BlockMIs.map(listBlockMi => store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.menuItems.find(mi => mi.miListItemName === listBlockMi.name)).filter(mi => !!mi);
+    const targetMIs = isBlock ? blockMis : templateMis;
     if (!targetMIs) {
         return React.createElement(React.Fragment, null);
     }
@@ -37229,7 +37498,7 @@ const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollaps
         }
         target.classList.remove("hovered");
     };
-    const label = block.label.length ? block.label : block.uuid;
+    const label = block.label.length ? block.label : block.contentValue ? "\"" + block.contentValue.split("\n")[0].substring(ZERO, TWO * TWO * TWO * TWO) + "\"" : block.uuid;
     const colapsedState = block.treeViewCollapseState;
     const isHideen = block.menuItems.find(mi => mi.miListItemName === BLOCK_MI_NAMES.display)?.miListItemValue === CSS_DISPLAY_TYPE.none;
     const isVariable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType);
@@ -37552,11 +37821,12 @@ const useUI = () => {
     };
 };
 
-const CopiesStack = ({ store }) => {
-    return React.createElement(React.Fragment, null);
-};
-
 const considerZooming = (value) => {
+    //for background images, so it would not try to convert base64 code
+    const maxSizeToTranslate = 2000;
+    if (value.length > maxSizeToTranslate) {
+        return value;
+    }
     //does not replaces %, b.c % are scalable on it own
     const newValue = value.replace(sizeMask, (str) => {
         if (str.includes("%")) {
@@ -37569,7 +37839,7 @@ const considerZooming = (value) => {
 
 const BlockStyle = qe.div `
   transition: all var(--transition);
-  font-size: calc(var(--zoom) * 100%);
+  font-size: calc(var(--zoom) * 1rem);
   cursor: pointer;
   notoverflow: hidden;
   line-break: anywhere;
@@ -37594,18 +37864,14 @@ const BlockStyle = qe.div `
     margin: 0;
   }
 `;
-const isTarget = (store, uuid, e) => {
+const isTargetBlock = (store, uuid, e) => {
     const clearUUID = (s) => {
         return s.split(" ").find(classItem => /(uuid-b)\d{1,}/g.test(classItem))?.replace("uuid-", "");
     };
     const target = e.target;
     const targetUUID = clearUUID(target.className);
     if (targetUUID) {
-        store.dispach({
-            name: ACTION_NAMES.app_selectBlock,
-            payload: targetUUID
-        });
-        return;
+        return true;
     }
     const parent = target.parentElement;
     if (!parent) {
@@ -37617,8 +37883,9 @@ const isTarget = (store, uuid, e) => {
     }
     return true;
 };
-const handleClick = (e, store, uuid) => {
-    if (!isTarget(store, uuid, e)) {
+const handleClick = (e, store, block) => {
+    const isBlockClicked = isTargetBlock(store, block.uuid, e);
+    if (!isBlockClicked) {
         return;
     }
     if (store.state.focusedBlockSelectorID) {
@@ -37626,55 +37893,72 @@ const handleClick = (e, store, uuid) => {
             name: ACTION_NAMES.block_setParam,
             payload: {
                 paramName: "referenceId",
-                value: uuid,
+                value: block.uuid,
                 blockUUID: store.state.focusedBlockSelectorID
             }
         });
     }
     else {
-        store.dispach({
-            name: ACTION_NAMES.app_selectBlock,
-            payload: uuid
-        });
+        if (store.state.selectedTab === TAB_TYPE.Edit) {
+            store.dispach({
+                name: ACTION_NAMES.app_selectBlock,
+                payload: block.uuid
+            });
+        }
+        if (store.state.selectedTab === TAB_TYPE.Copy) {
+            store.dispach({
+                name: ACTION_NAMES.app_selectCopy,
+                payload: block.copyRowUUID || null
+            });
+        }
     }
 };
-const getChildren = (children, store) => {
+const getChildren = (children, store, copyRowUUID) => {
     return children.map(child => {
-        return React.createElement(Block, { key: child.uuid, block: child, store: store });
+        const blockKey = `${child.uuid}-${child.copyRowUUID}`;
+        return React.createElement(Block, { key: blockKey, block: child, store: store, copyRowUUID: copyRowUUID });
     });
 };
+const formatText = (text) => {
+    return text.split("\n").map((line, i) => {
+        return React.createElement("p", { key: line.substring(ZERO, TWO * TWO * TWO) + i }, line.replace(/ /g, "\u00a0"));
+    });
+};
+const getReference = (block, store) => {
+    const referenceBlock = store.state.templates[0].blocks.find(b => b.uuid === block.referenceId);
+    if (!referenceBlock) {
+        return "";
+    }
+    if (referenceBlock?.contentType === CONTENT_TYPE.select) {
+        return referenceBlock.contentValue.split("\n")[0];
+    }
+    else {
+        return referenceBlock.contentValue;
+    }
+};
 const getContent = (block, store) => {
-    const formatText = (text) => {
-        return text.split("\n").map((line, i) => {
-            return React.createElement("p", { key: line.substring(ZERO, TWO * TWO * TWO) + i }, line.replace(/ /g, "\u00a0"));
-        });
-    };
-    const getReference = (block) => {
-        const referenceBlock = store.state.templates[0].blocks.find(b => b.uuid === block.referenceId);
-        if (!referenceBlock) {
-            return "";
-        }
-        if (referenceBlock?.contentType === CONTENT_TYPE.select) {
-            return referenceBlock.contentValue.split("\n")[0];
-        }
-        else {
-            return referenceBlock.contentValue;
-        }
-    };
-    // const handleContentEditableChange:(e:React.FormEvent) => void = (e) => {
-    //   e;
-    //   return;
-    // };
-    //TODO contentEditable={store.state.selectedBlock === block.uuid} onChange={handleContentEditableChange}
     return React.createElement(React.Fragment, null,
         block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue),
         block.contentType === CONTENT_TYPE.variable && formatText(block.contentValue),
         block.contentType === CONTENT_TYPE.select && formatText(block.contentValue.split("\n")[0]),
-        block.contentType === CONTENT_TYPE.copyFrom && formatText(getReference(block)));
+        block.contentType === CONTENT_TYPE.copyFrom && formatText(getReference(block, store)));
 };
-const Block = ({ store, block, classes }) => {
+const getCopyContent = (block, store, copyRowUUID) => {
+    const copyColumns = store.state.templates[0].copyColumns;
+    const getVariableByTargetUUID = (blockUUID) => {
+        const targetRow = store.state.templates[0].copyRows.find(row => row.uuid === copyRowUUID);
+        const value = targetRow?.cells.find(cell => copyColumns.find(col => col.uuid === cell.columnId)?.targetBlockId === blockUUID)?.value || "";
+        return value;
+    };
+    return React.createElement(React.Fragment, null,
+        block.contentType === CONTENT_TYPE.fixed && formatText(block.contentValue),
+        block.contentType === CONTENT_TYPE.variable && formatText(getVariableByTargetUUID(block.uuid)),
+        block.contentType === CONTENT_TYPE.select && formatText(getVariableByTargetUUID(block.uuid)),
+        block.contentType === CONTENT_TYPE.copyFrom && formatText(getVariableByTargetUUID(block.referenceId)));
+};
+const Block = ({ store, block, classes, copyRowUUID }) => {
     const children = store.state.templates[0].blocks.filter(blockItem => blockItem.parentId === block.uuid);
-    const selected = store.state.selectedBlock === block.uuid ? "selected" : "";
+    const selected = store.state.selectedTab === TAB_TYPE.Edit ? store.state.selectedBlock === block.uuid ? "selected" : "" : store.state.selectedTab === TAB_TYPE.Copy ? store.state.selectedCopy === block.copyRowUUID ? "selected" : "" : "";
     const variable = [CONTENT_TYPE.variable, CONTENT_TYPE.select].includes(block.contentType) ? "variable" : "";
     const coping = block.contentType === CONTENT_TYPE.copyFrom ? "copying" : "";
     const getStyles = (mis) => {
@@ -37691,74 +37975,43 @@ const Block = ({ store, block, classes }) => {
         });
         return ret;
     };
-    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes} ${variable} ${coping}`, onClick: (e) => handleClick(e, store, block.uuid) }, !!children.length && block.contentType === CONTENT_TYPE.fixed ? getChildren(children, store) : getContent(block, store));
+    const value = store.state.selectedTab === TAB_TYPE.Edit ? getContent(block, store) : getCopyContent(block, store, copyRowUUID);
+    return React.createElement(BlockStyle, { style: getStyles(block.menuItems), className: `block uuid-${block.uuid} ${selected} ${classes ? classes : ""} ${variable} ${coping}`, onClick: (e) => handleClick(e, store, block) }, !!children.length && block.contentType === CONTENT_TYPE.fixed ? getChildren(children, store, copyRowUUID) : value);
 };
 
-const EditStack = ({ store }) => {
-    const pageStyles = (state) => {
-        let ret = {};
-        state.templates[0].menuItems.filter(mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(cssMI => {
-            const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
-            if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
-                return;
-            }
-            if (!listMI.CSSParam) {
-                return;
-            }
-            ret = {
-                ...ret,
-                [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
-            };
-        });
-        return ret;
-    };
-    const renderPage = (blocks, store) => {
-        const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
-        return React.createElement(PageStyle$1, { key: pageKey, className: "page", style: pageStyles(store.state) }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
-    };
-    const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
-    const rootBlocks = (blocks) => {
-        //v.3
-        //we expect page style to be
-        // display: flex, justify-content: start, align-content: start
-        const ret = [];
-        let pageIndex = ZERO;
-        let blockIndex = ZERO;
-        const blocksLength = blocks.length - ONE;
-        let rowTop = ZERO;
-        let borderB = ZERO;
-        let borderR = ZERO;
-        while (blockIndex <= blocksLength) {
-            const blockFtpW = blocks[blockIndex].FTPProportions.width;
-            const blockFtpH = blocks[blockIndex].FTPProportions.height;
-            //do we need to break page?
-            if (rowTop + blockFtpH > ONE) {
-                pageIndex++;
-                rowTop = ZERO;
-                borderB = ZERO;
-                borderR = ZERO;
-            }
-            else {
-                //do we need to break line?
-                if (borderR + blockFtpW > ONE) {
-                    rowTop = borderB;
-                    borderR = blockFtpW;
-                    borderB = borderB + blockFtpH;
-                    //do we need to break page now?
-                    if (borderB > ONE) {
-                        pageIndex++;
-                        rowTop = ZERO;
-                        borderB = ZERO;
-                        borderR = ZERO;
-                        //do we need to update borderB?
-                        if (rowTop + blockFtpH > borderB) {
-                            borderB = rowTop + blockFtpH;
-                        }
-                        //at least updating borderR
-                        borderR += blockFtpW;
-                    }
-                }
-                else {
+const clasterByFTP = (blocks) => {
+    //v.3
+    //we expect page style to be
+    // display: flex, justify-content: start, align-content: start
+    const ret = [];
+    let pageIndex = ZERO;
+    let blockIndex = ZERO;
+    const blocksLength = blocks.length - ONE;
+    let rowTop = ZERO;
+    let borderB = ZERO;
+    let borderR = ZERO;
+    while (blockIndex <= blocksLength) {
+        const blockFtpW = blocks[blockIndex].FTPProportions.width;
+        const blockFtpH = blocks[blockIndex].FTPProportions.height;
+        //do we need to break page?
+        if (rowTop + blockFtpH > ONE) {
+            pageIndex++;
+            rowTop = ZERO;
+            borderB = ZERO;
+            borderR = ZERO;
+        }
+        else {
+            //do we need to break line?
+            if (borderR + blockFtpW > ONE) {
+                rowTop = borderB;
+                borderR = blockFtpW;
+                borderB = borderB + blockFtpH;
+                //do we need to break page now?
+                if (borderB > ONE) {
+                    pageIndex++;
+                    rowTop = ZERO;
+                    borderB = ZERO;
+                    borderR = ZERO;
                     //do we need to update borderB?
                     if (rowTop + blockFtpH > borderB) {
                         borderB = rowTop + blockFtpH;
@@ -37767,15 +38020,101 @@ const EditStack = ({ store }) => {
                     borderR += blockFtpW;
                 }
             }
-            if (!ret[pageIndex]) {
-                ret[pageIndex] = [];
+            else {
+                //do we need to update borderB?
+                if (rowTop + blockFtpH > borderB) {
+                    borderB = rowTop + blockFtpH;
+                }
+                //at least updating borderR
+                borderR += blockFtpW;
             }
-            ret[pageIndex].push(blocks[blockIndex]);
-            blockIndex++;
         }
-        return ret;
+        if (!ret[pageIndex]) {
+            ret[pageIndex] = [];
+        }
+        ret[pageIndex].push(blocks[blockIndex]);
+        blockIndex++;
+    }
+    return ret;
+};
+const pageStyles = (state) => {
+    let ret = {};
+    state.templates[0].menuItems.filter(mi => TemplateMIs.find(tmi => tmi.name === mi.miListItemName)?.miType === MI_LISTITEM_TYPE.templateCSS || false).map(cssMI => {
+        const listMI = TemplateMIs.find(tmi => tmi.name === cssMI.miListItemName);
+        if (!listMI || listMI.miType !== MI_LISTITEM_TYPE.templateCSS) {
+            return;
+        }
+        if (!listMI.CSSParam) {
+            return;
+        }
+        ret = {
+            ...ret,
+            [listMI.CSSParam]: considerZooming(String(cssMI.miListItemValue))
+        };
+    });
+    return ret;
+};
+const EditStack = ({ store }) => {
+    //it seems like this is the only reliable way to get correct dom element size
+    setTimeout(() => {
+        const rootBlocks = document.querySelectorAll(".rootBlock");
+        [...rootBlocks].map((block) => {
+            const pageDOM = block.parentElement;
+            //getting block uuid
+            const blockUUID = block.className.split(" ").find(name => /uuid-b(\d){1,}/.test(name))?.replace("uuid-", "") || "";
+            //getting size proportions
+            const blockStyle = window.getComputedStyle(block);
+            const getNumber = (arg) => {
+                return parseFloat(arg.replace("px", ""));
+            };
+            const pageRightBorder = pageDOM.clientWidth;
+            const pageBottomBorder = pageDOM.clientHeight;
+            const blockHeight = block.clientHeight + getNumber(blockStyle.marginTop) + getNumber(blockStyle.marginBottom);
+            const blockWidth = block.clientWidth + getNumber(blockStyle.marginLeft) + getNumber(blockStyle.marginRight);
+            const widthProportion = Math.round(blockWidth / pageRightBorder * THOUSAND) / THOUSAND;
+            const heightProportion = Math.round(blockHeight / pageBottomBorder * THOUSAND) / THOUSAND;
+            //comparing to state saved
+            const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
+            if (targetBlock) {
+                if (heightProportion && widthProportion &&
+                    (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion)) {
+                    store.dispach({
+                        name: ACTION_NAMES.block_setFTP,
+                        payload: {
+                            blockUUID: blockUUID,
+                            width: widthProportion,
+                            height: heightProportion
+                        }
+                    });
+                }
+            }
+        });
+    }, AFTER_ANIMATION);
+    const renderPage = (blocks, store) => {
+        const pageKey = `${blocks[0].uuid}${blocks[blocks.length - ONE].uuid}`;
+        return React.createElement(PageStyle$1, { key: pageKey, className: "page", style: pageStyles(store.state) }, blocks.map(block => React.createElement(Block, { key: block.uuid, classes: "rootBlock", store: store, block: block })));
     };
-    return React.createElement(React.Fragment, null, rootBlocks(rootChildren).map(childList => {
+    const rootChildren = store.state.templates[0].blocks.filter(block => block.parentId === null);
+    return React.createElement(React.Fragment, null, clasterByFTP(rootChildren).map(childList => {
+        return renderPage(childList, store);
+    }));
+};
+
+const CopiesStack = ({ store }) => {
+    const rootCopyChildren = store.state.templates[0].copyRows.map(copyRow => store.state.templates[0].blocks.filter(block => block.parentId === null).map(b => {
+        return {
+            ...b,
+            copyRowUUID: copyRow.uuid
+        };
+    })).flat();
+    const renderPage = (childList, store) => {
+        const pageKey = `${childList[0].uuid}-${childList[0].copyRowUUID}-${childList[childList.length - ONE].uuid}-${childList[childList.length - ONE].copyRowUUID}`;
+        return React.createElement(PageStyle$1, { key: pageKey, style: pageStyles(store.state), className: "page" }, childList.map(child => {
+            const blockKey = `${child.uuid}-${child.copyRowUUID}`;
+            return React.createElement(Block, { key: blockKey, store: store, block: child, copyRowUUID: child.copyRowUUID });
+        }));
+    };
+    return React.createElement(React.Fragment, null, clasterByFTP(rootCopyChildren).map(childList => {
         return renderPage(childList, store);
     }));
 };
@@ -37825,47 +38164,24 @@ const PageStyle$1 = qe.div `
   box-shadow: var(--box-shadow);
 `;
 const Stack = ({ store }) => {
-    const handleBlockSelect = (uuid) => {
-        store.dispach({
-            name: ACTION_NAMES.app_selectBlock,
-            payload: uuid
-        });
+    const handleClick = (tab) => {
+        if (tab === TAB_TYPE.Edit) {
+            store.dispach({
+                name: ACTION_NAMES.app_selectBlock,
+                payload: null
+            });
+        }
+        if (tab === TAB_TYPE.Copy) {
+            store.dispach({
+                name: ACTION_NAMES.app_selectCopy,
+                payload: null
+            });
+        }
     };
-    //it seems like this is the only reliable way to get correct dom element size
-    setTimeout(() => {
-        const rootBlocks = document.querySelectorAll(".rootBlock");
-        [...rootBlocks].map((block) => {
-            const pageDOM = block.parentElement;
-            //getting block uuid
-            const blockUUID = block.className.split(" ").find(name => /uuid-b(\d){1,}/.test(name))?.replace("uuid-", "") || "";
-            //getting size proportions
-            const pageRightBorder = pageDOM.clientWidth;
-            const pageBottomBorder = pageDOM.clientHeight;
-            const blockHeight = block.clientHeight;
-            const blockWidth = block.clientWidth;
-            const widthProportion = Math.round(blockWidth / pageRightBorder * THOUSAND) / THOUSAND;
-            const heightProportion = Math.round(blockHeight / pageBottomBorder * THOUSAND) / THOUSAND;
-            //comparing to state saved
-            const targetBlock = store.state.templates[0].blocks.find(block => block.uuid === blockUUID);
-            if (targetBlock) {
-                if (heightProportion && widthProportion &&
-                    (targetBlock.FTPProportions.height !== heightProportion || targetBlock.FTPProportions.width !== widthProportion)) {
-                    store.dispach({
-                        name: ACTION_NAMES.block_setFTP,
-                        payload: {
-                            blockUUID: blockUUID,
-                            width: widthProportion,
-                            height: heightProportion
-                        }
-                    });
-                }
-            }
-        });
-    }, AFTER_ANIMATION);
     const pageSize = store.state.templates[0].pageSizeMM.split(" ");
     const isHorizontal = store.state.templates[0].pageOrientation === PAGE_ORIENTATION.horizontal;
     const modifiedSize = isHorizontal ? pageSize.reverse() : pageSize;
-    return React.createElement(StackStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleBlockSelect(null); }, style: {
+    return React.createElement(StackStyle, { className: "stack", onClick: (e) => { e.target.classList.contains("stack") && handleClick(store.state.selectedTab); }, style: {
             // ...getMargins(store.state.templates[0].pageMargin),
             "--zoom": store.state.zoomByTab[store.state.selectedTab],
             "--page-size-1": modifiedSize[0],

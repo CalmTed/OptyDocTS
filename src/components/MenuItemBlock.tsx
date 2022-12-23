@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { BlockMIs } from "src/models/blockMIs";
-import { ACTION_NAMES, CONTENT_TYPE, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
+import { ACTION_NAMES, INPUT_TYPES, MI_LISTITEM_TYPE } from "src/models/constants";
 import { MenuItemBlockModel, StoreModel, MenuItemBlockListItemModel, BlockModel } from "src/models/types";
 import styled from "styled-components";
 import { MIColor, MIFile, MISelect, MISize, MIText, MITextarea, MIblockSelect } from "./ui/MiTypes";

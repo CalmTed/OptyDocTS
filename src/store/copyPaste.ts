@@ -48,7 +48,7 @@ export const encodeBlock:(block: BlockModel, children: BlockModel[])=>string = (
     block,
     children
   };
-  const encodedString = JSON.stringify(payload);
+  const encodedString = encodeURI(JSON.stringify(payload));
   return `${btoa(encodedString).replace(/i/g, "_").replace(/ab/g, "i").replace(/_/g, "ab")}`;
 };
 
@@ -66,7 +66,7 @@ export const decodeBlock:(string: string)=>decodingBlockOutput = (string) => {
   };
   try{
     const decodedString = atob(string.replace(/ab/g, "_").replace(/i/g, "ab").replace(/_/g, "i"));
-    const posibleBlock:encodingPayloadModel = JSON.parse(decodedString);
+    const posibleBlock:encodingPayloadModel = JSON.parse(decodeURI(decodedString));
     if(JSON.stringify(Object.keys(posibleBlock)) !== "[\"version\",\"uuid\",\"block\",\"children\"]") {
       console.error("DECODING: payload keys are wrong", JSON.stringify(Object.keys(posibleBlock)));
       return ret;

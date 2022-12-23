@@ -13,7 +13,7 @@ const encodeTemplate:(template: TemplateModel)=>string = (template) => {
     uuid: template.uuid,
     template
   };
-  const encodedString = JSON.stringify(payload);
+  const encodedString = encodeURI(JSON.stringify(payload));
   return `${btoa(encodedString).replace(/i/g, "_").replace(/ab/g, "i").replace(/_/g, "ab")}`;
 };
 
@@ -29,7 +29,7 @@ const decodeTemplate:(string: string)=>decodingBlockOutput = (string) => {
   };
   try{
     const decodedString = atob(string.replace(/ab/g, "_").replace(/i/g, "ab").replace(/_/g, "i"));
-    const posibleTemplate:encodingPayloadModel = JSON.parse(decodedString);
+    const posibleTemplate:encodingPayloadModel = JSON.parse(decodeURI(decodedString));
     if(JSON.stringify(Object.keys(posibleTemplate)) !== "[\"version\",\"uuid\",\"template\"]") {
       console.error("DECODING: payload keys are wrong", JSON.stringify(Object.keys(posibleTemplate)));
       return ret;

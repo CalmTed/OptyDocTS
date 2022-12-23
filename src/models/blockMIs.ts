@@ -20,7 +20,17 @@ export enum BLOCK_MI_NAMES{
   backgroundRepeat = "backgroundRepeat",
   backgroundPosition = "backgroundPosition",
   fontColor = "fontColor",
-  fontSize = "fontSize"
+  fontSize = "fontSize",
+  fontFamily = "fontFamily",
+  fontWeight = "fontWeight",
+  fontStyle = "fontStyle",
+  border = "border",
+  borderTop = "borderTop",
+  borderBottom = "borderBottom",
+  borderLeft = "borderLeft",
+  borderRight = "borderRight",
+  padding = "padding",
+  margin = "margin"
 }
 
 export const BlockMIs:(MenuItemBlockListItemModel)[] = [
@@ -200,6 +210,18 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         value: "flex-end"
       },
       {
+        label: "miSpaceBetween",
+        value: "space-between"
+      },
+      {
+        label: "miSpaceAround",
+        value: "space-around"
+      },
+      {
+        label: "miSpaceEvenly",
+        value: "space-evenly"
+      },
+      {
         label: "miInherit",
         value: "inherit"
       }
@@ -271,6 +293,78 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         label: "miInherit",
         value: "inherit"
       }
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.fontFamily,
+    label: "miFontFamily",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "fontFamily",
+    CSSDefaultValue: "#000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label:"miSerif",
+        value:"serif"
+      },
+      {
+        label:"miSansSerif",
+        value:"sans-serif"
+      },
+      {
+        label:"miMonospace",
+        value:"monospace"
+      } 
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.fontWeight,
+    label: "miFontWeight",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "fontWeight",
+    CSSDefaultValue: "inherit",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label:"miInherit",
+        value:"inherit"
+      },
+      {
+        label:"miNormal",
+        value:"normal"
+      },
+      {
+        label:"miBold",
+        value:"bold"
+      } 
+    ]
+  },
+  {
+    name: BLOCK_MI_NAMES.fontStyle,
+    label: "miFontStyle",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "fontStyle",
+    CSSDefaultValue: "inherit",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label:"miInherit",
+        value:"inherit"
+      },
+      {
+        label:"miNormal",
+        value:"normal"
+      },
+      {
+        label:"miItalic",
+        value:"italic"
+      } 
     ]
   },
   {
@@ -400,5 +494,82 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         value: "right"
       }
     ]
+  },
+  {
+    name: BLOCK_MI_NAMES.border,
+    label: "miBorder",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "border",
+    CSSDefaultValue: "1px solid #000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.borderTop,
+    label: "miBorderTop",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "borderTop",
+    CSSDefaultValue: "1px solid #000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.borderBottom,
+    label: "miBorderBottom",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "borderBottom",
+    CSSDefaultValue: "1px solid #000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.borderLeft,
+    label: "miBorderLeft",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "borderLeft",
+    CSSDefaultValue: "1px solid #000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.borderRight,
+    label: "miBorderRight",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "borderRight",
+    CSSDefaultValue: "1px solid #000",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.margin,
+    label: "miMargin",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "margin",
+    CSSDefaultValue: "0px",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
+  },
+  {
+    name: BLOCK_MI_NAMES.padding,
+    label: "miPadding",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "padding",
+    CSSDefaultValue: "0px",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.text,
+    inputOptions: []
   }
 ];

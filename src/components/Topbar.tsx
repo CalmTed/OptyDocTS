@@ -210,8 +210,8 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       {
         store.state.selectedTab === TAB_TYPE.Copy &&
           <>
-            <TopbarButton title={(console.log("TODO"), undefined)} iconType="plus" onClick={() => methods.handleAddCopy()} ></TopbarButton>
-            <TopbarButton title={(console.log("TODO"), undefined)} iconType="minus" onClick={() => methods.handleRemoveCopy()} disabled={!store.state.selectedCopy}></TopbarButton>
+            <TopbarButton title={store.t("topBarAddCopy")} iconType="plus" onClick={() => methods.handleAddCopy()} ></TopbarButton>
+            <TopbarButton title={store.t("topBarRemoveCopy")} iconType="minus" onClick={() => methods.handleRemoveCopy()} disabled={!store.state.selectedCopy}></TopbarButton>
           </>
       }
     </div>

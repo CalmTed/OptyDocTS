@@ -119,8 +119,9 @@ export enum SIZE_UNITS{
 //we filter % character insize considerZooming component
 export const sizeMask = new RegExp(
   "("
-   + Object.values(SIZE_UNITS).map(unit => `^(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}$`).join("|")
-   + ")"
+   + Object.values(SIZE_UNITS).map(unit => `(-|)([\\d]{1,}|[\\d]{1,}.[\\d]{1,})${unit}`).join("|")
+   + ")",
+  "g"
 );
 export enum DEFAULT_VALUES{
   inherit = "inherit",

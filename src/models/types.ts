@@ -178,6 +178,7 @@ export interface TemplateModel {
 
 export interface BlockModel {
   uuid: string
+  copyRowUUID?: string
   label: string
   parentId: string | null
   contentType: CONTENT_TYPE
