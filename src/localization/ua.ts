@@ -19,6 +19,10 @@ const wordsUA: Record<WordType, string> = {
   topBarPrint: "Друкувати",
   topBarAddCopy: "Add copy",
   topBarRemoveCopy: "Remove copy",
+  topBarPreviusCopy: "Previus copy",
+  topBarNextCopy: "Next copy",
+  topBarImportCSV: "Import CSV file",
+  topBarExportCSV: "Export copies as CSV file",
   //sideBar
   sideBarEdit: "Макет",
   sideBarCopy: "Копії",

@@ -112,8 +112,8 @@ const Split: FC<SplitProps> = ({store, children}) => {
   };
   return (<SplitStyle 
     id="split" 
-    style={({"--split-size": (store.state.sidebarSectionHeight + "px")} as React.CSSProperties)}
-    property={store.state.sidebarSectionHeight + ""}
+    style={({"--split-size": (store.state.sidebarSectionHeight[store.state.selectedTab] + "px")} as React.CSSProperties)}
+    property={store.state.sidebarSectionHeight[store.state.selectedTab] + ""}
   >
     {children && (
       <>

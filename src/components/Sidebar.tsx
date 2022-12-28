@@ -10,6 +10,7 @@ import Icon from "./ui/Icon";
 import { MIPicker } from "./ui/MIPicker";
 import { MICopyNav } from "./ui/MICopyNav";
 import { MICopyVars } from "./ui/MICopyVars";
+import { CopyTable } from "./CopyTable";
 
 interface SidebarModel {
   store: StoreModel
@@ -21,6 +22,8 @@ const SidebarStyle = styled.div`
   width: var(--sidebar-width);
   left: 0px;
   height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const SplitStyle = styled.div`
@@ -181,6 +184,7 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
           </>
         </SplitStyle>
         <SplitStyle>
+          <CopyTable store={store}/>
         </SplitStyle>
       </Split>
     }

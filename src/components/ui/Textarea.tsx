@@ -20,7 +20,7 @@ const TextareaStyle = styled.textarea`
   color: var(--text-color);
   font-size: inherit;
   font-family: inherit;
-  :hover{
+  :hover:not(:focus){
     opacity: 0.8;
   }
   :focus{

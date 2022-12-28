@@ -26,6 +26,7 @@ const PageStyle = styled.div`
   --shadow-color: #222;
   --variable-color: #11B7AF;
   --copiedFrom-color: #AD14F3;
+  --table-row-bg: #36353582;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -34,6 +35,7 @@ const PageStyle = styled.div`
     --second-color: #ECCF03;
     --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
     --shadow-color: #888;
+    --table-row-bg: #c9c9c970;
   }
   @media (prefers-color-scheme: light) {
     &.auto{
@@ -44,6 +46,7 @@ const PageStyle = styled.div`
       --second-color: #ECCF03;
       --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
       --shadow-color: #888;
+      --table-row-bg: #c9c9c970;
     }
   }
   --transition: .1s ease-in;
@@ -200,7 +203,14 @@ const Page: FC<PageModel> = ({state, dispach}) => {
       document.removeEventListener("mousedown", handleMouseDown);
     };
   });
-
+  const titleDOM = document.querySelector("title");
+  if(titleDOM) {
+    if(state.templates[0].name.length) {
+      titleDOM.innerText = `${state.templates[0].name} - OptyDoc v1.1`;
+    } else{
+      titleDOM.innerText = "OptyDoc v1.1";
+    }
+  }
   return <PageStyle className={`webpage ${state.theme}`}>
     <Topbar store={store}></Topbar>
     <Sidebar store={store}></Sidebar>

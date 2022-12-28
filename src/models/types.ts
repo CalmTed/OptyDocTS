@@ -116,6 +116,11 @@ export type ActionModel = {
     cellUUID: string
     value: string 
   }
+} | {
+  name: ACTION_NAMES.template_setCopyRows
+  payload: {
+    rows: CopyRowModel[]
+  }
 } | {////////     BLOCK     /////////
   name: ACTION_NAMES.block_setParam
   payload: {
@@ -153,7 +158,10 @@ export interface AppStateModel {
   selectedTab: TAB_TYPE
   selectedBlock: string | null
   selectedCopy: string | null
-  sidebarSectionHeight: number
+  sidebarSectionHeight: {
+    [TAB_TYPE.Edit] : number
+    [TAB_TYPE.Copy] : number
+  }
   templates: TemplateModel[]
   zoomByTab: {
     [TAB_TYPE.Edit] : number

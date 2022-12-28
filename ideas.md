@@ -1,0 +1,7 @@
+- internal clipbeard buffer for inner page copying
+- content type for mis
+- limit range of copyes to pring per time
+- setting rule to rerender FTP for copies if there are a lot of lines in variable block and it should be wrapped to the next page
+- save template to .html file with ability to make copies offline in any browser
+- colapsable menu(and other styles) for mobile view
+- sort copies by column value

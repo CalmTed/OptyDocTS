@@ -2,8 +2,9 @@ import React, { FC } from "react";
 import { CopyCellModel, StoreModel } from "src/models/types";
 import styled from "styled-components";
 import Select from "./Select";
-import { ACTION_NAMES, CONTENT_TYPE } from "src/models/constants";
+import { ACTION_NAMES, CONTENT_TYPE, ONE } from "src/models/constants";
 import Input from "./Input";
+import Textarea from "./Textarea";
 
 interface MICopyVarsModel{
   store: StoreModel
@@ -52,7 +53,16 @@ export const MICopyVars:FC<MICopyVarsModel> = ({store}) => {
         }
         return <CopyVarStyle key={cell.uuid}>
           <label>{column.label}</label>
-          {column.contentType === CONTENT_TYPE.variable && <Input value={cell.value} onChange={ (e) => handleValueChange((e.target as HTMLInputElement).value, cell) }></Input>}
+          {
+            column.contentType === CONTENT_TYPE.variable &&
+            cell.value.indexOf("\n") === -ONE &&
+            <Input value={cell.value} onChange={ (e) => handleValueChange((e.target as HTMLInputElement).value, cell) }></Input>
+          }
+          {
+            column.contentType === CONTENT_TYPE.variable &&
+            cell.value.indexOf("\n") > -ONE &&
+            <Textarea value={cell.value} onChange={ (e) => handleValueChange((e.target as HTMLInputElement).value, cell) }></Textarea>
+          }
           {
             column.contentType === CONTENT_TYPE.select &&
             <Select

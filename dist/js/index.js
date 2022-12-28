@@ -34586,6 +34586,7 @@ var ACTION_NAMES;
     ACTION_NAMES["template_addCopy"] = "template_addCopy";
     ACTION_NAMES["template_removeCopy"] = "template_removeCopy";
     ACTION_NAMES["template_setCopyValue"] = "template_setCopyValue";
+    ACTION_NAMES["template_setCopyRows"] = "template_setCopyRows";
     ACTION_NAMES["block_setParam"] = "block_setParam";
     ACTION_NAMES["block_setCSS"] = "block_setCSS";
     ACTION_NAMES["block_setFTP"] = "block_setFTP";
@@ -34690,6 +34691,10 @@ const wordsEB = {
     topBarPrint: "Print",
     topBarAddCopy: "Add copy",
     topBarRemoveCopy: "Remove copy",
+    topBarPreviusCopy: "Previus copy",
+    topBarNextCopy: "Next copy",
+    topBarImportCSV: "Import CSV file",
+    topBarExportCSV: "Export copies as CSV file",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
@@ -34807,6 +34812,10 @@ const wordsUA = {
     topBarPrint: "Друкувати",
     topBarAddCopy: "Add copy",
     topBarRemoveCopy: "Remove copy",
+    topBarPreviusCopy: "Previus copy",
+    topBarNextCopy: "Next copy",
+    topBarImportCSV: "Import CSV file",
+    topBarExportCSV: "Export copies as CSV file",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -35807,7 +35816,10 @@ const getInitialAppState = () => {
         selectedTab: TAB_TYPE.Edit,
         selectedBlock: null,
         selectedCopy: null,
-        sidebarSectionHeight: 100,
+        sidebarSectionHeight: {
+            [TAB_TYPE.Edit]: 45,
+            [TAB_TYPE.Copy]: 45
+        },
         templates: [getInitialTamplate()],
         zoomByTab: {
             [TAB_TYPE.Edit]: 1,
@@ -35929,19 +35941,19 @@ const getCopyColumn = (block) => {
         };
     }
 };
-const getCopyRow = (columns) => {
+const getCopyRow = (columns, cellValues) => {
     return {
         uuid: getId("crw"),
         cells: columns.map(col => {
-            return getNewCell(col);
+            return getNewCell(col, cellValues ? cellValues.find(value => value.columnId === col.uuid) : undefined);
         })
     };
 };
-const getNewCell = (column) => {
+const getNewCell = (column, value) => {
     return {
         uuid: getId("ccel"),
         columnId: column.uuid,
-        value: column.defauldValue
+        value: value ? value.value : column.defauldValue
     };
 };
 
@@ -36072,6 +36084,96 @@ const importTemplate = (file, callBack) => {
         const fileText = fr.result;
         const decodedTemplate = decodeTemplate(fileText);
         callBack(decodedTemplate.template);
+    };
+    fr.readAsText(file);
+};
+
+const copyTableToCSV = (rows, columns) => {
+    let ret = "";
+    ret += columns.map(column => column.targetBlockId).join(",") + "\r\n";
+    ret += columns.map(column => `"${column.label.replace(/\n/g, "%2F")}"`).join(",") + "\r\n";
+    rows.map(row => {
+        ret += row.cells.map(cell => `"${cell.value.replace(/\n/g, "%2F")}"`).join(",") + "\r\n";
+    });
+    return ret;
+};
+const CSVToCopyTable = (csv, copyColumns) => {
+    const firstRow = csv.split("\n")[0].split(",");
+    //check if all csv columns have corresponding copyColumn
+    const csvFRString = firstRow.sort().join(",").trim();
+    const localColumnsString = firstRow.sort().join(",").trim();
+    if (csvFRString !== localColumnsString) {
+        console.error(csvFRString + " !== " + localColumnsString);
+        return null;
+    }
+    //loop all rows and create new rows with needed cell values
+    function parseCSV(str) {
+        const arr = [];
+        let quote = false;
+        for (let row = 0, col = 0, c = 0; c < str.length; c++) {
+            const cc = str[c], nc = str[c + ONE];
+            arr[row] = arr[row] || [];
+            arr[row][col] = arr[row][col]?.replace(/(%2F)/g, "\n") || "";
+            if (cc === "\"" && quote && nc === "\"") {
+                arr[row][col] += cc;
+                ++c;
+                continue;
+            }
+            if (cc === "\"") {
+                quote = !quote;
+                continue;
+            }
+            if (cc === "," && !quote) {
+                ++col;
+                continue;
+            }
+            if (cc === "\r" && nc === "\n" && !quote) {
+                ++row;
+                col = ZERO;
+                ++c;
+                continue;
+            }
+            if (cc === "\n" && !quote) {
+                ++row;
+                col = ZERO;
+                continue;
+            }
+            if (cc === "\r" && !quote) {
+                ++row;
+                col = ZERO;
+                continue;
+            }
+            arr[row][col] += cc;
+        }
+        return arr;
+    }
+    const rows = parseCSV(csv).slice(TWO);
+    return rows.filter(row => !!row.length).map(row => {
+        const cellValues = firstRow.map((targetBlockId, i) => {
+            return {
+                columnId: copyColumns.find(col => col.targetBlockId === targetBlockId)?.uuid || "",
+                value: row[i]
+            };
+        });
+        return getCopyRow(copyColumns, cellValues);
+    });
+};
+const exportAsCSV = (textToSave, fileName) => {
+    const link = document.createElement("a");
+    document.body.appendChild(link);
+    link.setAttribute("style", "display: none");
+    const url = "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(textToSave);
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    window.URL.revokeObjectURL(url);
+};
+const importCopyRows = (copyColumns, file, callBack) => {
+    const fr = new FileReader();
+    fr.onloadend = () => {
+        const fileText = fr.result;
+        const rows = CSVToCopyTable(fileText, copyColumns);
+        callBack(rows);
     };
     fr.readAsText(file);
 };
@@ -36252,12 +36354,49 @@ const topBarMethods = (store) => {
                     copyUUID: store.state.selectedCopy
                 }
             });
+        },
+        handleSetCopy: (arg) => {
+            const currentCopy = store.state.templates[0].copyRows.find(row => row.uuid === store.state.selectedCopy);
+            const targetCopyIndex = arg === "next" ? currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) + ONE : undefined : currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) - ONE : null;
+            if (typeof targetCopyIndex === "undefined") {
+                return;
+            }
+            store.dispach({
+                name: ACTION_NAMES.app_selectCopy,
+                payload: targetCopyIndex !== null ? store.state.templates[0].copyRows[targetCopyIndex].uuid : targetCopyIndex
+            });
+        },
+        openCSV: (e) => {
+            const file = e.target.files?.[0];
+            if (!file) {
+                return;
+            }
+            importCopyRows(store.state.templates[0].copyColumns, file, (rows) => {
+                if (rows !== null) {
+                    store.dispach({
+                        name: ACTION_NAMES.template_setCopyRows,
+                        payload: { rows }
+                    });
+                    store.showToast("copies imported");
+                }
+                else {
+                    store.showToast("table error");
+                }
+            });
+        },
+        saveCSV: () => {
+            exportAsCSV(copyTableToCSV(store.state.templates[0].copyRows, store.state.templates[0].copyColumns), `${store.state.templates[0].name}_data.csv`);
+            store.showToast("coming soon");
         }
     };
 };
 const Topbar = ({ store }) => {
     const methods = topBarMethods(store);
     const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
+    const copySelected = store.state.templates[0].copyRows.find(row => row.uuid === store.state.selectedCopy);
+    const indexOfSelectedCopyRow = copySelected ? store.state.templates[0].copyRows.indexOf(copySelected) + ONE : false;
+    const isFirstCopy = indexOfSelectedCopyRow ? indexOfSelectedCopyRow < TWO : true;
+    const isLastCopy = indexOfSelectedCopyRow ? indexOfSelectedCopyRow === store.state.templates[0].copyRows.length : true;
     return React.createElement(TopbarStyle, { className: "topbar" },
         React.createElement("div", { className: "templateTools" },
             store.state.selectedTab === TAB_TYPE.Edit &&
@@ -36272,8 +36411,14 @@ const Topbar = ({ store }) => {
                         React.createElement(TopbarButton, { title: store.t("topBarDuplicateBlock"), iconType: "duplicate", onClick: methods.handleDuplicate }))),
             store.state.selectedTab === TAB_TYPE.Copy &&
                 React.createElement(React.Fragment, null,
-                    React.createElement(TopbarButton, { title: store.t("topBarAddCopy"), iconType: "plus", onClick: () => methods.handleAddCopy() }),
-                    React.createElement(TopbarButton, { title: store.t("topBarRemoveCopy"), iconType: "minus", onClick: () => methods.handleRemoveCopy(), disabled: !store.state.selectedCopy }))),
+                    React.createElement(TopbarButton, { title: store.t("topBarAddCopy"), iconType: "plus", onClick: methods.handleAddCopy, disabled: !store.state.templates[0].copyColumns.length }),
+                    React.createElement(TopbarButton, { title: store.t("topBarRemoveCopy"), iconType: "minus", onClick: methods.handleRemoveCopy, disabled: !store.state.selectedCopy }),
+                    React.createElement(TopbarButton, { title: store.t("topBarPreviusCopy"), iconType: "left", onClick: () => methods.handleSetCopy("prev"), disabled: isFirstCopy }),
+                    React.createElement(TopbarButton, { title: store.t("topBarNextCopy"), iconType: "right", onClick: () => methods.handleSetCopy("next"), disabled: isLastCopy }),
+                    React.createElement("label", null,
+                        React.createElement(TopbarButton, { title: store.t("topBarImportCSV"), iconType: "hash", onClick: () => null }),
+                        React.createElement("input", { style: { "display": "none" }, type: "file", onChange: methods.openCSV })),
+                    React.createElement(TopbarButton, { title: store.t("topBarExportCSV"), iconType: "download", onClick: methods.saveCSV, disabled: !store.state.templates[0].copyRows.length }))),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: methods.handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
             React.createElement("label", null,
@@ -36287,9 +36432,10 @@ const Topbar = ({ store }) => {
 
 const TabListStyle = qe.div `
   display: flex;
+  width: 100%;
+  height: var(--topbar-height);
 `;
 const TabStyle = qe.div `
-  height: var(--topbar-height);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36419,7 +36565,7 @@ const Split = ({ store, children }) => {
             }
         }
     };
-    return (React.createElement(SplitStyle$1, { id: "split", style: { "--split-size": (store.state.sidebarSectionHeight + "px") }, property: store.state.sidebarSectionHeight + "" }, children && (React.createElement(React.Fragment, null,
+    return (React.createElement(SplitStyle$1, { id: "split", style: { "--split-size": (store.state.sidebarSectionHeight[store.state.selectedTab] + "px") }, property: store.state.sidebarSectionHeight[store.state.selectedTab] + "" }, children && (React.createElement(React.Fragment, null,
         React.createElement(UpperStyle, null, children[0]),
         React.createElement(GutterStyle, { className: "gutter", onMouseDown: (event) => { handleMouseDown(event); } }),
         React.createElement(LowerStyle, null, children[1])))));
@@ -36433,7 +36579,7 @@ const InputStyle = qe.input `
   padding: 0.5em 1em;
   color: var(--text-color);
   font-size: inherit;
-  :hover{
+  :hover:not(:focus){
     opacity: 0.8;
   }
   :focus{
@@ -36602,7 +36748,7 @@ const TextareaStyle = qe.textarea `
   color: var(--text-color);
   font-size: inherit;
   font-family: inherit;
-  :hover{
+  :hover:not(:focus){
     opacity: 0.8;
   }
   :focus{
@@ -37330,7 +37476,12 @@ const MICopyVars = ({ store }) => {
         }
         return React.createElement(CopyVarStyle, { key: cell.uuid },
             React.createElement("label", null, column.label),
-            column.contentType === CONTENT_TYPE.variable && React.createElement(Input, { value: cell.value, onChange: (e) => handleValueChange(e.target.value, cell) }),
+            column.contentType === CONTENT_TYPE.variable &&
+                cell.value.indexOf("\n") === -ONE &&
+                React.createElement(Input, { value: cell.value, onChange: (e) => handleValueChange(e.target.value, cell) }),
+            column.contentType === CONTENT_TYPE.variable &&
+                cell.value.indexOf("\n") > -ONE &&
+                React.createElement(Textarea, { value: cell.value, onChange: (e) => handleValueChange(e.target.value, cell) }),
             column.contentType === CONTENT_TYPE.select &&
                 React.createElement(Select, { value: cell.value, options: column.options.map(c => {
                         return {
@@ -37341,12 +37492,62 @@ const MICopyVars = ({ store }) => {
     }));
 };
 
+const CopyTableStyle = qe.div `
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-content: flex-start;
+`;
+const CellStyle = qe.div `
+  padding: 0.5em 1em;
+  width: 100%;
+  max-width: 15em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  white-space: nowrap;
+  &.selected{
+    color: var(--main-color);
+  }
+  :nth-child(even) {
+    background-color: var(--table-row-bg);
+  }
+`;
+const ColumnStyle = qe.div `
+  width: min-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+`;
+const TitleRowStyle = qe.div `
+  font-weight: bold;
+  padding: 0.5em 1em;
+  opaci
+`;
+const CopyTable = ({ store }) => {
+    const handleRowClick = (copyId) => {
+        store.dispach({
+            name: ACTION_NAMES.app_selectCopy,
+            payload: copyId
+        });
+    };
+    return React.createElement(CopyTableStyle, null, store.state.templates[0].copyColumns.map(column => React.createElement(ColumnStyle, { key: column.uuid },
+        React.createElement(TitleRowStyle, null, column.label ? column.label : column.targetBlockId),
+        React.createElement(React.Fragment, null, store.state.templates[0].copyRows.map(row => {
+            const cell = row.cells.find(cell => cell.columnId === column.uuid);
+            return cell &&
+                React.createElement(CellStyle, { key: cell.uuid, onClick: () => handleRowClick(row.uuid), className: `${row.uuid === store.state.selectedCopy ? "selected" : ""}` }, cell.value);
+        })))));
+};
+
 const SidebarStyle = qe.div `
   background: var(--section-bg);
   position: fixed;
   width: var(--sidebar-width);
   left: 0px;
   height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
 `;
 const SplitStyle = qe.div `
   overflow: auto;
@@ -37481,7 +37682,8 @@ const Sidebar = ({ store }) => {
                     React.createElement(React.Fragment, null,
                         React.createElement(MICopyNav, { store: store }),
                         React.createElement(MICopyVars, { store: store }))),
-                React.createElement(SplitStyle, null)));
+                React.createElement(SplitStyle, null,
+                    React.createElement(CopyTable, { store: store }))));
 };
 const TreeBrunch = ({ block, brunchChildren, selected, level, onClick, onCollapsedChange }) => {
     const handleMouseEnter = (uuid) => {
@@ -38204,6 +38406,7 @@ const PageStyle = qe.div `
   --shadow-color: #222;
   --variable-color: #11B7AF;
   --copiedFrom-color: #AD14F3;
+  --table-row-bg: #36353582;
   &.light{
     --app-bg: #d9d9d9;
     --section-bg: #eeeeee;
@@ -38212,6 +38415,7 @@ const PageStyle = qe.div `
     --second-color: #ECCF03;
     --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
     --shadow-color: #888;
+    --table-row-bg: #c9c9c970;
   }
   @media (prefers-color-scheme: light) {
     &.auto{
@@ -38222,6 +38426,7 @@ const PageStyle = qe.div `
       --second-color: #ECCF03;
       --main-button-bg: radial-gradient(83.75% 83.75% at 8.75% 93.75%, #14ABF3 0%, #ECCF03 100%);
       --shadow-color: #888;
+      --table-row-bg: #c9c9c970;
     }
   }
   --transition: .1s ease-in;
@@ -38371,6 +38576,15 @@ const Page = ({ state, dispach }) => {
             document.removeEventListener("mousedown", handleMouseDown);
         };
     });
+    const titleDOM = document.querySelector("title");
+    if (titleDOM) {
+        if (state.templates[0].name.length) {
+            titleDOM.innerText = `${state.templates[0].name} - OptyDoc v1.1`;
+        }
+        else {
+            titleDOM.innerText = "OptyDoc v1.1";
+        }
+    }
     return React.createElement(PageStyle, { className: `webpage ${state.theme}` },
         React.createElement(Topbar, { store: store }),
         React.createElement(Sidebar, { store: store }),
@@ -38435,8 +38649,8 @@ const appReducer = (state, action) => {
             }
             break;
         case ACTION_NAMES.app_setsidebarSectionHeight:
-            if (action.payload !== state.sidebarSectionHeight) {
-                state.sidebarSectionHeight = action.payload;
+            if (action.payload !== state.sidebarSectionHeight[state.selectedTab]) {
+                state.sidebarSectionHeight[state.selectedTab] = action.payload;
                 stateUpdated = true;
             }
             break;
@@ -38444,6 +38658,7 @@ const appReducer = (state, action) => {
             if (!state.templates?.[0]) {
                 state.templates.push(action.payload);
                 state.selectedBlock = null;
+                state.selectedCopy = null;
                 stateUpdated = true;
             }
             state.templates[0] = action.payload;
@@ -38664,6 +38879,12 @@ const templateReducer = (state, action) => {
                     targetCell.value = action.payload.value;
                     stateUpdated = true;
                 }
+            }
+            break;
+        case ACTION_NAMES.template_setCopyRows:
+            if (action.payload.rows.length) {
+                template.copyRows = action.payload.rows;
+                stateUpdated = true;
             }
             break;
         default:

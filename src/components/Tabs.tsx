@@ -5,10 +5,11 @@ import styled from "styled-components";
 
 const TabListStyle = styled.div`
   display: flex;
+  width: 100%;
+  height: var(--topbar-height);
 `;
 
 const TabStyle = styled.div`
-  height: var(--topbar-height);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -17,6 +17,10 @@ const wordsEB = {
   topBarPrint: "Print",
   topBarAddCopy: "Add copy",
   topBarRemoveCopy: "Remove copy",
+  topBarPreviusCopy: "Previus copy",
+  topBarNextCopy: "Next copy",
+  topBarImportCSV: "Import CSV file",
+  topBarExportCSV: "Export copies as CSV file",
   //sideBar
   sideBarEdit: "Edit",
   sideBarCopy: "Copy",

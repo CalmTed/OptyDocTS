@@ -2,11 +2,12 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { BlockModel, StoreModel, TemplateModel } from "src/models/types";
 import TopbarButton from "./TopbarButton";
-import { ACTION_NAMES, CONTENT_TYPE, TAB_TYPE, THEME_TYPE, ZERO } from "src/models/constants";
+import { ACTION_NAMES, CONTENT_TYPE, ONE, TAB_TYPE, THEME_TYPE, TWO, ZERO } from "src/models/constants";
 import { LANG_CODES } from "src/store/translation";
 import { getInitialTamplate } from "src/models/intials";
 import { copyTextToClipboard, decodeBlock, encodeBlock } from "src/store/copyPaste";
-import { exportTemplate, importTemplate } from "src/store/importExport";
+import { exportTemplate, importTemplate } from "src/store/templateFileMethods";
+import { copyTableToCSV, exportAsCSV, importCopyRows } from "src/store/copyTableFileMethods";
 
 interface TopbarModel {
   store: StoreModel
@@ -185,12 +186,48 @@ const topBarMethods = (store: StoreModel) => {
           copyUUID: store.state.selectedCopy
         }
       });
+    },
+    handleSetCopy: (arg: "next" | "prev") => {
+      const currentCopy = store.state.templates[0].copyRows.find(row => row.uuid === store.state.selectedCopy);
+      const targetCopyIndex = arg === "next" ? currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) + ONE : undefined : currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) - ONE : null;
+      if(typeof targetCopyIndex === "undefined") {
+        return;
+      }
+      store.dispach({
+        name: ACTION_NAMES.app_selectCopy,
+        payload: targetCopyIndex !== null ? store.state.templates[0].copyRows[targetCopyIndex].uuid : targetCopyIndex
+      });
+    },
+    openCSV: (e: React.ChangeEvent) => {
+      const file = (e.target as HTMLInputElement).files?.[0] as Blob;
+      if(!file) {
+        return;
+      }
+      importCopyRows(store.state.templates[0].copyColumns, file, (rows) => {
+        if(rows !== null) {
+          store.dispach({
+            name: ACTION_NAMES.template_setCopyRows,
+            payload: {rows}
+          });
+          store.showToast("copies imported");
+        }else{
+          store.showToast("table error");
+        }
+      });
+    },
+    saveCSV: () => {
+      exportAsCSV(copyTableToCSV(store.state.templates[0].copyRows, store.state.templates[0].copyColumns), `${store.state.templates[0].name}_data.csv`);
+      store.showToast("coming soon");
     }
   };
 };
 const Topbar: FC<TopbarModel> = ({store}) => {
   const methods = topBarMethods(store);
   const isSelectedBlockFixed = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock)?.contentType === CONTENT_TYPE.fixed;
+  const copySelected = store.state.templates[0].copyRows.find(row => row.uuid === store.state.selectedCopy);
+  const indexOfSelectedCopyRow = copySelected ? store.state.templates[0].copyRows.indexOf(copySelected) + ONE : false;
+  const isFirstCopy = indexOfSelectedCopyRow ? indexOfSelectedCopyRow < TWO : true;
+  const isLastCopy = indexOfSelectedCopyRow ? indexOfSelectedCopyRow === store.state.templates[0].copyRows.length : true;
   return <TopbarStyle className="topbar">
     <div className="templateTools">
       {
@@ -210,8 +247,15 @@ const Topbar: FC<TopbarModel> = ({store}) => {
       {
         store.state.selectedTab === TAB_TYPE.Copy &&
           <>
-            <TopbarButton title={store.t("topBarAddCopy")} iconType="plus" onClick={() => methods.handleAddCopy()} ></TopbarButton>
-            <TopbarButton title={store.t("topBarRemoveCopy")} iconType="minus" onClick={() => methods.handleRemoveCopy()} disabled={!store.state.selectedCopy}></TopbarButton>
+            <TopbarButton title={store.t("topBarAddCopy")} iconType="plus" onClick={methods.handleAddCopy} disabled={!store.state.templates[0].copyColumns.length}></TopbarButton>
+            <TopbarButton title={store.t("topBarRemoveCopy")} iconType="minus" onClick={methods.handleRemoveCopy} disabled={!store.state.selectedCopy}></TopbarButton>
+            <TopbarButton title={store.t("topBarPreviusCopy")} iconType="left" onClick={() => methods.handleSetCopy("prev")} disabled={isFirstCopy}></TopbarButton>
+            <TopbarButton title={store.t("topBarNextCopy")} iconType="right" onClick={() => methods.handleSetCopy("next")} disabled={isLastCopy}></TopbarButton>
+            <label>
+              <TopbarButton title={store.t("topBarImportCSV")} iconType="hash" onClick={() => null}></TopbarButton>
+              <input style={{"display":"none"}} type="file" onChange={methods.openCSV}></input>
+            </label>
+            <TopbarButton title={store.t("topBarExportCSV")} iconType="download" onClick={methods.saveCSV} disabled={!store.state.templates[0].copyRows.length}></TopbarButton>
           </>
       }
     </div>

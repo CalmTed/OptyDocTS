@@ -36,6 +36,7 @@ export enum ACTION_NAMES{
   template_addCopy = "template_addCopy",
   template_removeCopy = "template_removeCopy",
   template_setCopyValue = "template_setCopyValue",
+  template_setCopyRows = "template_setCopyRows",
 
   
   block_setParam = "block_setParam",

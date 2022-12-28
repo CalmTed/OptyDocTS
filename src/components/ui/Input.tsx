@@ -18,7 +18,7 @@ const InputStyle = styled.input`
   padding: 0.5em 1em;
   color: var(--text-color);
   font-size: inherit;
-  :hover{
+  :hover:not(:focus){
     opacity: 0.8;
   }
   :focus{

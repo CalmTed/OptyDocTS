@@ -18,7 +18,10 @@ export const getInitialAppState: ()=>AppStateModel = () => {
     selectedTab: TAB_TYPE.Edit,
     selectedBlock: null,
     selectedCopy: null,
-    sidebarSectionHeight: 100,
+    sidebarSectionHeight: {
+      [TAB_TYPE.Edit]: 45,
+      [TAB_TYPE.Copy]: 45
+    },
     templates: [getInitialTamplate()],
     zoomByTab: {
       [TAB_TYPE.Edit]: 1,
@@ -149,18 +152,23 @@ export const getCopyColumn: (block: BlockModel) => CopyColumnModel = (block) => 
   }
 };
 
-export const getCopyRow: (columns: CopyColumnModel[])=>CopyRowModel = (columns) => {
+interface CellValueModel{
+  columnId: string
+  value: string
+}
+
+export const getCopyRow: (columns: CopyColumnModel[], cellValues?: CellValueModel[])=>CopyRowModel = (columns, cellValues) => {
   return {
     uuid: getId("crw"),
     cells: columns.map(col => {
-      return getNewCell(col);
+      return getNewCell(col, cellValues ? cellValues.find(value => value.columnId === col.uuid) : undefined);
     })
   };
 };
-const getNewCell: (column: CopyColumnModel) => CopyCellModel = (column) => {
+const getNewCell: (column: CopyColumnModel, value?: CellValueModel) => CopyCellModel = (column, value) => {
   return {
     uuid: getId("ccel"),
     columnId: column.uuid,
-    value: column.defauldValue
+    value: value ? value.value : column.defauldValue
   } as CopyCellModel;
 };

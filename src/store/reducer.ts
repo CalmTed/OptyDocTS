@@ -61,8 +61,8 @@ const appReducer: ReducerModel = (state, action) => {
     }
     break;
   case ACTION_NAMES.app_setsidebarSectionHeight:
-    if(action.payload !== state.sidebarSectionHeight) {
-      state.sidebarSectionHeight = action.payload;
+    if(action.payload !== state.sidebarSectionHeight[state.selectedTab]) {
+      state.sidebarSectionHeight[state.selectedTab] = action.payload;
       stateUpdated = true;
     }
     break;
@@ -70,6 +70,7 @@ const appReducer: ReducerModel = (state, action) => {
     if(!state.templates?.[0]) {
       state.templates.push(action.payload);
       state.selectedBlock = null;
+      state.selectedCopy = null;
       stateUpdated = true;
     }
     state.templates[0] = action.payload;
@@ -289,6 +290,12 @@ const templateReducer: ReducerModel = (state, action) => {
         targetCell.value = action.payload.value;
         stateUpdated = true;
       }
+    }
+    break;
+  case ACTION_NAMES.template_setCopyRows:
+    if(action.payload.rows.length) {
+      template.copyRows = action.payload.rows;
+      stateUpdated = true;
     }
     break;
   default:
