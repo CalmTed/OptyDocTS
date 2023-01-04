@@ -22,6 +22,7 @@ const CellStyle = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+  min-height: 1.2em;
   &.selected{
     color: var(--main-color);
   }

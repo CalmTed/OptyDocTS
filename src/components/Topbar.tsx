@@ -45,6 +45,7 @@ const topBarMethods = (store: StoreModel) => {
       };
       const selectedBlockchildren = getChildren(store.state.selectedBlock);
       const textToSave = encodeBlock(selectedBlock, selectedBlockchildren);
+      localStorage.setItem("clipBoard", textToSave);
       copyTextToClipboard(textToSave);
       store.showToast(store.t("uiBlockCopiedToClipboard"), "info");
     }
@@ -85,7 +86,7 @@ const topBarMethods = (store: StoreModel) => {
     },
     handleCopy,
     handlePaste: (isPasteBefore: boolean) => {
-      store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
+      const pasteBlock = (text: string) => {
         const {result, block, children} = decodeBlock(text);
         const selectedBlock = store.state.selectedBlock || null;
         if(!result || !block) {
@@ -115,7 +116,15 @@ const topBarMethods = (store: StoreModel) => {
             }
           }
         }
-      });
+      };
+      const textFromLS = localStorage.getItem("clipBoard");
+      if(textFromLS) {
+        pasteBlock(textFromLS);
+      }else{
+        store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
+          pasteBlock(text);
+        });
+      }
     },
     handleCut: () => {
       handleCopy();
