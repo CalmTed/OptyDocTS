@@ -39,6 +39,7 @@ const wordsEB = {
   uiTemplateImported: "Template imported",
   uiTemplateImporting: "Template importing...",
   uiTemplateExporting: "Template exporting...",
+  uiNone: "None",
   //toasts
   uiNewTemplateCreated: "New template created",
   uiNoBlockSelected: "No block selected",
@@ -73,6 +74,7 @@ const wordsEB = {
   miHeight: "Height",
   miFlexAlignHorizontal: "Flex align horizontal",
   miFlexAlignVertical: "Flex align vertical",
+  miFlexAlignContentVertical: "Flex align content vertical",
   miTop: "Top",
   miBottom: "Bottom",
   miCenter: "Center",
@@ -99,6 +101,7 @@ const wordsEB = {
   miFontColor: "Font color",
   miFontWeight: "Font weight",
   miFontStyle: "Font style",
+  miFontIndent: "Font indent",
   miFlexWrap: "Flex wrap",
   miWrap: "Wrap",
   miNoWrap: "No wrap",

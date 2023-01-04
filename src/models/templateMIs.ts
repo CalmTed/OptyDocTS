@@ -156,26 +156,6 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     ]
   },
   {
-    name: TEMPLATE_MI_NAMES.backgroundColor,
-    label: "miBackgroundColor",
-    miType: MI_LISTITEM_TYPE.templateCSS,
-    CSSParam: "backgroundColor",
-    CSSDefaultValue: "#fff",
-    isAddable: true,
-    inputType: INPUT_TYPES.color,
-    inputOptions: []
-  },
-  {
-    name: TEMPLATE_MI_NAMES.backgroundImage,
-    label: "miBackgroundImage",
-    miType: MI_LISTITEM_TYPE.templateCSS,
-    CSSParam: "backgroundImage",
-    CSSDefaultValue: "",
-    isAddable: true,
-    inputType: INPUT_TYPES.file,
-    inputOptions: []
-  },
-  {
     name: TEMPLATE_MI_NAMES.textColor,
     label: "miFontColor",
     miType: MI_LISTITEM_TYPE.templateCSS,
@@ -216,6 +196,26 @@ export const TemplateMIs:MenuItemTemplateListItemModel[] = [
     CSSDefaultValue: "inherit",
     isAddable: true,
     inputType: INPUT_TYPES.size,
+    inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundColor,
+    label: "miBackgroundColor",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "backgroundColor",
+    CSSDefaultValue: "#fff",
+    isAddable: true,
+    inputType: INPUT_TYPES.color,
+    inputOptions: []
+  },
+  {
+    name: TEMPLATE_MI_NAMES.backgroundImage,
+    label: "miBackgroundImage",
+    miType: MI_LISTITEM_TYPE.templateCSS,
+    CSSParam: "backgroundImage",
+    CSSDefaultValue: "",
+    isAddable: true,
+    inputType: INPUT_TYPES.file,
     inputOptions: []
   },
   {

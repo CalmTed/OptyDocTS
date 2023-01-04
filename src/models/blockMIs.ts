@@ -10,6 +10,7 @@ export enum BLOCK_MI_NAMES{
   height = "height",
   flexAlignHorizontal = "flexAlignHorizontal",
   flexAlignVertical = "flexAlignVertical",
+  flexAlignContentVertical = "flexAlignContentVertical",
   flexWrap = "flexWrap",
   contentType = "contentType",
   variableLabel = "variableLabel",
@@ -24,6 +25,7 @@ export enum BLOCK_MI_NAMES{
   fontFamily = "fontFamily",
   fontWeight = "fontWeight",
   fontStyle = "fontStyle",
+  fontIndent = "fontIndent",
   border = "border",
   borderTop = "borderTop",
   borderBottom = "borderBottom",
@@ -272,6 +274,55 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     ]
   },
   {
+    name: BLOCK_MI_NAMES.flexAlignContentVertical,
+    label: "miFlexAlignContentVertical",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "alignContent",
+    CSSDefaultValue: "flex-start",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.options,
+    inputOptions: [
+      {
+        label: "miTop",
+        value: "flex-start"
+      },
+      {
+        label: "miCenter",
+        value: "center"
+      },
+      {
+        label: "miBottom",
+        value: "flex-end"
+      },
+      
+      {
+        label: "miSpaceBetween",
+        value: "space-between"
+      },
+      {
+        label: "miSpaceAround",
+        value: "space-around"
+      },
+      {
+        label: "miSpaceEvenly",
+        value: "space-evenly"
+      },
+      {
+        label: "miInherit",
+        value: "inherit"
+      }
+    ],
+    conditions:[
+      {
+        type: "css",
+        cssPropName: BLOCK_MI_NAMES.display,
+        whiteList: [CSS_DISPLAY_TYPE.flex],
+        blackList: []
+      }
+    ]
+  },
+  {
     name: BLOCK_MI_NAMES.flexWrap,
     label: "miFlexWrap",
     miType: MI_LISTITEM_TYPE.blockCSS,
@@ -318,6 +369,18 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
         value:"monospace"
       } 
     ]
+  },
+  
+  {
+    name: BLOCK_MI_NAMES.fontSize,
+    label: "miFontSize",
+    miType: MI_LISTITEM_TYPE.blockCSS,
+    CSSParam: "fontSize",
+    CSSDefaultValue: "inherit",
+    isCopylinkable: true,
+    isAddable: true,
+    inputType: INPUT_TYPES.size,
+    inputOptions: []
   },
   {
     name: BLOCK_MI_NAMES.fontWeight,
@@ -379,10 +442,10 @@ export const BlockMIs:(MenuItemBlockListItemModel)[] = [
     inputOptions: []
   },
   {
-    name: BLOCK_MI_NAMES.fontSize,
-    label: "miFontSize",
+    name: BLOCK_MI_NAMES.fontIndent,
+    label: "miFontIndent",
     miType: MI_LISTITEM_TYPE.blockCSS,
-    CSSParam: "fontSize",
+    CSSParam: "textIndent",
     CSSDefaultValue: "inherit",
     isCopylinkable: true,
     isAddable: true,

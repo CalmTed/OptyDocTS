@@ -154,10 +154,12 @@ const topBarMethods = (store: StoreModel) => {
       });
     },
     handleImport: (e: React.ChangeEvent) => {
-      const file = (e.target as HTMLInputElement).files?.[0] as Blob;
+      const target = (e.target as HTMLInputElement);
+      const file = target.files?.[0] as Blob;
       if(!file) {
         return;
       }
+      target.value = "";
       importTemplate(file, (result: TemplateModel | null) => {
         if(!result) {
           store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
@@ -199,10 +201,12 @@ const topBarMethods = (store: StoreModel) => {
       });
     },
     openCSV: (e: React.ChangeEvent) => {
-      const file = (e.target as HTMLInputElement).files?.[0] as Blob;
+      const target = (e.target as HTMLInputElement);
+      const file = target.files?.[0] as Blob;
       if(!file) {
         return;
       }
+      target.value = "";
       importCopyRows(store.state.templates[0].copyColumns, file, (rows) => {
         if(rows !== null) {
           store.dispach({
@@ -252,7 +256,7 @@ const Topbar: FC<TopbarModel> = ({store}) => {
             <TopbarButton title={store.t("topBarPreviusCopy")} iconType="left" onClick={() => methods.handleSetCopy("prev")} disabled={isFirstCopy}></TopbarButton>
             <TopbarButton title={store.t("topBarNextCopy")} iconType="right" onClick={() => methods.handleSetCopy("next")} disabled={isLastCopy}></TopbarButton>
             <label>
-              <TopbarButton title={store.t("topBarImportCSV")} iconType="hash" onClick={() => null}></TopbarButton>
+              <TopbarButton title={store.t("topBarImportCSV")} iconType="hash" onClick={() => null} disabled={!store.state.templates[0].copyColumns.length}></TopbarButton>
               <input style={{"display":"none"}} type="file" onChange={methods.openCSV}></input>
             </label>
             <TopbarButton title={store.t("topBarExportCSV")} iconType="download" onClick={methods.saveCSV} disabled={!store.state.templates[0].copyRows.length}></TopbarButton>

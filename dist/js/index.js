@@ -34713,6 +34713,7 @@ const wordsEB = {
     uiTemplateImported: "Template imported",
     uiTemplateImporting: "Template importing...",
     uiTemplateExporting: "Template exporting...",
+    uiNone: "None",
     //toasts
     uiNewTemplateCreated: "New template created",
     uiNoBlockSelected: "No block selected",
@@ -34746,6 +34747,7 @@ const wordsEB = {
     miHeight: "Height",
     miFlexAlignHorizontal: "Flex align horizontal",
     miFlexAlignVertical: "Flex align vertical",
+    miFlexAlignContentVertical: "Flex align content vertical",
     miTop: "Top",
     miBottom: "Bottom",
     miCenter: "Center",
@@ -34772,6 +34774,7 @@ const wordsEB = {
     miFontColor: "Font color",
     miFontWeight: "Font weight",
     miFontStyle: "Font style",
+    miFontIndent: "Font indent",
     miFlexWrap: "Flex wrap",
     miWrap: "Wrap",
     miNoWrap: "No wrap",
@@ -34810,12 +34813,12 @@ const wordsUA = {
     topBarCutBlock: "Вирізати блок",
     topBarDuplicateBlock: "Дублювати блок",
     topBarPrint: "Друкувати",
-    topBarAddCopy: "Add copy",
-    topBarRemoveCopy: "Remove copy",
-    topBarPreviusCopy: "Previus copy",
-    topBarNextCopy: "Next copy",
-    topBarImportCSV: "Import CSV file",
-    topBarExportCSV: "Export copies as CSV file",
+    topBarAddCopy: "Додати копію",
+    topBarRemoveCopy: "Видалити копію",
+    topBarPreviusCopy: "Попередня копія",
+    topBarNextCopy: "Наступна копія",
+    topBarImportCSV: "Імпортувати CSV файл",
+    topBarExportCSV: "Експортувати копії у CSV файл",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34829,21 +34832,22 @@ const wordsUA = {
     uiCancel: "Відминити",
     uiConfirm: "Підтвердити",
     uiProseed: "Продовжити",
-    uiPrinted: "Nadrukovano",
-    uiTemplateExportred: "Maket eksportovano",
-    uiTemplateDecodingProblem: "Pomylka shyfruvannya maketu",
-    uiTemplateImported: "Maket importovano",
-    uiTemplateImporting: "Importuvannya maketu...",
-    uiTemplateExporting: "Eksportuvannya maketu...",
+    uiPrinted: "Надруковано",
+    uiTemplateExportred: "Макет експортовано",
+    uiTemplateDecodingProblem: "Помилка шифрування макету",
+    uiTemplateImported: "Макет імпортовано",
+    uiTemplateImporting: "Імпортування макету...",
+    uiTemplateExporting: "Експортування макету...",
+    uiNone: "Не обрано",
     //toasts
     uiNewTemplateCreated: "Новий мaкет створено",
     uiNoBlockSelected: "Жодного блоку не виділено",
     uiBlockCopiedToClipboard: "Блок скопійовано",
     uiBlockDecodingProblem: "Помилка шифрування",
     uiImageHasToBeLessThenMB: "Помилка: Зображення має бути розміром менше 3МБ",
-    uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
-    uiDisclamerPrintingHeader: "Information for firefox users",
-    uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
+    uiClickOnBlockToSelectAsReference: "Натиспість на блок, щоб обрати його як той, з якого копіювати дані",
+    uiDisclamerPrintingHeader: "Інформація для користувачів Firefox",
+    uiDisclamerPrintingText: "Для друку краще користуйтесь Chrome :)\n Якщо ні, тоді ставте вручну фон білим і масштаб сторінки за замовчуванням (ctrl+0)",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
@@ -34868,17 +34872,18 @@ const wordsUA = {
     miHeight: "Висота",
     miFlexAlignHorizontal: "Флекс горизонтальне рівняння",
     miFlexAlignVertical: "Флекс вертикальне рівняння",
+    miFlexAlignContentVertical: "Флекс вертикальне рівняння блоків",
     miTop: "Зверху",
     miBottom: "Знизу",
     miCenter: "Поцентру",
     miRight: "Зправа",
     miLeft: "Зліва",
-    miSpaceEvenly: "Space evenly",
-    miSpaceAround: "Space around",
-    miSpaceBetween: "Space between",
+    miSpaceEvenly: "Рівні відступи",
+    miSpaceAround: "Відступи навкруги",
+    miSpaceBetween: "Відступи поміж",
     miContentType: "Тип контенту",
-    miVariableLabel: "Variable label",
-    miReferenceId: "ID referenta(?)",
+    miVariableLabel: "Назва змінної",
+    miReferenceId: "Код блока для копіювання",
     miFixed: "Статичний",
     miVariable: "Змінна",
     miSelect: "Вибір",
@@ -34890,10 +34895,11 @@ const wordsUA = {
     miBackgroundPosition: "Положення фону",
     miEditMiList: "Змінити список стилів",
     miFontFamily: "Шрифт",
-    miFontColor: "Колір фришту",
-    miFontSize: "Розмір фрифту",
-    miFontWeight: "Font weight",
-    miFontStyle: "Font style",
+    miFontColor: "Колір шрифту",
+    miFontSize: "Розмір шрифту",
+    miFontWeight: "Жирність шрифту",
+    miFontStyle: "Нахил шрифту",
+    miFontIndent: "Відсутп параграфу",
     miFlexWrap: "Флекс перенос блоків",
     miWrap: "Переносити",
     miNoWrap: "Не переносити",
@@ -34901,18 +34907,18 @@ const wordsUA = {
     miCover: "По більшій стороні",
     miNoRepeat: "Не повторювати",
     miRepeat: "Повторювати",
-    miBorder: "Border",
-    miBorderTop: "Border top",
-    miBorderBottom: "Border bottom",
-    miBorderRight: "Border right",
-    miBorderLeft: "Border left",
-    miMargin: "Margin",
-    miSerif: "Serif",
-    miSansSerif: "SansSerif",
-    miMonospace: "Monospace",
-    miNormal: "Normal",
-    miBold: "Bold",
-    miItalic: "Italic",
+    miBorder: "Грані",
+    miBorderTop: "Грань зверху",
+    miBorderBottom: "Грань знизу",
+    miBorderRight: "Грань зправа",
+    miBorderLeft: "Грань зліва",
+    miMargin: "Відступ зовні",
+    miSerif: "Із зарубками",
+    miSansSerif: "Без зарубок",
+    miMonospace: "З рівною шириною",
+    miNormal: "Нормально",
+    miBold: "Жирно",
+    miItalic: "Під нахилом",
     undefined: ""
 };
 
@@ -34942,6 +34948,7 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["height"] = "height";
     BLOCK_MI_NAMES["flexAlignHorizontal"] = "flexAlignHorizontal";
     BLOCK_MI_NAMES["flexAlignVertical"] = "flexAlignVertical";
+    BLOCK_MI_NAMES["flexAlignContentVertical"] = "flexAlignContentVertical";
     BLOCK_MI_NAMES["flexWrap"] = "flexWrap";
     BLOCK_MI_NAMES["contentType"] = "contentType";
     BLOCK_MI_NAMES["variableLabel"] = "variableLabel";
@@ -34956,6 +34963,7 @@ var BLOCK_MI_NAMES;
     BLOCK_MI_NAMES["fontFamily"] = "fontFamily";
     BLOCK_MI_NAMES["fontWeight"] = "fontWeight";
     BLOCK_MI_NAMES["fontStyle"] = "fontStyle";
+    BLOCK_MI_NAMES["fontIndent"] = "fontIndent";
     BLOCK_MI_NAMES["border"] = "border";
     BLOCK_MI_NAMES["borderTop"] = "borderTop";
     BLOCK_MI_NAMES["borderBottom"] = "borderBottom";
@@ -35202,6 +35210,54 @@ const BlockMIs = [
         ]
     },
     {
+        name: BLOCK_MI_NAMES.flexAlignContentVertical,
+        label: "miFlexAlignContentVertical",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "alignContent",
+        CSSDefaultValue: "flex-start",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.options,
+        inputOptions: [
+            {
+                label: "miTop",
+                value: "flex-start"
+            },
+            {
+                label: "miCenter",
+                value: "center"
+            },
+            {
+                label: "miBottom",
+                value: "flex-end"
+            },
+            {
+                label: "miSpaceBetween",
+                value: "space-between"
+            },
+            {
+                label: "miSpaceAround",
+                value: "space-around"
+            },
+            {
+                label: "miSpaceEvenly",
+                value: "space-evenly"
+            },
+            {
+                label: "miInherit",
+                value: "inherit"
+            }
+        ],
+        conditions: [
+            {
+                type: "css",
+                cssPropName: BLOCK_MI_NAMES.display,
+                whiteList: [CSS_DISPLAY_TYPE.flex],
+                blackList: []
+            }
+        ]
+    },
+    {
         name: BLOCK_MI_NAMES.flexWrap,
         label: "miFlexWrap",
         miType: MI_LISTITEM_TYPE.blockCSS,
@@ -35248,6 +35304,17 @@ const BlockMIs = [
                 value: "monospace"
             }
         ]
+    },
+    {
+        name: BLOCK_MI_NAMES.fontSize,
+        label: "miFontSize",
+        miType: MI_LISTITEM_TYPE.blockCSS,
+        CSSParam: "fontSize",
+        CSSDefaultValue: "inherit",
+        isCopylinkable: true,
+        isAddable: true,
+        inputType: INPUT_TYPES.size,
+        inputOptions: []
     },
     {
         name: BLOCK_MI_NAMES.fontWeight,
@@ -35309,10 +35376,10 @@ const BlockMIs = [
         inputOptions: []
     },
     {
-        name: BLOCK_MI_NAMES.fontSize,
-        label: "miFontSize",
+        name: BLOCK_MI_NAMES.fontIndent,
+        label: "miFontIndent",
         miType: MI_LISTITEM_TYPE.blockCSS,
-        CSSParam: "fontSize",
+        CSSParam: "textIndent",
         CSSDefaultValue: "inherit",
         isCopylinkable: true,
         isAddable: true,
@@ -35659,26 +35726,6 @@ const TemplateMIs = [
         ]
     },
     {
-        name: TEMPLATE_MI_NAMES.backgroundColor,
-        label: "miBackgroundColor",
-        miType: MI_LISTITEM_TYPE.templateCSS,
-        CSSParam: "backgroundColor",
-        CSSDefaultValue: "#fff",
-        isAddable: true,
-        inputType: INPUT_TYPES.color,
-        inputOptions: []
-    },
-    {
-        name: TEMPLATE_MI_NAMES.backgroundImage,
-        label: "miBackgroundImage",
-        miType: MI_LISTITEM_TYPE.templateCSS,
-        CSSParam: "backgroundImage",
-        CSSDefaultValue: "",
-        isAddable: true,
-        inputType: INPUT_TYPES.file,
-        inputOptions: []
-    },
-    {
         name: TEMPLATE_MI_NAMES.textColor,
         label: "miFontColor",
         miType: MI_LISTITEM_TYPE.templateCSS,
@@ -35719,6 +35766,26 @@ const TemplateMIs = [
         CSSDefaultValue: "inherit",
         isAddable: true,
         inputType: INPUT_TYPES.size,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundColor,
+        label: "miBackgroundColor",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "backgroundColor",
+        CSSDefaultValue: "#fff",
+        isAddable: true,
+        inputType: INPUT_TYPES.color,
+        inputOptions: []
+    },
+    {
+        name: TEMPLATE_MI_NAMES.backgroundImage,
+        label: "miBackgroundImage",
+        miType: MI_LISTITEM_TYPE.templateCSS,
+        CSSParam: "backgroundImage",
+        CSSDefaultValue: "",
+        isAddable: true,
+        inputType: INPUT_TYPES.file,
         inputOptions: []
     },
     {
@@ -36151,7 +36218,7 @@ const CSVToCopyTable = (csv, copyColumns) => {
     return rows.filter(row => !!row.length).map(row => {
         const cellValues = firstRow.map((targetBlockId, i) => {
             return {
-                columnId: copyColumns.find(col => col.targetBlockId === targetBlockId)?.uuid || "",
+                columnId: copyColumns.find(col => col.targetBlockId.trim() === targetBlockId.trim())?.uuid || "",
                 value: row[i]
             };
         });
@@ -36322,10 +36389,12 @@ const topBarMethods = (store) => {
             });
         },
         handleImport: (e) => {
-            const file = e.target.files?.[0];
+            const target = e.target;
+            const file = target.files?.[0];
             if (!file) {
                 return;
             }
+            target.value = "";
             importTemplate(file, (result) => {
                 if (!result) {
                     store.showToast(store.t("uiTemplateDecodingProblem"), "alert");
@@ -36367,10 +36436,12 @@ const topBarMethods = (store) => {
             });
         },
         openCSV: (e) => {
-            const file = e.target.files?.[0];
+            const target = e.target;
+            const file = target.files?.[0];
             if (!file) {
                 return;
             }
+            target.value = "";
             importCopyRows(store.state.templates[0].copyColumns, file, (rows) => {
                 if (rows !== null) {
                     store.dispach({
@@ -36416,7 +36487,7 @@ const Topbar = ({ store }) => {
                     React.createElement(TopbarButton, { title: store.t("topBarPreviusCopy"), iconType: "left", onClick: () => methods.handleSetCopy("prev"), disabled: isFirstCopy }),
                     React.createElement(TopbarButton, { title: store.t("topBarNextCopy"), iconType: "right", onClick: () => methods.handleSetCopy("next"), disabled: isLastCopy }),
                     React.createElement("label", null,
-                        React.createElement(TopbarButton, { title: store.t("topBarImportCSV"), iconType: "hash", onClick: () => null }),
+                        React.createElement(TopbarButton, { title: store.t("topBarImportCSV"), iconType: "hash", onClick: () => null, disabled: !store.state.templates[0].copyColumns.length }),
                         React.createElement("input", { style: { "display": "none" }, type: "file", onChange: methods.openCSV })),
                     React.createElement(TopbarButton, { title: store.t("topBarExportCSV"), iconType: "download", onClick: methods.saveCSV, disabled: !store.state.templates[0].copyRows.length }))),
         React.createElement("div", { className: "appTools" },
@@ -37423,7 +37494,7 @@ const MICopyNav = ({ store }) => {
     const copiesOptions = () => {
         return [
             {
-                label: "None",
+                label: store.t("uiNone"),
                 value: "null"
             },
             ...store.state.templates[0].copyRows.map((row, i) => {
@@ -37504,8 +37575,8 @@ const CellStyle = qe.div `
   max-width: 15em;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
   white-space: nowrap;
+  cursor: pointer;
   &.selected{
     color: var(--main-color);
   }
@@ -37522,7 +37593,10 @@ const ColumnStyle = qe.div `
 const TitleRowStyle = qe.div `
   font-weight: bold;
   padding: 0.5em 1em;
-  opaci
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
 `;
 const CopyTable = ({ store }) => {
     const handleRowClick = (copyId) => {
@@ -38172,7 +38246,7 @@ const Block = ({ store, block, classes, copyRowUUID }) => {
             }
             ret = {
                 ...ret,
-                ...{ [String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue)) }
+                ...{ [String(listMI.CSSParam)]: `${considerZooming(String(mi.miListItemValue))}` }
             };
         });
         return ret;

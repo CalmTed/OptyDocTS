@@ -31,7 +31,7 @@ export const MICopyNav:FC<MICopyNavModel> = ({store}) => {
   const copiesOptions = () => {
     return [
       {
-        label: "None",
+        label: store.t("uiNone"),
         value: "null"
       },
       ...store.state.templates[0].copyRows.map((row, i) => {

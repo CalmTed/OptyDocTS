@@ -152,7 +152,7 @@ export const Block: FC<BlockComponentModel> = ({store, block, classes, copyRowUU
       }
       ret = {
         ...ret,
-        ...{[String(listMI.CSSParam)]: considerZooming(String(mi.miListItemValue))}
+        ...{[String(listMI.CSSParam)]: `${considerZooming(String(mi.miListItemValue))}`}
       };
     });
     return ret;

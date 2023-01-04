@@ -45,7 +45,7 @@ export const CSVToCopyTable: (csv: string, copyColumns: CopyColumnModel[]) => Co
   return rows.filter(row => !!row.length).map(row => {
     const cellValues = firstRow.map((targetBlockId, i) => {
       return {
-        columnId: copyColumns.find(col => col.targetBlockId === targetBlockId)?.uuid || "",
+        columnId: copyColumns.find(col => col.targetBlockId.trim() === targetBlockId.trim())?.uuid || "",
         value: row[i]
       };
     });

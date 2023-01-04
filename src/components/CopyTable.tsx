@@ -20,8 +20,8 @@ const CellStyle = styled.div`
   max-width: 15em;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
   white-space: nowrap;
+  cursor: pointer;
   &.selected{
     color: var(--main-color);
   }
@@ -40,7 +40,10 @@ const ColumnStyle = styled.div`
 const TitleRowStyle = styled.div`
   font-weight: bold;
   padding: 0.5em 1em;
-  opaci
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
 `;
 
 export const CopyTable: FC<CopyTableModel> = ({store}) => {
