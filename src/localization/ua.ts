@@ -23,6 +23,8 @@ const wordsUA: Record<WordType, string> = {
   topBarNextCopy: "Наступна копія",
   topBarImportCSV: "Імпортувати CSV файл",
   topBarExportCSV: "Експортувати копії у CSV файл",
+  topBarVideo: "Відео-інструкція",
+  topBarFeedback: "Залишити вігук",
   //sideBar
   sideBarEdit: "Макет",
   sideBarCopy: "Копії",
@@ -44,6 +46,8 @@ const wordsUA: Record<WordType, string> = {
   uiTemplateImporting: "Імпортування макету...",
   uiTemplateExporting: "Експортування макету...",
   uiNone: "Не обрано",
+  uiBetterHorizontalHeader:"Вибач, це прототип, він непридатний для використання у вертикальному вигляді",
+  uiBetterHorizontalText:"Краще відкрий на повноцінному екрані комп'ютера чи ноутбука",
   //toasts
   uiNewTemplateCreated: "Новий мaкет створено",
   uiNoBlockSelected: "Жодного блоку не виділено",
@@ -53,7 +57,8 @@ const wordsUA: Record<WordType, string> = {
   uiClickOnBlockToSelectAsReference: "Натиспість на блок, щоб обрати його як той, з якого копіювати дані",
   uiDisclamerPrintingHeader: "Інформація для користувачів Firefox",
   uiDisclamerPrintingText: "Для друку краще користуйтесь Chrome :)\n Якщо ні, тоді ставте вручну фон білим і масштаб сторінки за замовчуванням (ctrl+0)",
-
+  uiCopyesDilitionConfirmationHeader: "Ця дія змінить структуру копіювання",
+  uiCopyesDilitionConfirmationText: "Ви впевнені що хочете змінити тип контенту? Це призведе до видалення всіх копій",
   //mi
   miPageSize: "Розмір аркуша",
   A4: "A4",
@@ -64,7 +69,7 @@ const wordsUA: Record<WordType, string> = {
   miPageOrientation: "Орієнтація сторінки",
   horizontal: "Горизонтально",
   vertical: "Вертикально",
-  miPadding: "Відступи",
+  miPadding: "Відступи зсередини",
   miLastChangeTime: "Час останьої зміни",
   miName: "Назва",
   miContent: "Контент",
@@ -74,7 +79,7 @@ const wordsUA: Record<WordType, string> = {
   miDisplayFlex: "Флекс блоком",
   miDisplayNone: "Приховати",
   miInherit: "Наслідує",
-  miWidth: "Широта",
+  miWidth: "Ширина",
   miHeight: "Висота",
   miFlexAlignHorizontal: "Флекс горизонтальне рівняння",
   miFlexAlignVertical: "Флекс вертикальне рівняння",

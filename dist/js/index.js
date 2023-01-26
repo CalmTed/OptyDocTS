@@ -34512,7 +34512,11 @@ const ICON = {
     duplicate: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_316)'><path d='M5 7H10.3333L13 9.11765V17.5H5V7Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='mask0_403_316' style='mask-type:alpha' maskUnits='userSpaceOnUse' x='0' y='0'  width='100%' height='100%' ><path d='M0 0V5H15V20H20V0H0Z' fill='#D9D9D9'/></mask><g mask='url(#mask0_403_316)'><path d='M9 3H14.3333L17 5.11765V14H9V3Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/></g><path d='M9 14V11' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M7.5 12.5L10.5 12.5' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></g><defs><clipPath id='clip0_403_316'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
     hidden: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2 8.5C5.5 12.5 14.5 12.5 18 8.5' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><path d='M9 14.5C9 15.0523 9.44772 15.5 10 15.5C10.5523 15.5 11 15.0523 11 14.5H9ZM11 12V11H9V12H11ZM11 14.5V12H9V14.5H11Z' fill='var(--icon-color)'/><path d='M3.61839 13.0586C3.42047 13.5742 3.678 14.1526 4.1936 14.3505C4.70921 14.5484 5.28763 14.2909 5.48555 13.7753L3.61839 13.0586ZM6.38147 11.4413L6.73984 10.5078L4.87268 9.79103L4.51431 10.7246L6.38147 11.4413ZM5.48555 13.7753L6.38147 11.4413L4.51431 10.7246L3.61839 13.0586L5.48555 13.7753Z' fill='var(--icon-color)'/><path d='M14.5144 13.7753C14.7124 14.2909 15.2908 14.5484 15.8064 14.3505C16.322 14.1526 16.5795 13.5742 16.3816 13.0586L14.5144 13.7753ZM15.4857 10.7246L15.1273 9.79103L13.2602 10.5078L13.6185 11.4413L15.4857 10.7246ZM16.3816 13.0586L15.4857 10.7246L13.6185 11.4413L14.5144 13.7753L16.3816 13.0586Z' fill='var(--icon-color)'/></svg>",
     paste: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_295)'><path d='M5 4H11.6667H15V6.42017V16H5V4Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='path-3-inside-1_403_295' fill='white'><rect x='7' y='2' width='6' height='4' rx='0.5'/></mask><rect x='7' y='2' width='6' height='4' rx='0.5' stroke='var(--icon-color)' stroke-width='2' mask='url(#path-3-inside-1_403_295)'/></g><defs><clipPath id='clip0_403_295'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
-    pasteBefore: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_328)'><path d='M8 6H14.6667H18V8.42017V18H8V6Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='path-3-inside-1_403_328' fill='white'><rect x='10' y='4' width='6' height='4' rx='0.5'/></mask><rect x='10' y='4' width='6' height='4' rx='0.5' stroke='var(--icon-color)' stroke-width='2' mask='url(#path-3-inside-1_403_328)'/><path d='M8.5 2.5C7.32843 2.5 6.67157 2.5 5.5 2.5C4.5 2.5 3.5 3.5 3.5 4.5C3.5 5.5 3.5 7.5 3.5 7.5M3.5 7.5H2L3.5 9.5L5 7.5H3.5Z' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></g><defs><clipPath id='clip0_403_328'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>"
+    pasteBefore: "<svg  width='100%' height='100%'  viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_403_328)'><path d='M8 6H14.6667H18V8.42017V18H8V6Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/><mask id='path-3-inside-1_403_328' fill='white'><rect x='10' y='4' width='6' height='4' rx='0.5'/></mask><rect x='10' y='4' width='6' height='4' rx='0.5' stroke='var(--icon-color)' stroke-width='2' mask='url(#path-3-inside-1_403_328)'/><path d='M8.5 2.5C7.32843 2.5 6.67157 2.5 5.5 2.5C4.5 2.5 3.5 3.5 3.5 4.5C3.5 5.5 3.5 7.5 3.5 7.5M3.5 7.5H2L3.5 9.5L5 7.5H3.5Z' stroke='var(--icon-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></g><defs><clipPath id='clip0_403_328'><rect  width='100%' height='100%'  rx='2' fill='white'/></clipPath></defs></svg>",
+    feedback: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'> <g clip-path='url(#clip0_502_270)'> <path d='M6.5 12L13.5 6M11 10.5H14.5M5.5 7C5.5 7 8.32843 7 9.5 7M7.5 5V9M3 13.5V4.1C3 3.49249 3.49155 3 4.09907 3C5.38329 3 7.46407 3 8.5 3C10.0621 3 12.5 3 12.5 3C12.5 3 12.5 3 12.5 3H15.4C16.0075 3 16.5 3.49249 16.5 4.1V9V12.4C16.5 13.0075 16.0075 13.5 15.4 13.5H9.29738C9.10262 13.5 8.91136 13.5517 8.74313 13.6498L4.65426 16.035C3.92094 16.4628 3 15.9338 3 15.0849V13.5Z' stroke='var(--icon-color)' stroke-width='1.5' stroke-linejoin='round'/> </g> <defs> <clipPath id='clip0_502_270'> <rect width='20' height='20' rx='2' fill='white'/> </clipPath> </defs> </svg> ",
+    video: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'> <g> <path d='M3 14V7C3 5.89543 3.89494 5 4.99951 5H8.5H12.5H14.5C15.6046 5 16.5 5.89543 16.5 7V11V14C16.5 15.1046 15.6046 16 14.5 16H9H5.5H5C3.89543 16 3 15.1046 3 14Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/> <path d='M11 10.5L8.5 8.5V12.5L11 10.5Z' stroke='var(--icon-color)' stroke-width='2' stroke-linejoin='round'/> </g> </svg>",
+    ua: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g clip-path='url(#clip0_508_282)'><path d='M2 5C2 4.44772 2.44772 4 3 4H17C17.5523 4 18 4.44772 18 5V10H2V5Z' fill='#3DB9FE'/><path d='M2 10H18V15C18 15.5523 17.5523 16 17 16H3C2.44772 16 2 15.5523 2 15V10Z' fill='#F9F481'/></g></svg>",
+    en: "<svg width='100%' height='100%' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><g><path d='M2 5C2 4.44772 2.44772 4 3 4H9V10H2V5Z' fill='#2192FA'/><path d='M2 15H18V15C18 15.5523 17.5523 16 17 16H3C2.44772 16 2 15.5523 2 15V15Z' fill='white'/><path d='M2 14H18V15H2V14Z' fill='#F98181'/><path d='M2 13H18V14H2V13Z' fill='white'/><path d='M2 11H18V12H2V11Z' fill='white'/><path d='M9 9H18V10H9V9Z' fill='white'/><path d='M9 7H18V8H9V7Z' fill='white'/><path d='M9 5H18V6H9V5Z' fill='white'/><path d='M2 12H18V13H2V12Z' fill='#F98181'/><path d='M2 10H18V11H2V10Z' fill='#F98181'/><path d='M9 8H18V9H9V8Z' fill='#F98181'/><path d='M9 6H18V7H9V6Z' fill='#F98181'/><path d='M9 4H17C17.5523 4 18 4.44772 18 5V5H9V4Z' fill='#F98181'/><rect x='3' y='5' width='1' height='1' fill='white'/><rect x='3' y='5' width='1' height='1' fill='white'/><rect x='3' y='5' width='1' height='1' fill='white'/><rect x='5' y='5' width='1' height='1' fill='white'/><rect x='5' y='5' width='1' height='1' fill='white'/><rect x='5' y='5' width='1' height='1' fill='white'/><rect x='7' y='5' width='1' height='1' fill='white'/><rect x='7' y='5' width='1' height='1' fill='white'/><rect x='7' y='5' width='1' height='1' fill='white'/><rect x='4' y='6' width='1' height='1' fill='white'/><rect x='4' y='6' width='1' height='1' fill='white'/><rect x='4' y='6' width='1' height='1' fill='white'/><rect x='6' y='6' width='1' height='1' fill='white'/><rect x='6' y='6' width='1' height='1' fill='white'/><rect x='6' y='6' width='1' height='1' fill='white'/><rect x='7' y='7' width='1' height='1' fill='white'/><rect x='7' y='7' width='1' height='1' fill='white'/><rect x='7' y='7' width='1' height='1' fill='white'/><rect x='3' y='7' width='1' height='1' fill='white'/><rect x='3' y='7' width='1' height='1' fill='white'/><rect x='3' y='7' width='1' height='1' fill='white'/><rect x='5' y='7' width='1' height='1' fill='white'/><rect x='5' y='7' width='1' height='1' fill='white'/><rect x='5' y='7' width='1' height='1' fill='white'/><rect x='4' y='8' width='1' height='1' fill='white'/><rect x='4' y='8' width='1' height='1' fill='white'/><rect x='4' y='8' width='1' height='1' fill='white'/><rect x='6' y='8' width='1' height='1' fill='white'/><rect x='6' y='8' width='1' height='1' fill='white'/><rect x='6' y='8' width='1' height='1' fill='white'/></g></svg>"
 };
 
 const IconStyle = qe.div `
@@ -34695,6 +34699,8 @@ const wordsEB = {
     topBarNextCopy: "Next copy",
     topBarImportCSV: "Import CSV file",
     topBarExportCSV: "Export copies as CSV file",
+    topBarVideo: "Video tutorials(UKR)",
+    topBarFeedback: "Feedback form",
     //sideBar
     sideBarEdit: "Edit",
     sideBarCopy: "Copy",
@@ -34702,7 +34708,7 @@ const wordsEB = {
     uiConfirmNewTemplateHeader: "Confirm action",
     uiConfirmNewTemplateText: "Are you sure you want to overwrite current template",
     uiPasteHeader: "Paste block text here",
-    uiPasteText: "Sorry there is no better way to do it for now",
+    uiPasteText: "Sorry, there is no better way to do it for now",
     uiOk: "Ok",
     uiCancel: "Cancel",
     uiConfirm: "Confirm",
@@ -34714,6 +34720,8 @@ const wordsEB = {
     uiTemplateImporting: "Template importing...",
     uiTemplateExporting: "Template exporting...",
     uiNone: "None",
+    uiBetterHorizontalHeader: "Sorry its unusible in horizontal view",
+    uiBetterHorizontalText: "Better to use desktop PC or laptop",
     //toasts
     uiNewTemplateCreated: "New template created",
     uiNoBlockSelected: "No block selected",
@@ -34723,6 +34731,8 @@ const wordsEB = {
     uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
     uiDisclamerPrintingHeader: "Information for firefox users",
     uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
+    uiCopyesDilitionConfirmationHeader: "You are about to change copy structure",
+    uiCopyesDilitionConfirmationText: "Are you sure you want to change content type? It will delete all the copies",
     //mi
     miPageSize: "Page size",
     A4: "A4",
@@ -34819,6 +34829,8 @@ const wordsUA = {
     topBarNextCopy: "Наступна копія",
     topBarImportCSV: "Імпортувати CSV файл",
     topBarExportCSV: "Експортувати копії у CSV файл",
+    topBarVideo: "Відео-інструкція",
+    topBarFeedback: "Залишити вігук",
     //sideBar
     sideBarEdit: "Макет",
     sideBarCopy: "Копії",
@@ -34839,6 +34851,8 @@ const wordsUA = {
     uiTemplateImporting: "Імпортування макету...",
     uiTemplateExporting: "Експортування макету...",
     uiNone: "Не обрано",
+    uiBetterHorizontalHeader: "Вибач, це прототип, він непридатний для використання у вертикальному вигляді",
+    uiBetterHorizontalText: "Краще відкрий на повноцінному екрані комп'ютера чи ноутбука",
     //toasts
     uiNewTemplateCreated: "Новий мaкет створено",
     uiNoBlockSelected: "Жодного блоку не виділено",
@@ -34848,6 +34862,8 @@ const wordsUA = {
     uiClickOnBlockToSelectAsReference: "Натиспість на блок, щоб обрати його як той, з якого копіювати дані",
     uiDisclamerPrintingHeader: "Інформація для користувачів Firefox",
     uiDisclamerPrintingText: "Для друку краще користуйтесь Chrome :)\n Якщо ні, тоді ставте вручну фон білим і масштаб сторінки за замовчуванням (ctrl+0)",
+    uiCopyesDilitionConfirmationHeader: "Ця дія змінить структуру копіювання",
+    uiCopyesDilitionConfirmationText: "Ви впевнені що хочете змінити тип контенту? Це призведе до видалення всіх копій",
     //mi
     miPageSize: "Розмір аркуша",
     A4: "A4",
@@ -34858,7 +34874,7 @@ const wordsUA = {
     miPageOrientation: "Орієнтація сторінки",
     horizontal: "Горизонтально",
     vertical: "Вертикально",
-    miPadding: "Відступи",
+    miPadding: "Відступи зсередини",
     miLastChangeTime: "Час останьої зміни",
     miName: "Назва",
     miContent: "Контент",
@@ -34868,7 +34884,7 @@ const wordsUA = {
     miDisplayFlex: "Флекс блоком",
     miDisplayNone: "Приховати",
     miInherit: "Наслідує",
-    miWidth: "Широта",
+    miWidth: "Ширина",
     miHeight: "Висота",
     miFlexAlignHorizontal: "Флекс горизонтальне рівняння",
     miFlexAlignVertical: "Флекс вертикальне рівняння",
@@ -34923,8 +34939,8 @@ const wordsUA = {
 };
 
 const words = {
-    en: wordsEB,
-    ua: wordsUA
+    ua: wordsUA,
+    en: wordsEB
 };
 const LANG_CODES = Object.keys(words);
 const createT = (language) => {
@@ -36245,6 +36261,47 @@ const importCopyRows = (copyColumns, file, callBack) => {
     fr.readAsText(file);
 };
 
+const ButtonStyle = qe.div `
+  user-select: none;
+  padding: 0.5em 1em;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-size: inherit;
+  border: 0;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  :hover{
+    opacity: 0.8;
+  }
+  &.disabled{
+    cursor: default;
+    opacity: 0.6;
+  }
+  &.normal{
+    background: var(--main-color);
+    color: var(--section-bg);
+    svg{
+      --icon-color: var(--section-bg);
+    }
+  }
+  &.main{
+    background: var(--main-button-bg);
+    color: var(--main-button-text);
+    svg{
+      --icon-color: var(--main-button-text);
+    }
+  }
+  &.nocolor{
+    background: var(--app-bg);
+  }
+`;
+const Button = ({ children, onClick, type = "normal", icon, style, classes, disabled = false }) => {
+    return React.createElement(ButtonStyle, { onClick: (event) => { !disabled ? onClick(event) : null; }, className: `${type} ${disabled ? "disabled" : ""} ${classes ? classes : ""}`, style: style },
+        icon && React.createElement(Icon, { iconType: icon }),
+        children);
+};
+
 const TopbarStyle = qe.div `
   background: var(--section-bg);
   position: fixed;
@@ -36277,6 +36334,7 @@ const topBarMethods = (store) => {
             };
             const selectedBlockchildren = getChildren(store.state.selectedBlock);
             const textToSave = encodeBlock(selectedBlock, selectedBlockchildren);
+            localStorage.setItem("clipBoard", textToSave);
             copyTextToClipboard(textToSave);
             store.showToast(store.t("uiBlockCopiedToClipboard"), "info");
         }
@@ -36317,7 +36375,7 @@ const topBarMethods = (store) => {
         },
         handleCopy,
         handlePaste: (isPasteBefore) => {
-            store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
+            const pasteBlock = (text) => {
                 const { result, block, children } = decodeBlock(text);
                 const selectedBlock = store.state.selectedBlock || null;
                 if (!result || !block) {
@@ -36350,7 +36408,16 @@ const topBarMethods = (store) => {
                         }
                     }
                 }
-            });
+            };
+            const textFromLS = localStorage.getItem("clipBoard");
+            if (textFromLS) {
+                pasteBlock(textFromLS);
+            }
+            else {
+                store.showPrompt(store.t("uiPasteHeader"), store.t("uiPasteText"), (text) => {
+                    pasteBlock(text);
+                });
+            }
         },
         handleCut: () => {
             handleCopy();
@@ -36457,7 +36524,6 @@ const topBarMethods = (store) => {
         },
         saveCSV: () => {
             exportAsCSV(copyTableToCSV(store.state.templates[0].copyRows, store.state.templates[0].copyColumns), `${store.state.templates[0].name}_data.csv`);
-            store.showToast("coming soon");
         }
     };
 };
@@ -36490,6 +36556,8 @@ const Topbar = ({ store }) => {
                         React.createElement(TopbarButton, { title: store.t("topBarImportCSV"), iconType: "hash", onClick: () => null, disabled: !store.state.templates[0].copyColumns.length }),
                         React.createElement("input", { style: { "display": "none" }, type: "file", onChange: methods.openCSV })),
                     React.createElement(TopbarButton, { title: store.t("topBarExportCSV"), iconType: "download", onClick: methods.saveCSV, disabled: !store.state.templates[0].copyRows.length }))),
+        React.createElement(Button, { style: { margin: "0.5em" }, onClick: () => { window.open("https://www.youtube.com/watch?v=MjzxHZ5_-bA&list=PLmUs1AbCgT1ZbAJO5XDDPC8MeD1nHcv97", "_blank")?.focus(); }, type: "main", icon: "video" }, store.t("topBarVideo")),
+        React.createElement(Button, { style: { margin: "0.5em" }, onClick: () => { window.open("https://forms.gle/SDYZT5sMFVHZnxaj6", "_blank")?.focus(); }, icon: "feedback" }, store.t("topBarFeedback")),
         React.createElement("div", { className: "appTools" },
             React.createElement(TopbarButton, { title: store.t("topBarPrint"), iconType: "print", onClick: methods.handlePrint, disabled: store.state.templates[0].blocks.length === ZERO }),
             React.createElement("label", null,
@@ -36498,7 +36566,7 @@ const Topbar = ({ store }) => {
             React.createElement(TopbarButton, { title: store.t("topBarExportTemplate"), iconType: "export", onClick: methods.handleExport, disabled: store.state.lastChange === ZERO }),
             React.createElement(TopbarButton, { title: store.t("topBarNewTemplate"), iconType: "newTemplate", onClick: methods.handleNewTemplate, disabled: store.state.templates?.[0] ? !store.state.templates?.[0]?.dateEdited || false : false }),
             React.createElement(TopbarButton, { title: store.t("topBarChangeTheme"), iconType: store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme", onClick: methods.handleTheme }),
-            React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: "setting", onClick: methods.handleLanguage })));
+            React.createElement(TopbarButton, { title: store.t("topBarChangeLanguage"), iconType: store.state.langCode === "ua" ? "en" : "ua", onClick: methods.handleLanguage })));
 };
 
 const TabListStyle = qe.div `
@@ -37066,7 +37134,7 @@ const MIBlockParam = ({ store, listItemData, disabled }) => {
                     return;
                 }
                 if (selectedBlock?.contentType && value !== selectedBlock.contentType) {
-                    store.showConfirm("You are about to change copy structure", "Are you sure you want to change content type? It will delete all the copies", () => {
+                    store.showConfirm(store.t("uiCopyesDilitionConfirmationHeader"), store.t("uiCopyesDilitionConfirmationText"), () => {
                         store.dispach({
                             name: ACTION_NAMES.block_setParam,
                             payload: {
@@ -37577,6 +37645,7 @@ const CellStyle = qe.div `
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
+  min-height: 1.2em;
   &.selected{
     color: var(--main-color);
   }
@@ -37740,6 +37809,18 @@ const Sidebar = ({ store }) => {
     };
     const nonBlock = store.state.selectedBlock === null;
     const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
+    setTimeout(() => {
+        const body = window.document.body;
+        const shownAlert = localStorage.getItem("useHorizontal");
+        if (body.clientHeight / body.clientWidth > ONE && !shownAlert) {
+            store.showAlert(store.t("uiBetterHorizontalHeader"), store.t("uiBetterHorizontalText"), () => {
+                localStorage.setItem("useHorizontal", "true");
+            });
+        }
+        else if (body.clientHeight / body.clientWidth < ONE) {
+            localStorage.removeItem("useHorizontal");
+        }
+    }, AFTER_ANIMATION);
     return React.createElement(SidebarStyle, { className: "sidebar" },
         React.createElement(Tabs, { store: store }),
         store.state.selectedTab === TAB_TYPE.Edit &&
@@ -37828,47 +37909,6 @@ const Toast = ({ toast }) => {
     return React.createElement(ToastStyle, { className: `toast ${toast.isShown ? "shown" : "hidden"}` },
         toast.icon && React.createElement(Icon, { iconType: toast.icon }),
         toast.text);
-};
-
-const ButtonStyle = qe.div `
-  user-select: none;
-  padding: 0.5em 1em;
-  border-radius: var(--border-radius);
-  color: var(--text-color);
-  font-size: inherit;
-  border: 0;
-  cursor: pointer;
-  transition: all var(--transition);
-  display: flex;
-  :hover{
-    opacity: 0.8;
-  }
-  &.disabled{
-    cursor: default;
-    opacity: 0.6;
-  }
-  &.normal{
-    background: var(--main-color);
-    color: var(--section-bg);
-    svg{
-      --icon-color: var(--section-bg);
-    }
-  }
-  &.main{
-    background: var(--main-button-bg);
-    color: var(--main-button-text);
-    svg{
-      --icon-color: var(--main-button-text);
-    }
-  }
-  &.nocolor{
-    background: var(--app-bg);
-  }
-`;
-const Button = ({ children, onClick, type = "normal", icon, style, classes, disabled = false }) => {
-    return React.createElement(ButtonStyle, { onClick: (event) => { !disabled ? onClick(event) : null; }, className: `${type} ${disabled ? "disabled" : ""} ${classes ? classes : ""}`, style: style },
-        icon && React.createElement(Icon, { iconType: icon }),
-        children);
 };
 
 const PromptStyle = qe.div `

@@ -8,6 +8,7 @@ import { getInitialTamplate } from "src/models/intials";
 import { copyTextToClipboard, decodeBlock, encodeBlock } from "src/store/copyPaste";
 import { exportTemplate, importTemplate } from "src/store/templateFileMethods";
 import { copyTableToCSV, exportAsCSV, importCopyRows } from "src/store/copyTableFileMethods";
+import Button from "./ui/Button";
 
 interface TopbarModel {
   store: StoreModel
@@ -134,9 +135,7 @@ const topBarMethods = (store: StoreModel) => {
     },
     handleDuplicate: () => {
       const block = store.state.templates[0].blocks.find(b => b.uuid === store.state.selectedBlock);
-      if(!block) {
-        return;
-      }
+      if(!block) { return; }
       const getChildren: (parentId:string | null) => BlockModel[] = (parentId) => {
         let ret:BlockModel[] = [];
         store.state.templates[0].blocks.filter(block => block.parentId === parentId).map(block => {
@@ -165,9 +164,7 @@ const topBarMethods = (store: StoreModel) => {
     handleImport: (e: React.ChangeEvent) => {
       const target = (e.target as HTMLInputElement);
       const file = target.files?.[0] as Blob;
-      if(!file) {
-        return;
-      }
+      if(!file) { return; }
       target.value = "";
       importTemplate(file, (result: TemplateModel | null) => {
         if(!result) {
@@ -188,9 +185,7 @@ const topBarMethods = (store: StoreModel) => {
       });
     },
     handleRemoveCopy: () => {
-      if(!store.state.selectedCopy) {
-        return;
-      }
+      if(!store.state.selectedCopy) { return; }
       store.dispach({
         name: ACTION_NAMES.template_removeCopy,
         payload: {
@@ -201,9 +196,7 @@ const topBarMethods = (store: StoreModel) => {
     handleSetCopy: (arg: "next" | "prev") => {
       const currentCopy = store.state.templates[0].copyRows.find(row => row.uuid === store.state.selectedCopy);
       const targetCopyIndex = arg === "next" ? currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) + ONE : undefined : currentCopy ? store.state.templates[0].copyRows.indexOf(currentCopy) - ONE : null;
-      if(typeof targetCopyIndex === "undefined") {
-        return;
-      }
+      if(typeof targetCopyIndex === "undefined") { return; }
       store.dispach({
         name: ACTION_NAMES.app_selectCopy,
         payload: targetCopyIndex !== null ? store.state.templates[0].copyRows[targetCopyIndex].uuid : targetCopyIndex
@@ -212,9 +205,7 @@ const topBarMethods = (store: StoreModel) => {
     openCSV: (e: React.ChangeEvent) => {
       const target = (e.target as HTMLInputElement);
       const file = target.files?.[0] as Blob;
-      if(!file) {
-        return;
-      }
+      if(!file) { return; }
       target.value = "";
       importCopyRows(store.state.templates[0].copyColumns, file, (rows) => {
         if(rows !== null) {
@@ -230,7 +221,6 @@ const topBarMethods = (store: StoreModel) => {
     },
     saveCSV: () => {
       exportAsCSV(copyTableToCSV(store.state.templates[0].copyRows, store.state.templates[0].copyColumns), `${store.state.templates[0].name}_data.csv`);
-      store.showToast("coming soon");
     }
   };
 };
@@ -272,6 +262,8 @@ const Topbar: FC<TopbarModel> = ({store}) => {
           </>
       }
     </div>
+    <Button style={{margin:"0.5em"}} onClick={() => { window.open("https://www.youtube.com/watch?v=MjzxHZ5_-bA&list=PLmUs1AbCgT1ZbAJO5XDDPC8MeD1nHcv97", "_blank")?.focus(); }} type="main" icon="video">{store.t("topBarVideo")}</Button>
+    <Button style={{margin:"0.5em"}} onClick={() => { window.open("https://forms.gle/SDYZT5sMFVHZnxaj6", "_blank")?.focus(); }} icon="feedback">{store.t("topBarFeedback")}</Button>
     <div className="appTools">
       <TopbarButton title={store.t("topBarPrint")} iconType="print" onClick={methods.handlePrint} disabled={ store.state.templates[0].blocks.length === ZERO }></TopbarButton>
       <label>
@@ -285,7 +277,7 @@ const Topbar: FC<TopbarModel> = ({store}) => {
         iconType={store.state.theme === "light" ? "sun" : store.state.theme === "dark" ? "moon" : "autoTheme"}
         onClick={methods.handleTheme}
       ></TopbarButton>
-      <TopbarButton title={store.t("topBarChangeLanguage")} iconType="setting" onClick={methods.handleLanguage}></TopbarButton>
+      <TopbarButton title={store.t("topBarChangeLanguage")} iconType={store.state.langCode === "ua" ? "en" : "ua"} onClick={methods.handleLanguage}></TopbarButton>
     </div>
   </TopbarStyle>;
 };

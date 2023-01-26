@@ -21,6 +21,8 @@ const wordsEB = {
   topBarNextCopy: "Next copy",
   topBarImportCSV: "Import CSV file",
   topBarExportCSV: "Export copies as CSV file",
+  topBarVideo: "Video tutorials(UKR)",
+  topBarFeedback: "Feedback form",
   //sideBar
   sideBarEdit: "Edit",
   sideBarCopy: "Copy",
@@ -28,7 +30,7 @@ const wordsEB = {
   uiConfirmNewTemplateHeader: "Confirm action",
   uiConfirmNewTemplateText: "Are you sure you want to overwrite current template",
   uiPasteHeader: "Paste block text here",
-  uiPasteText: "Sorry there is no better way to do it for now",
+  uiPasteText: "Sorry, there is no better way to do it for now",
   uiOk: "Ok",
   uiCancel: "Cancel",
   uiConfirm: "Confirm",
@@ -40,6 +42,8 @@ const wordsEB = {
   uiTemplateImporting: "Template importing...",
   uiTemplateExporting: "Template exporting...",
   uiNone: "None",
+  uiBetterHorizontalHeader:"Sorry its unusible in horizontal view",
+  uiBetterHorizontalText:"Better to use desktop PC or laptop",
   //toasts
   uiNewTemplateCreated: "New template created",
   uiNoBlockSelected: "No block selected",
@@ -49,6 +53,8 @@ const wordsEB = {
   uiClickOnBlockToSelectAsReference: "Click on block to select as reference",
   uiDisclamerPrintingHeader: "Information for firefox users",
   uiDisclamerPrintingText: "For better printing experience use Chrome :)\n If no, set page background manualy and zoom to default 100%(ctrl+0)",
+  uiCopyesDilitionConfirmationHeader: "You are about to change copy structure",
+  uiCopyesDilitionConfirmationText: "Are you sure you want to change content type? It will delete all the copies",
 
   //mi
   miPageSize: "Page size",

@@ -2,8 +2,8 @@ import wordsEN from "../localization/en";
 import wordsUA from "../localization/ua";
 
 const words = {
-  en: wordsEN,
-  ua: wordsUA
+  ua: wordsUA,
+  en: wordsEN
 };
 
 export const LANG_CODES:LanguageType[] = Object.keys(words) as LanguageType[];

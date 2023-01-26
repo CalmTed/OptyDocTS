@@ -64,7 +64,7 @@ const MIBlockParam: FC<MIBlockParam> = ({store, listItemData, disabled}) => {
           return;
         }
         if(selectedBlock?.contentType && value !== selectedBlock.contentType) {
-          store.showConfirm("You are about to change copy structure", "Are you sure you want to change content type? It will delete all the copies", () => {
+          store.showConfirm(store.t("uiCopyesDilitionConfirmationHeader"), store.t("uiCopyesDilitionConfirmationText"), () => {
             store.dispach({
               name: ACTION_NAMES.block_setParam,
               payload: {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BlockModel, StoreModel } from "src/models/types";
 import Tabs from "./Tabs";
 import Split from "./ui/Split";
-import { ACTION_NAMES, CONTENT_TYPE, CSS_DISPLAY_TYPE, MI_TARGET, TAB_TYPE, TWO, ZERO } from "src/models/constants";
+import { ACTION_NAMES, AFTER_ANIMATION, CONTENT_TYPE, CSS_DISPLAY_TYPE, MI_TARGET, ONE, TAB_TYPE, TWO, ZERO } from "src/models/constants";
 import { BLOCK_MI_NAMES } from "src/models/blockMIs";
 import { MIs } from "./ui/Mis";
 import Icon from "./ui/Icon";
@@ -157,6 +157,17 @@ const Sidebar: FC<SidebarModel> = ({store}) => {
 
   const nonBlock = store.state.selectedBlock === null;
   const MItaget = nonBlock ? MI_TARGET.template : MI_TARGET.block;
+  setTimeout(() => {
+    const body = window.document.body;
+    const shownAlert = localStorage.getItem("useHorizontal");
+    if(body.clientHeight / body.clientWidth > ONE && !shownAlert) {
+      store.showAlert(store.t("uiBetterHorizontalHeader"), store.t("uiBetterHorizontalText"), () => {
+        localStorage.setItem("useHorizontal", "true");
+      });
+    }else if (body.clientHeight / body.clientWidth < ONE) {
+      localStorage.removeItem("useHorizontal");
+    }
+  }, AFTER_ANIMATION);
   return <SidebarStyle className="sidebar"> 
     <Tabs store={store}></Tabs>
     { store.state.selectedTab === TAB_TYPE.Edit &&
